@@ -1,5 +1,4 @@
 import { teamSection, type TeamMember } from '../../whoWeAreData';
-import TeamScrollStack from '../TeamScrollStack/TeamScrollStack';
 import styles from './Team.module.css';
 
 const DesktopMemberCard = ({ member }: { member: TeamMember }) => {
@@ -23,6 +22,28 @@ const DesktopMemberCard = ({ member }: { member: TeamMember }) => {
   );
 };
 
+const MobileMemberCard = ({ member }: { member: TeamMember }) => {
+  return (
+    <article className={styles.stackCard}>
+      <div className={styles.stackMedia}>
+        <img
+          src={member.image}
+          alt={`${member.firstName} ${member.lastName}`}
+          className={styles.stackImage}
+        />
+        <div className={styles.stackOverlay} aria-hidden />
+        <div className={styles.stackTitle}>
+          <h3 className={styles.stackName}>{member.firstName}</h3>
+          <h3 className={styles.stackName}>{member.lastName}</h3>
+        </div>
+      </div>
+      <div className={styles.stackDetail}>
+        <p className={styles.stackBio}>{member.bio}</p>
+      </div>
+    </article>
+  );
+};
+
 const Team = () => {
   return (
     <section className={styles.peopleSection}>
@@ -37,8 +58,10 @@ const Team = () => {
         ))}
       </div>
 
-      <div className={styles.teamScrollMobile}>
-        <TeamScrollStack members={teamSection.members} />
+      <div className={styles.teamStack}>
+        {teamSection.members.map((member) => (
+          <MobileMemberCard key={member.lastName} member={member} />
+        ))}
       </div>
     </section>
   );
