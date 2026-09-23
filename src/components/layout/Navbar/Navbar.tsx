@@ -13,6 +13,7 @@ const NAV_LINKS = [
   { to: '/who-we-are', label: 'Who We Are' },
   { to: '/products', label: 'Products' },
   { to: '/case-studies', label: 'Case Studies' },
+  { to: '/partners', label: 'Partners' },
   { to: '/pricing', label: 'Pricing' },
 ] as const;
 

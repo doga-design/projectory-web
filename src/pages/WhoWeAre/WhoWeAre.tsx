@@ -3,7 +3,8 @@ import WhoWeAreHero from './components/WhoWeAreHero/WhoWeAreHero';
 import ImageCarousel from './components/ImageCarousel/ImageCarousel';
 import Team from './components/Team/Team';
 import WhyWeStarted from './components/WhyWeStarted/WhyWeStarted';
-import CtaBanner from './components/CtaBanner/CtaBanner';
+import CtaBanner from '@/components/sections/CtaBanner/CtaBanner';
+import { ctaBanner } from './whoWeAreData';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { pageMeta } from '@/config/seo';
 
@@ -20,7 +21,7 @@ const WhoWeAre = () => {
       <div className={`${styles.container} ${styles.sectionBlock}`}>
         <WhyWeStarted />
       </div>
-      <CtaBanner />
+      <CtaBanner variant="teal" {...ctaBanner} />
     </div>
   );
 };

@@ -2,7 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Button.module.css';
 
-export type ButtonVariant = 'lime' | 'coral' | 'teal' | 'plum' | 'light' | 'dark' | 'outline';
+export type ButtonVariant =
+  | 'lime'
+  | 'limeLight'
+  | 'coral'
+  | 'teal'
+  | 'plum'
+  | 'light'
+  | 'dark'
+  | 'outline';
 
 type ButtonBaseProps = {
   variant: ButtonVariant;

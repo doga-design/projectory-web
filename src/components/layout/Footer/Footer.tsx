@@ -120,6 +120,7 @@ const Footer = () => {
           <h4 className={styles.columnHeading}>Get Started</h4>
           <Link to="/get-started-form">Product finder</Link>
           <Link to="/pricing">Pricing</Link>
+          <Link to="/partners">Partners</Link>
           <Link to="/get-started#faq">FAQ</Link>
           <Link to="/get-started#contact-form">Contact us</Link>
           <Link to="/get-started#schedule-demo">Schedule a demo</Link>
