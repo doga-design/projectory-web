@@ -47,6 +47,14 @@
   --btn-bg-hover: color-mix(in srgb, var(--brand-lime) 90%, black);
 }
 
+.limeLight {
+  --btn-bg: var(--color-surface-inverse);
+  --btn-fg: var(--brand-lime);
+  --btn-border-width: 0.5px;
+  --btn-border: var(--color-surface-inverse);
+  --btn-fg-hover: color-mix(in srgb, var(--brand-lime) 90%, black);
+}
+
 .coral {
   --btn-bg: var(--brand-coral);
   --btn-fg: var(--color-text);

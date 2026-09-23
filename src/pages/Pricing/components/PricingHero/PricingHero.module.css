@@ -12,7 +12,7 @@
   margin: 0;
   max-width: 900px;
   font-family: var(--font-medium);
-  font-size: 70px;
+  font-size: var(--font-size-hero);
   font-style: normal;
   font-weight: 500;
   line-height: 65px;
@@ -43,7 +43,7 @@
   }
 
   .price {
-    font-size: 48px;
+    font-size: var(--font-size-3xl);
     line-height: var(--leading-tight);
     max-width: 100%;
   }

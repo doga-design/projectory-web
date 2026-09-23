@@ -20,6 +20,7 @@ const LaserFocusForm = lazy(() => import('@/pages/activities/LaserFocus/LaserFoc
 const ScatterPlot = lazy(() => import('@/pages/activities/LaserFocus/ScatterPlot/ScatterPlot'));
 const VentingMachine = lazy(() => import('@/pages/activities/VentingMachine/VentingMachine'));
 const Pricing = lazy(() => import('@/pages/Pricing/Pricing'));
+const Partners = lazy(() => import('@/pages/Partners/Partners'));
 
 const MIN_LOADING_MS = 1200;
 const FADE_OUT_MS = 500;
@@ -74,6 +75,7 @@ const App = () => {
               <Route path="/products" element={<Product />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/case-studies" element={<CaseStudies />} />
+              <Route path="/partners" element={<Partners />} />
               <Route path="/case-study/:id" element={<CaseStudyPage />} />
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/get-started" element={<GetStarted />} />

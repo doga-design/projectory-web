@@ -67,15 +67,19 @@
   /* Type */
   --font-body: 'FounderGrotesk_Regular', sans-serif;
   --font-medium: 'FounderGrotesk_Medium', sans-serif;
+  --font-serif: 'GT-Alpina-Regular', serif;
 
   --font-size-xs: 13px;
   --font-size-s: 14px;
   --font-size-sm: 17px;
   --font-size-md: 18px;
   --font-size-lg: 20px;
+  --font-size-lead: 23px;
   --font-size-xl: 24px;
   --font-size-2xl: 32px;
+  --font-size-3xl: 48px;
   --font-size-display: 55px;
+  --font-size-hero: 70px;
 
   /* Leading */
   --leading-none: 1;
