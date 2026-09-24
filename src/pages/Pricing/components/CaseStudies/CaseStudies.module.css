@@ -53,34 +53,30 @@
   margin-bottom: 15px;
 }
 
-/* --accent is set per-slide from CaseStudies.tsx, which picks from the brand
-   palette. The component reads it rather than knowing which hue it got — the
-   tier-3 pattern, driven from JS. */
-.pill {
-  border: 1px solid var(--accent);
-  color: var(--accent);
-  background-color: transparent;
-  padding: 10px var(--space-5);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-size: var(--font-size-md);
-  font-weight: 400;
-  line-height: var(--leading-snug);
-  transition:
-    background-color var(--transition-fast),
-    color var(--transition-fast);
-}
+/* The pills are the site's outline Button, recoloured through its own custom
+   properties. --accent is set per-slide from CaseStudies.tsx, which picks from
+   the brand palette. The component reads it rather than knowing which hue it
+   got — the tier-3 pattern, driven from JS. Scoped under .pills so it outranks
+   the variant class whatever order the stylesheets load in.
 
-/* Ink on a bright accent fill: darker than --color-surface so it reads on
+   Ink on a bright accent fill: darker than --color-surface so it reads on
    lime and yellow, which the inverse text token is too light for. */
-.pill:hover,
-.pillActive {
-  background-color: var(--accent);
-  color: var(--neutral-700);
+.pills > .pill {
+  --btn-fg: var(--accent);
+  --btn-border: var(--accent);
+  --btn-bg-hover: var(--accent);
+  --btn-fg-hover: var(--neutral-700);
 }
 
+.pills > .pillActive {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--neutral-700);
+}
+
+/* --swap is the one slide-change timing, shared by the image and the copy so
+   they always change together. */
 .panel {
+  --swap: 0.3s;
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -96,41 +92,65 @@
   gap: var(--space-6);
 }
 
-.image {
-  background-color: var(--color-surface);
-  border: var(--border-hairline);
-  box-sizing: border-box;
+/* All the study images sit stacked in one frame; only the active one is shown.
+   The surface fill lives on the frame, so it only shows before the first
+   image has loaded — never between slides. */
+.media {
+  position: relative;
   width: 100%;
-  max-width: 100%;
   min-height: 240px;
-  height: auto;
   aspect-ratio: 16 / 10;
-  object-fit: cover;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: var(--border-hairline);
   border-radius: var(--radius-xl);
+  background-color: var(--color-surface);
+}
+
+/* The outgoing image holds until the incoming one has faded in on top, so
+   the cross-fade never dips to the surface behind. */
+.image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--swap) ease var(--swap);
+}
+
+.imageActive {
+  z-index: 1;
+  opacity: 1;
+  transition-delay: 0s;
+}
+
+/* Every study's copy sits in the same cell, so the stack is always as tall
+   as the tallest one and the row never resizes between slides. The old copy
+   fades out quickly, then hides; the new one fades in slightly after, so the
+   two never read on top of each other and the area is never left blank. */
+.slides {
+  display: grid;
+  min-width: 0;
+}
+
+.slides > .copy {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity calc(var(--swap) * 0.6) ease,
+    visibility 0s linear calc(var(--swap) * 0.6);
+}
+
+.slides > .copyActive {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity var(--swap) ease calc(var(--swap) / 3);
 }
 
 @media (min-width: 769px) {
-  .section {
-    width: min(1100px, calc(100vw - var(--block-4)));
-    max-width: none;
-  }
-
-  .pill:nth-child(5) {
-    order: 1;
-  } /* Trade Show $12k */
-  .pill:nth-child(1) {
-    order: 2;
-  } /* Sales Kickoff $22k */
-  .pill:nth-child(2) {
-    order: 3;
-  } /* Industry Event $35k */
-  .pill:nth-child(4) {
-    order: 4;
-  } /* Association Conference $45k */
-  .pill:nth-child(3) {
-    order: 5;
-  } /* Leadership Summit $120k */
-
   .panel {
     min-height: 420px;
   }
@@ -140,20 +160,13 @@
     gap: var(--block-2);
   }
 
-  .image {
-    min-height: 420px;
-    max-height: 420px;
+  .media {
     height: 420px;
     aspect-ratio: auto;
-    object-fit: cover;
-    justify-self: end;
-    width: calc(100% - var(--block-1));
-    max-width: calc(100% - var(--block-1));
-    margin-left: var(--block-1);
   }
 
-  .copy {
-    max-width: none;
+  .slides > .copy {
+    align-self: center;
   }
 }
 
@@ -246,9 +259,9 @@
     margin-bottom: 10px;
   }
 
-  .pill {
+  /* The Button's small size, so the five pills wrap compactly. */
+  .pills > .pill {
     padding: 10px 15px;
-    font-size: var(--font-size-sm);
   }
 
   .panel {
@@ -261,12 +274,8 @@
     gap: var(--space-6);
   }
 
-  .image {
-    min-height: 240px;
+  .media {
     max-height: 300px;
-    height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
   }
 
   .copy {

@@ -73,7 +73,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: var(--nav-gap);
-  width: min(800px, calc(100% - 48px));
+  width: min(840px, calc(100% - 48px));
   margin: 18px auto 0;
   container-type: inline-size;
   container-name: nav;
