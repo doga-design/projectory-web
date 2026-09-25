@@ -66,17 +66,24 @@
   gap: var(--space-3);
 }
 
+/* --text-lift shifts the text up without changing the card's height:
+   it comes off the top padding and goes onto the bottom. */
 .card {
+  --text-lift: 6px;
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: var(--block-1);
+  padding: calc(var(--block-1) - var(--text-lift)) var(--block-1)
+    calc(var(--block-1) + var(--text-lift));
   border: none;
   border-radius: var(--radius-md);
   background: var(--color-surface);
   color: var(--color-text);
   font: inherit;
   text-align: left;
+  /* Buttons block text selection by default; the copy should be copyable. */
+  -webkit-user-select: text;
+  user-select: text;
   cursor: pointer;
   transition:
     background var(--transition-base),
@@ -92,10 +99,16 @@
 }
 
 .cardOpen {
-  padding: var(--block-2);
+  padding: calc(var(--block-2) - var(--text-lift)) var(--block-2)
+    calc(var(--block-2) + var(--text-lift));
   background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
   cursor: default;
+}
+
+.cardOpen .cardTitle,
+.cardOpen .body {
+  cursor: text;
 }
 
 /* Slide-open: a grid row animating 0fr → 1fr, so no height is measured in JS. */
@@ -149,11 +162,15 @@
   display: block;
   padding-top: var(--block-1);
   font-family: var(--font-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   line-height: 24px;
   font-feature-settings:
     'liga' off,
     'clig' off;
+}
+
+.list > .card:first-child .body {
+  max-width: 25em;
 }
 
 @media (max-width: 1024px) {
@@ -177,7 +194,8 @@
   }
 
   .cardOpen {
-    padding: var(--block-1);
+    padding: calc(var(--block-1) - var(--text-lift)) var(--block-1)
+      calc(var(--block-1) + var(--text-lift));
   }
 
   .cardOpen .cardTitle {

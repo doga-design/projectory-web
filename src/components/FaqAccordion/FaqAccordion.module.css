@@ -20,6 +20,19 @@
   min-width: 0;
 }
 
+/* Spans the page's content column in the same 5:7 split as CyclingCards, so
+   the title and list edges line up with the sections around it. */
+.split {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  column-gap: var(--block-2);
+  width: 100%;
+}
+
+.split .list {
+  width: 100%;
+}
+
 .title {
   margin: 0;
   flex-shrink: 0;

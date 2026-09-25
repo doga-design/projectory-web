@@ -1,6 +1,7 @@
-import { useState, type CSSProperties } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useInView } from 'framer-motion';
 import { caseStudies, caseStudiesHeader } from '../../pricingData';
+import Button from '@/components/Button/Button';
 import styles from './CaseStudies.module.css';
 
 /**
@@ -12,20 +13,33 @@ import styles from './CaseStudies.module.css';
  * itself, the stray lime folded into the one lime.
  */
 const ACCENTS = [
+  'var(--brand-yellow)',
   'var(--brand-teal)',
   'var(--brand-coral)',
-  'var(--brand-lime)',
   'var(--brand-violet)',
-  'var(--brand-yellow)',
+  'var(--brand-lime)',
 ] as const;
 
+/** How long each study stays up before the next one takes over. */
+const CYCLE_MS = 6000;
+
 const CaseStudies = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const inView = useInView(sectionRef, { amount: 0.3 });
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const selected = caseStudies[selectedIndex];
-  const accent = ACCENTS[selectedIndex % ACCENTS.length];
+
+  // Keyed on `selectedIndex`, so a click also restarts the clock from the clicked tab.
+  useEffect(() => {
+    if (!inView) return;
+    const id = window.setTimeout(
+      () => setSelectedIndex((i) => (i + 1) % caseStudies.length),
+      CYCLE_MS
+    );
+    return () => window.clearTimeout(id);
+  }, [selectedIndex, inView]);
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       <div className={styles.header}>
         <div className={styles.headerInner}>
           <p className={styles.eyebrow}>{caseStudiesHeader.eyebrow}</p>
@@ -38,53 +52,70 @@ const CaseStudies = () => {
           const isActive = index === selectedIndex;
           const pillAccent = ACCENTS[index % ACCENTS.length];
           return (
-            <button
+            <Button
               key={study.name}
-              type="button"
+              variant="outline"
               role="tab"
               aria-selected={isActive}
-              className={`${styles.pill} ${isActive ? styles.pillActive : ''}`}
+              className={`${styles.pill}${isActive ? ` ${styles.pillActive}` : ''}`}
               style={{ '--accent': pillAccent } as CSSProperties}
               onClick={() => setSelectedIndex(index)}
             >
               {study.name}
-            </button>
+            </Button>
           );
         })}
       </div>
 
-      <div className={styles.panel}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selected.name}
-            className={styles.panelInner}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <img src={selected.image} alt="" className={styles.image} />
-            <div className={styles.copy}>
-              <h3 className={styles.heading} style={{ color: accent }}>
-                {selected.heading}
-              </h3>
-              <p className={styles.description}>{selected.description}</p>
-              <div className={styles.priceBlock}>
-                <div className={styles.priceTags}>
-                  {selected.tags.map((tag) => (
-                    <span key={tag} className={styles.priceTag}>
-                      {tag}
-                    </span>
-                  ))}
+      {/* Every slide stays mounted and stacked, and switching tabs only changes
+          which one is shown. Nothing remounts, so each image is fetched and
+          decoded once, image and copy change in the same frame, and the panel
+          keeps the height of the tallest study. */}
+      <div className={styles.panel} role="tabpanel">
+        <div className={styles.panelInner}>
+          <div className={styles.media}>
+            {caseStudies.map((study, index) => (
+              <img
+                key={study.name}
+                src={study.image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className={`${styles.image}${index === selectedIndex ? ` ${styles.imageActive}` : ''}`}
+              />
+            ))}
+          </div>
+          <div className={styles.slides}>
+            {caseStudies.map((study, index) => {
+              const isActive = index === selectedIndex;
+              return (
+                <div
+                  key={study.name}
+                  className={`${styles.copy}${isActive ? ` ${styles.copyActive}` : ''}`}
+                  inert={!isActive}
+                >
+                  <h3 className={styles.heading} style={{ color: ACCENTS[index % ACCENTS.length] }}>
+                    {study.heading}
+                  </h3>
+                  <p className={styles.description}>{study.description}</p>
+                  <div className={styles.priceBlock}>
+                    <div className={styles.priceTags}>
+                      {study.tags.map((tag) => (
+                        <span key={tag} className={styles.priceTag}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className={styles.priceValue}>
+                      {study.price}
+                      <span className={styles.priceCurrency}>{study.currency}</span>
+                    </div>
+                  </div>
                 </div>
-                <div className={styles.priceValue}>
-                  {selected.price}
-                  <span className={styles.priceCurrency}>{selected.currency}</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </section>
   );

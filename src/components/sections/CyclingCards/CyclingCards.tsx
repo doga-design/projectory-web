@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion';
 import styles from './CyclingCards.module.css';
 
@@ -15,23 +15,30 @@ interface CyclingCardsProps {
 /** How long each card stays open before the next one takes over. */
 const CYCLE_MS = 3000;
 
+/** True while the user has text selected inside `el`. */
+const hasSelectionIn = (el: HTMLElement | null) => {
+  const selection = document.getSelection();
+  return !!el && !!selection && !selection.isCollapsed && el.contains(selection.anchorNode);
+};
+
 /** Title on the left, cards on the right that open one at a time, top to bottom, on a loop. */
 const CyclingCards = ({ eyebrow, title, items, accent = 'pink' }: CyclingCardsProps) => {
   const sectionRef = useRef<HTMLElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { amount: 0.3 });
   const [active, setActive] = useState(0);
-  const [paused, setPaused] = useState(false);
 
   // Keyed on `active`, so a click also restarts the clock from the clicked card.
+  // Only leaving the viewport stops it — never hover, taps or selections.
   useEffect(() => {
-    if (!inView || paused) return;
+    if (!inView) return;
     const id = window.setTimeout(() => setActive((i) => (i + 1) % items.length), CYCLE_MS);
     return () => window.clearTimeout(id);
-  }, [active, inView, paused, items.length]);
+  }, [active, inView, items.length]);
 
-  // Mouse only: on touch, a tap fires enter and would leave the cycle paused.
-  const setHover = (hovering: boolean) => (e: PointerEvent) => {
-    if (e.pointerType === 'mouse') setPaused(hovering);
+  // A drag-select ends in a click; don't treat it as picking a card.
+  const open = (index: number) => {
+    if (!hasSelectionIn(listRef.current)) setActive(index);
   };
 
   return (
@@ -40,7 +47,7 @@ const CyclingCards = ({ eyebrow, title, items, accent = 'pink' }: CyclingCardsPr
         <p className={styles.eyebrow}>{eyebrow}</p>
         <h2 className={styles.title}>{title}</h2>
       </div>
-      <div className={styles.list} onPointerEnter={setHover(true)} onPointerLeave={setHover(false)}>
+      <div ref={listRef} className={styles.list}>
         {items.map((item, index) => {
           const isOpen = index === active;
           return (
@@ -48,7 +55,7 @@ const CyclingCards = ({ eyebrow, title, items, accent = 'pink' }: CyclingCardsPr
               key={item.title}
               type="button"
               className={`${styles.card}${isOpen ? ` ${styles.cardOpen}` : ''}`}
-              onClick={() => setActive(index)}
+              onClick={() => open(index)}
               aria-expanded={isOpen}
             >
               <span className={styles.reveal}>

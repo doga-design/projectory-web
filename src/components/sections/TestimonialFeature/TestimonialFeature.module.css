@@ -81,6 +81,7 @@
   width: 65px;
   height: auto;
   pointer-events: none;
+  rotate: -30deg;
 }
 
 /* ── Lightbox ─── */

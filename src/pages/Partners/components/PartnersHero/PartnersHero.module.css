@@ -1,10 +1,13 @@
+/* --logo-lift raises the logo band: .copy fills the rest of the hero, so the
+   bottom padding is what sets where the band sits. */
 .hero {
+  --logo-lift: 12px;
   display: flex;
   flex-direction: column;
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  padding-bottom: var(--block-4);
+  padding-bottom: calc(var(--block-4) + var(--logo-lift));
   text-align: center;
 }
 
@@ -48,7 +51,7 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding-bottom: var(--block-3);
+    padding-bottom: calc(var(--block-3) + var(--logo-lift));
   }
 
   .copy {

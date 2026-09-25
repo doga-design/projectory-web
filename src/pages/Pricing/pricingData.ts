@@ -84,6 +84,16 @@ export const caseStudiesHeader = {
 
 export const caseStudies = [
   {
+    image: tradeShowImg,
+    name: 'Trade Show',
+    heading: 'Branded installation for booth traffic that actually converts',
+    description:
+      'A healthcare company exhibiting at a major industry trade show wanted something more memorable than typical booth giveaways. We provided a single branded installation that was fully customized to match the booth\u2019s visual identity.',
+    tags: ['Rent-and-run delivery', 'One product', 'Full white-label branding'],
+    price: '$12,000',
+    currency: 'USD',
+  },
+  {
     image: salesKickoffImg,
     name: 'Sales Kickoff',
     heading: 'Internal team, fully\nsupported on-site',
@@ -111,6 +121,17 @@ export const caseStudies = [
     currency: 'USD',
   },
   {
+    image:
+      'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749519214/Program_Feature1_o2kgpw_r7wxiw.webp',
+    name: 'Association Conference',
+    heading: 'Installations on the floor,\nsessions in the breakouts',
+    description:
+      "A national association's annual gathering featured two interactive installations on the show floor and two facilitated breakout sessions \u2014 with an onsite crew handling setup, operation, and teardown throughout.",
+    tags: ['Multi-day event', '1200 participants', 'Onsite crew and facilitators', 'Four products'],
+    price: '$45,000',
+    currency: 'USD',
+  },
+  {
     image: leadershipSummitImg,
     name: 'Leadership Summit',
     heading: 'Full-service,\nrun by our team',
@@ -126,27 +147,6 @@ export const caseStudies = [
       'Custom branding',
     ],
     price: '$120,000',
-    currency: 'USD',
-  },
-  {
-    image:
-      'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749519214/Program_Feature1_o2kgpw_r7wxiw.webp',
-    name: 'Association Conference',
-    heading: 'Installations on the floor,\nsessions in the breakouts',
-    description:
-      "A national association's annual gathering featured two interactive installations on the show floor and two facilitated breakout sessions \u2014 with an onsite crew handling setup, operation, and teardown throughout.",
-    tags: ['Multi-day event', '1200 participants', 'Onsite crew and facilitators', 'Four products'],
-    price: '$45,000',
-    currency: 'USD',
-  },
-  {
-    image: tradeShowImg,
-    name: 'Trade Show',
-    heading: 'Branded installation for booth traffic that actually converts',
-    description:
-      'A healthcare company exhibiting at a major industry trade show wanted something more memorable than typical booth giveaways. We provided a single branded installation that was fully customized to match the booth\u2019s visual identity.',
-    tags: ['Rent-and-run delivery', 'One product', 'Full white-label branding'],
-    price: '$12,000',
     currency: 'USD',
   },
 ];

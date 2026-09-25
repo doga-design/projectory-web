@@ -24,10 +24,13 @@
     transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.base:hover {
-  background: var(--btn-bg-hover, var(--btn-bg));
-  color: var(--btn-fg-hover, var(--btn-fg));
-  border-color: var(--btn-border-hover, var(--btn-border, transparent));
+/* Real pointers only: on touch, :hover sticks to the last tapped button. */
+@media (hover: hover) {
+  .base:hover {
+    background: var(--btn-bg-hover, var(--btn-bg));
+    color: var(--btn-fg-hover, var(--btn-fg));
+    border-color: var(--btn-border-hover, var(--btn-border, transparent));
+  }
 }
 
 .base:active {
