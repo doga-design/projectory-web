@@ -15,17 +15,19 @@ type CtaLink = { label: string; to: string };
 
 interface CtaBannerProps {
   variant: keyof typeof VARIANTS;
+  /** Anchor for in-page scroll links. */
+  id?: string;
   title: string;
   body: string;
   primary: CtaLink;
   secondary?: CtaLink;
 }
 
-const CtaBanner = ({ variant, title, body, primary, secondary }: CtaBannerProps) => {
+const CtaBanner = ({ variant, id, title, body, primary, secondary }: CtaBannerProps) => {
   const { badge, button } = VARIANTS[variant];
 
   return (
-    <section className={`${styles.banner} ${styles[variant]}`}>
+    <section id={id} className={`${styles.banner} ${styles[variant]}`}>
       <div className={styles.content}>
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.body}>{body}</p>

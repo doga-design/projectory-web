@@ -1,10 +1,10 @@
-import { partnerPrograms } from '../../partnersData';
+import { partnerPrograms, sectionIds } from '../../partnersData';
 import FeatureCard from '@/components/FeatureCard/FeatureCard';
 import styles from './PartnerPrograms.module.css';
 
 const PartnerPrograms = () => {
   return (
-    <section className={styles.section}>
+    <section id={sectionIds.programs} className={styles.section}>
       <div className={styles.header}>
         <p className={styles.eyebrow}>{partnerPrograms.eyebrow}</p>
         <h2 className={styles.title}>{partnerPrograms.title}</h2>

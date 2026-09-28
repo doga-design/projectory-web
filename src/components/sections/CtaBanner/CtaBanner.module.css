@@ -11,6 +11,8 @@
   box-sizing: border-box;
   background: var(--banner-bg);
   overflow: visible;
+  /* Clears the fixed navbar when an in-page link scrolls here. */
+  scroll-margin-top: 100px;
 }
 
 /* ── Variants ─── */
@@ -125,6 +127,10 @@
 
   .body {
     max-width: 100%;
+  }
+
+  .lime .body {
+    max-width: 16em;
   }
 
   .actions {

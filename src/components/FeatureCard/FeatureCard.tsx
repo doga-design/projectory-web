@@ -1,4 +1,5 @@
 import Button from '@/components/Button/Button';
+import { scrollToId } from '@/lib/scrollToId';
 import styles from './FeatureCard.module.css';
 
 export interface FeatureCardProps {
@@ -8,7 +9,8 @@ export interface FeatureCardProps {
   caption?: string;
   body: string;
   features: readonly string[];
-  cta: { label: string; to: string };
+  /** `to` routes to another page; `scrollTo` smooth-scrolls to an element id on this page. */
+  cta: { label: string; to: string } | { label: string; scrollTo: string };
 }
 
 const CheckIcon = () => (
@@ -53,9 +55,19 @@ const FeatureCard = ({ accent, title, caption, body, features, cta }: FeatureCar
             </li>
           ))}
         </ul>
-        <Button variant="light" to={cta.to} className={styles.cta}>
-          {cta.label}
-        </Button>
+        {'to' in cta ? (
+          <Button variant="light" to={cta.to} className={styles.cta}>
+            {cta.label}
+          </Button>
+        ) : (
+          <Button
+            variant="light"
+            onClick={() => scrollToId(cta.scrollTo)}
+            className={styles.cta}
+          >
+            {cta.label}
+          </Button>
+        )}
       </div>
     </article>
   );

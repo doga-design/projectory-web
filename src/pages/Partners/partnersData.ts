@@ -10,10 +10,17 @@ import royalCanadianMint from '@/assets/images/logos/royalCanadianMint.svg';
 import deloitte from '@/assets/images/logos/deloitte.webp';
 import enmax from '@/assets/images/logos/enmax.webp';
 
+/* In-page scroll targets for the hero and program card CTAs. */
+export const sectionIds = {
+  programs: 'partner-programs',
+  registerDeal: 'register-deal',
+};
+
 export const partnersHero = {
-  title: 'Welcome, Partner',
-  body: 'Now that you’re here, let’s add unforgettable\naudience engagement to your next client’s event.',
-  cta: { label: 'Become a Partner', to: '/get-started#contact-form' },
+  eyebrow: 'Projectory Partner Network',
+  title: 'Your Partners\nin Engagement',
+  body: 'We’ll get the room talking.\nYou focus on everything else.',
+  cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 
 /* Logo band under the hero. Add or remove a logo here; list order is scroll order. */
@@ -28,7 +35,7 @@ export const clientLogos = [
   { src: enmax, alt: 'ENMAX' },
 ] satisfies Logo[];
 
-const learnMore = { label: 'Learn More', to: '/get-started#contact-form' };
+const apply = { label: 'Apply', scrollTo: sectionIds.registerDeal };
 
 export const partnerPrograms = {
   eyebrow: 'Find your fit, and we’ll get to work',
@@ -40,11 +47,11 @@ export const partnerPrograms = {
       caption: 'Freelancers and independent planners',
       body: 'Know someone who’d love us? Make the intro and we’ll get them excited.',
       features: [
-        'A 5 to 10% referral fee on every booking.',
+        'A 10% referral fee on every booking',
         'Set the meeting, and we’ll do the talking.',
         'Keep earning on repeat bookings.',
       ],
-      cta: learnMore,
+      cta: apply,
     },
     {
       accent: 'teal',
@@ -52,30 +59,29 @@ export const partnerPrograms = {
       caption: 'Consultants, agencies, production companies',
       body: 'We build and pitch the deal together. You choose how to handle the pricing.',
       features: [
-        '15 to 20% partner pricing, to mark up or pass through.',
+        'A 30% exclusive discount to mark up or pass through.',
         'Full sales support, from the first call to signing.',
         'Ready materials for your RFPs and proposals.',
       ],
-      cta: learnMore,
+      cta: apply,
     },
     {
       accent: 'lime',
       title: 'Trade',
-      caption: 'Event organizers and networks whose audience is planners',
+      caption: 'Organizers of event industry gatherings.',
       body: 'When your audience is planners, we’ll make it worth showing off.',
       features: [
         'Up to 70% off our rates.',
         'First access to our newest and debut products.',
         'Add to sponsorship packages and other show elements.',
-        'Multi-year options.',
       ],
-      cta: learnMore,
+      cta: apply,
     },
   ] satisfies FeatureCardProps[],
 };
 
 export const whyPartner = {
-  eyebrow: 'What’s in it for us?',
+  eyebrow: 'What’s in it for you?',
   title: 'Why Partner\nWith Us?',
   items: [
     {
@@ -83,12 +89,12 @@ export const whyPartner = {
       body: 'Your clients are already asking for something more engaging and creative. Now you have the answer to walk in with.',
     },
     {
-      title: 'It plugs into how you already sell.',
-      body: 'Decks, RFP-ready materials, case studies, and budget options, ready to drop straight into your proposals. And you don’t need to be the expert, we’ll join your calls and pitch right alongside you.',
+      title: 'Press the easy button.',
+      body: 'Decks, one-pagers, RFP-ready materials, case studies and budget options, ready to drop into your proposals. We can join calls and pitch right alongside you.',
     },
     {
       title: 'Be the hero in the room.',
-      body: 'Every product started as a client brief, so if your client has a unique challenge, we’ll get to work. Run it with our guides and videos, or bring us in. Either way, your client will be glad you brought this up.',
+      body: 'Every product started as a client brief. If your client has a unique challenge, bring us in and we’ll put our heads together.',
     },
     {
       title: 'Proven with tough rooms.',
@@ -116,13 +122,13 @@ export const testimonial = {
   poster:
     'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto/v1770743158/RampUp_Sizzle_h1eqb9.jpg',
   quote:
-    '“Projectory did an amazing job. Getting us moving, talking, and having fun, while focused on business results. Loved it!”',
-  name: 'Sandra Rondzik',
-  role: 'Group Head, People Culture & Brand, CIBC',
+    '“Projectory was able to take us to a new level and bring a fun and interactive experience to our partners.”',
+  name: 'Denise Sutter',
+  role: 'Channel Marketing Manager, Cvent',
 };
 
 export const ctaBanner = {
-  title: 'Have a Client in Mind?\nRegister It.',
-  body: 'Even if it’s months away. We’ll protect the\ndates and wait for your sign.',
+  title: 'Ready to Apply?\nRegister a Deal.',
+  body: 'Your client stays yours. Register it and we’ll protect the dates, even if the event is months away.',
   primary: { label: 'Register a Deal', to: '/get-started#contact-form' },
 };
