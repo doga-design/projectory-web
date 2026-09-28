@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import styles from './LandingHero.module.css';
 import { yellowCoral, teal, coralBurgundy, lime } from '@/assets/images/shapes/floaters';
 import { usePageEntrance } from '@/hooks/usePageEntrance';
+import EyebrowPill from '@/components/EyebrowPill/EyebrowPill';
 
 const defaultShapes = {
   upper: yellowCoral,
@@ -136,14 +137,14 @@ const LandingHero = ({
       </div>
 
       <div className={styles.content}>
-        <motion.span
+        <EyebrowPill
           className={styles.pill}
           initial={enterInitial}
           animate={entrance.fade.animate}
           transition={entrance.transition(0)}
         >
-          <span className={styles.pillLabel}>{pill}</span>
-        </motion.span>
+          {pill}
+        </EyebrowPill>
         <div className={styles.copy}>
           <motion.h1
             className={styles.title}

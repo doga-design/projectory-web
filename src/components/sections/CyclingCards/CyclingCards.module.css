@@ -173,6 +173,10 @@
   max-width: 25em;
 }
 
+.list > .card:nth-child(2) .body {
+  max-width: calc(100% - 15px);
+}
+
 @media (max-width: 1024px) {
   .section {
     grid-template-columns: minmax(0, 1fr);

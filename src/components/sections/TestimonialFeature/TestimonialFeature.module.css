@@ -34,8 +34,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--block-1);
-  width: min(550px, 100%);
-  margin: -90px var(--block-4) 0 auto;
+  width: min(480px, 100%);
+  margin: -130px var(--block-4) 0 auto;
   padding: var(--block-3) var(--block-2);
   border: var(--border-hairline);
   border-radius: var(--radius-xl);

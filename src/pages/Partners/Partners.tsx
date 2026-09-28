@@ -5,7 +5,7 @@ import CtaBanner from '@/components/sections/CtaBanner/CtaBanner';
 import CyclingCards from '@/components/sections/CyclingCards/CyclingCards';
 import LogoGrid from '@/components/sections/LogoGrid/LogoGrid';
 import TestimonialFeature from '@/components/sections/TestimonialFeature/TestimonialFeature';
-import { ctaBanner, goodCompany, testimonial, whyPartner } from './partnersData';
+import { ctaBanner, goodCompany, sectionIds, testimonial, whyPartner } from './partnersData';
 import { usePageEntrance } from '@/hooks/usePageEntrance';
 import { useDocumentMeta } from '@/hooks/useDocumentMeta';
 import { pageMeta } from '@/config/seo';
@@ -24,7 +24,7 @@ const Partners = () => {
         <LogoGrid {...goodCompany} />
         <TestimonialFeature {...testimonial} />
       </div>
-      <CtaBanner variant="lime" {...ctaBanner} />
+      <CtaBanner variant="lime" id={sectionIds.registerDeal} {...ctaBanner} />
     </div>
   );
 };
