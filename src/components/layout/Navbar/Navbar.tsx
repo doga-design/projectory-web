@@ -7,6 +7,7 @@ import { useScrollLock } from '@/hooks/useScrollLock';
 import logo from '@/assets/images/logo.svg';
 import HeartIconNavSVG from '@/assets/images/heartIconNav.svg';
 import SlideInMenu from '../SlideInMenu/SlideInMenu';
+import CtaButton from '@/components/CtaButton/CtaButton';
 import { useLikedProducts } from '@/context/LikedProductsContext';
 
 const NAV_LINKS = [
@@ -142,9 +143,7 @@ const Navbar = () => {
                   </ul>
 
                   <div className={styles.navActions}>
-                    <Link to="/get-started" className={styles.ctaButton}>
-                      <span className={styles.ctaButtonLabel}>Get Started</span>
-                    </Link>
+                    <CtaButton to="/get-started">Get Started</CtaButton>
                     {likeMounted && (
                       <button
                         className={`${styles.slideInToggleBtn}${likeMotionClass ? ` ${likeMotionClass}` : ''}`}
@@ -185,13 +184,9 @@ const Navbar = () => {
                 ))}
               </ul>
 
-              <Link
-                to="/get-started"
-                className={`${styles.ctaButton} ${styles.mobileCtaButton}`}
-                onClick={closeMenu}
-              >
-                <span className={styles.ctaButtonLabel}>Get Started</span>
-              </Link>
+              <CtaButton to="/get-started" className={styles.mobileCtaButton} onClick={closeMenu}>
+                Get Started
+              </CtaButton>
             </div>
           </div>
 

@@ -9,8 +9,14 @@ export interface FeatureCardProps {
   caption?: string;
   body: string;
   features: readonly string[];
-  /** `to` routes to another page; `scrollTo` smooth-scrolls to an element id on this page. */
-  cta: { label: string; to: string } | { label: string; scrollTo: string };
+  /**
+   * `to` routes to another page; `scrollTo` smooth-scrolls to an element id on this page;
+   * `onClick` hands the click to the parent (e.g. to open an overlay).
+   */
+  cta:
+    | { label: string; to: string }
+    | { label: string; scrollTo: string }
+    | { label: string; onClick: () => void };
 }
 
 const CheckIcon = () => (
@@ -59,12 +65,12 @@ const FeatureCard = ({ accent, title, caption, body, features, cta }: FeatureCar
           <Button variant="light" to={cta.to} className={styles.cta}>
             {cta.label}
           </Button>
+        ) : 'onClick' in cta ? (
+          <Button variant="light" onClick={cta.onClick} className={styles.cta}>
+            {cta.label}
+          </Button>
         ) : (
-          <Button
-            variant="light"
-            onClick={() => scrollToId(cta.scrollTo)}
-            className={styles.cta}
-          >
+          <Button variant="light" onClick={() => scrollToId(cta.scrollTo)} className={styles.cta}>
             {cta.label}
           </Button>
         )}

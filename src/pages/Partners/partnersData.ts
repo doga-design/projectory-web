@@ -35,7 +35,8 @@ export const clientLogos = [
   { src: enmax, alt: 'ENMAX' },
 ] satisfies Logo[];
 
-const apply = { label: 'Apply', scrollTo: sectionIds.registerDeal };
+/* The program cards; each card's Apply opens the application overlay on that program. */
+export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
 
 export const partnerPrograms = {
   eyebrow: 'Find your fit, and we’ll get to work',
@@ -51,7 +52,6 @@ export const partnerPrograms = {
         'Set the meeting, and we’ll do the talking.',
         'Keep earning on repeat bookings.',
       ],
-      cta: apply,
     },
     {
       accent: 'teal',
@@ -63,7 +63,6 @@ export const partnerPrograms = {
         'Full sales support, from the first call to signing.',
         'Ready materials for your RFPs and proposals.',
       ],
-      cta: apply,
     },
     {
       accent: 'lime',
@@ -75,9 +74,8 @@ export const partnerPrograms = {
         'First access to our newest and debut products.',
         'Add to sponsorship packages and other show elements.',
       ],
-      cta: apply,
     },
-  ] satisfies FeatureCardProps[],
+  ] satisfies (Omit<FeatureCardProps, 'cta'> & { title: PartnerProgram })[],
 };
 
 export const whyPartner = {
