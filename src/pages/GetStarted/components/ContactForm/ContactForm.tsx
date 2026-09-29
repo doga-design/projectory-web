@@ -1,7 +1,10 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import styles from './ContactForm.module.css';
-import { submitToWeb3Forms } from '@/lib/web3forms';
+import HoneypotField from '@/components/HoneypotField/HoneypotField';
+import { useLeadForm } from '@/hooks/useLeadForm';
+import { fieldErrorMessage } from '@/lib/leads';
 
 const MailIcon = () => (
   <svg
@@ -68,6 +71,11 @@ const ContactForm = () => {
   });
 
   const [status, setStatus] = useState('');
+  const { send, sending, honeypotProps } = useLeadForm();
+
+  // The Partners page "Register a Deal" button links here with ?source=register-deal.
+  const [searchParams] = useSearchParams();
+  const registerDeal = searchParams.get('source') === 'register-deal';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -77,29 +85,31 @@ const ContactForm = () => {
     e.preventDefault();
     setStatus('Sending...');
 
-    try {
-      const { response } = await submitToWeb3Forms({
+    const source = registerDeal ? { source: 'register-deal' } : {};
+    const result = await send({
+      form: 'contact',
+      fields: { ...formData, ...source },
+      fallback: {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         company: formData.company,
         message: formData.message,
+        ...source,
+      },
+    });
+
+    if (result.ok) {
+      setStatus('Message sent successfully!');
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        message: '',
       });
-      if (response.ok) {
-        setStatus('Message sent successfully!');
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          company: '',
-          message: '',
-        });
-      } else {
-        setStatus('Failed to send message. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setStatus('Error sending message. Please try again.');
+    } else {
+      setStatus(fieldErrorMessage(result) ?? 'Failed to send message. Please try again.');
     }
   };
 
@@ -134,6 +144,7 @@ const ContactForm = () => {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.contactForm}>
+        <HoneypotField {...honeypotProps} />
         <div className={styles.fieldRow}>
           <label className={styles.field}>
             <span className={styles.label}>Name</span>
@@ -193,7 +204,7 @@ const ContactForm = () => {
           />
         </label>
 
-        <Button type="submit" variant="coral" className={styles.submit}>
+        <Button type="submit" variant="coral" className={styles.submit} disabled={sending}>
           Get In Touch
         </Button>
 

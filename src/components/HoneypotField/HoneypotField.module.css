@@ -1,0 +1,11 @@
+/* Invisible, zero-size and clipped: takes no space in any form layout, whatever the
+ * form's own `input` rules say. */
+.trap {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense, useState, useEffect, useCallback } from 'react';
 import Layout from '@/components/layout/Layout/Layout';
 import ScrollToTop from '@/components/layout/ScrollToTop/ScrollToTop';
+import PageViewTracker from '@/components/layout/PageViewTracker/PageViewTracker';
 import { LikedProductsProvider } from '@/context/LikedProductsContext';
 import LoadingScreen from '@/components/layout/LoadingScreen/LoadingScreen';
 
@@ -67,6 +68,7 @@ const App = () => {
       {showLoader && <LoadingScreen fadeOut={fadeOut} />}
       <Router>
         <ScrollToTop />
+        <PageViewTracker />
         <Layout>
           <Suspense fallback={null}>
             <Routes>

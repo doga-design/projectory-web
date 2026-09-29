@@ -35,7 +35,8 @@ export const clientLogos = [
   { src: enmax, alt: 'ENMAX' },
 ] satisfies Logo[];
 
-const apply = { label: 'Apply', scrollTo: sectionIds.registerDeal };
+/* The program cards; each card's Apply opens the application overlay on that program. */
+export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
 
 export const partnerPrograms = {
   eyebrow: 'Find your fit, and we’ll get to work',
@@ -51,7 +52,6 @@ export const partnerPrograms = {
         'Set the meeting, and we’ll do the talking.',
         'Keep earning on repeat bookings.',
       ],
-      cta: apply,
     },
     {
       accent: 'teal',
@@ -63,7 +63,6 @@ export const partnerPrograms = {
         'Full sales support, from the first call to signing.',
         'Ready materials for your RFPs and proposals.',
       ],
-      cta: apply,
     },
     {
       accent: 'lime',
@@ -75,9 +74,8 @@ export const partnerPrograms = {
         'First access to our newest and debut products.',
         'Add to sponsorship packages and other show elements.',
       ],
-      cta: apply,
     },
-  ] satisfies FeatureCardProps[],
+  ] satisfies (Omit<FeatureCardProps, 'cta'> & { title: PartnerProgram })[],
 };
 
 export const whyPartner = {
@@ -130,5 +128,6 @@ export const testimonial = {
 export const ctaBanner = {
   title: 'Ready to Apply?\nRegister a Deal.',
   body: 'Your client stays yours. Register it and we’ll protect the dates, even if the event is months away.',
-  primary: { label: 'Register a Deal', to: '/get-started#contact-form' },
+  // ?source= tells the contact form (and Pipedrive) this came from Register a Deal.
+  primary: { label: 'Register a Deal', to: '/get-started?source=register-deal#contact-form' },
 };

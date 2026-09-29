@@ -1,0 +1,54 @@
+/* CtaButton
+ * ═════════
+ * The navbar "Get Started" look: coral fill, white label, and the plum→coral
+ * gradient fading in on hover / focus / press.
+ *
+ * Recolour per use by setting these on the caller's class (they're read with
+ * fallbacks, never declared here, so the caller wins regardless of CSS order):
+ *   --cta-bg     fill               (default: --brand-coral)
+ *   --cta-fg     label colour       (default: --color-text)
+ *   --cta-hover  hover layer        (default: --linear-gradient)
+ */
+
+.cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background-color: var(--cta-bg, var(--brand-coral));
+  color: var(--cta-fg, var(--color-text));
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  color: var(--cta-fg, var(--color-text));
+}
+
+.cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--cta-hover, var(--linear-gradient));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.cta:hover::before,
+.cta:focus-visible::before,
+.cta:active::before {
+  opacity: 1;
+}
