@@ -22,6 +22,19 @@ interface ApplyFormOverlayProps {
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+// Opacity alone doesn't fade a backdrop-filter in every engine (the blur lands at
+// full strength before the tint), so the blur radius rides along. 10px = .backdrop's.
+const BACKDROP_HIDDEN = {
+  opacity: 0,
+  backdropFilter: 'blur(0px)',
+  WebkitBackdropFilter: 'blur(0px)',
+};
+const BACKDROP_SHOWN = {
+  opacity: 1,
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+};
+
 const emptyForm = { name: '', email: '', phone: '', company: '', message: '' };
 
 const cardFor = (program: PartnerProgram) =>
@@ -40,9 +53,9 @@ const ApplyFormOverlay = ({ program, onClose }: ApplyFormOverlayProps) => {
           key="backdrop"
           className={styles.backdrop}
           onClick={onClose}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={BACKDROP_HIDDEN}
+          animate={BACKDROP_SHOWN}
+          exit={BACKDROP_HIDDEN}
           transition={{ duration: 0.3, ease: EASE }}
         >
           <motion.div

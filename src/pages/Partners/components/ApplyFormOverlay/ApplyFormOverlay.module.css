@@ -38,10 +38,10 @@
   outline: var(--border-hairline);
   outline-offset: -0.5px;
   border-radius: var(--radius-xl);
+  /* No blur of its own: .backdrop already blurs the page, and a nested one only
+   * re-blurs the tint, switching on once the frame's fade ends (a visible darkening). */
   background: var(--glass-bg);
   box-shadow: var(--glass-shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   color: var(--color-text);
 }
 
