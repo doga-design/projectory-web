@@ -268,6 +268,14 @@
   --btn-fg-hover: var(--color-text-inverse);
 }
 
+/* Shown only if the application couldn't be sent. */
+.statusMessage {
+  margin: 0;
+  color: var(--brand-coral-soft);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+}
+
 /* ── Confirmation ─── */
 
 .success {

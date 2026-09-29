@@ -128,5 +128,6 @@ export const testimonial = {
 export const ctaBanner = {
   title: 'Ready to Apply?\nRegister a Deal.',
   body: 'Your client stays yours. Register it and we’ll protect the dates, even if the event is months away.',
-  primary: { label: 'Register a Deal', to: '/get-started#contact-form' },
+  // ?source= tells the contact form (and Pipedrive) this came from Register a Deal.
+  primary: { label: 'Register a Deal', to: '/get-started?source=register-deal#contact-form' },
 };

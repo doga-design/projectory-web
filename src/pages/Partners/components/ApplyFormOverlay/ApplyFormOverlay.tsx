@@ -8,6 +8,9 @@ import { FiX } from 'react-icons/fi';
 import Button from '@/components/Button/Button';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 import { useScrollLock } from '@/hooks/useScrollLock';
+import HoneypotField from '@/components/HoneypotField/HoneypotField';
+import { useLeadForm } from '@/hooks/useLeadForm';
+import { fieldErrorMessage } from '@/lib/leads';
 import { partnerPrograms, type PartnerProgram } from '../../partnersData';
 import styles from './ApplyFormOverlay.module.css';
 
@@ -69,6 +72,8 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
   const [selected, setSelected] = useState<PartnerProgram>(initialProgram);
   const [formData, setFormData] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState('');
+  const { send, sending, honeypotProps } = useLeadForm();
   const titleId = useId();
   const reduceMotion = useReducedMotion();
 
@@ -99,11 +104,23 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Goes to Pipedrive as a lead; a Web3Forms email is the backup if Pipedrive can't take it.
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO(backend): send the application. Until then this only shows the
-    // confirmation — don't ship to production like this.
-    setSubmitted(true);
+    setStatus('');
+    const result = await send({
+      form: 'partner-application',
+      fields: { ...formData, program: selected },
+      fallback: {
+        subject: `Partner application (${selected})`,
+        from_name: formData.name,
+        ...formData,
+        program: selected,
+      },
+      embedded: true,
+    });
+    if (result.ok) setSubmitted(true);
+    else setStatus(fieldErrorMessage(result) ?? 'Something went wrong. Please try again.');
   };
 
   return (
@@ -185,6 +202,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
                 </button>
               </div>
               <input type="hidden" name="program" value={selected} />
+              <HoneypotField {...honeypotProps} />
 
               <div className={styles.fieldRow}>
                 <label className={styles.field}>
@@ -246,9 +264,14 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
                 />
               </label>
 
-              <Button type="submit" variant="light" className={styles.submit}>
+              <Button type="submit" variant="light" className={styles.submit} disabled={sending}>
                 Apply
               </Button>
+              {status && (
+                <p className={styles.statusMessage} role="alert">
+                  {status}
+                </p>
+              )}
             </motion.form>
           )}
         </AnimatePresence>

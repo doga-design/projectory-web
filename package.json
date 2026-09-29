@@ -14,7 +14,8 @@
     "knip": "knip",
     "build": "vite build --outDir docs",
     "postbuild": "cp docs/index.html docs/404.html",
-    "seed:combo-convo": "node scripts/seed-combo-convo-backup.cjs"
+    "seed:combo-convo": "node scripts/seed-combo-convo-backup.cjs",
+    "setup:pipedrive": "node scripts/setup-pipedrive.cjs"
   },
   "dependencies": {
     "cors": "^2.8.5",

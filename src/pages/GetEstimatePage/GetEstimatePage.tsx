@@ -3,7 +3,10 @@ import { useLikedProducts } from '@/context/LikedProductsContext';
 import { Link } from 'react-router-dom';
 import { getProductsByIds } from '@/lib/findProduct';
 import styles from './GetEstimatePage.module.css';
-import { submitToWeb3Forms } from '@/lib/web3forms';
+import HoneypotField from '@/components/HoneypotField/HoneypotField';
+import { useLeadForm } from '@/hooks/useLeadForm';
+import { fieldErrorMessage } from '@/lib/leads';
+import { clearFinderAnswers, readFinderAnswers } from '@/lib/finderAnswers';
 
 import { teal as shape2 } from '@/assets/images/shapes/floaters';
 
@@ -26,6 +29,7 @@ const GetEstimatePage: React.FC = () => {
   });
   const [status, setStatus] = useState('');
   const [showOverlay, setShowOverlay] = useState(false);
+  const { send, sending, honeypotProps } = useLeadForm();
 
   // Update selectedProducts field whenever likedProducts changes
   useEffect(() => {
@@ -40,13 +44,24 @@ const GetEstimatePage: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Submit the form data using Web3Forms AJAX
+  // Sends to Pipedrive with product names and the Product Finder answers; the Web3Forms email
+  // (unchanged from before) is the backup.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('Sending...');
 
-    try {
-      const { response, result } = await submitToWeb3Forms({
+    const result = await send({
+      form: 'estimate',
+      fields: {
+        name: formData.name,
+        email: formData.email,
+        eventDate: formData.eventDate,
+        eventLocation: formData.eventLocation,
+        message: formData.message,
+        products: getProductsByIds(likedProducts).map((p) => p.name),
+        finder: readFinderAnswers(),
+      },
+      fallback: {
         subject: 'Estimate Request from Projectory',
         from_name: formData.name,
         name: formData.name,
@@ -55,16 +70,15 @@ const GetEstimatePage: React.FC = () => {
         eventLocation: formData.eventLocation,
         message: formData.message,
         selectedProducts: formData.selectedProducts,
-      });
-      if (response.ok && result.success !== false) {
-        setShowOverlay(true);
-        setStatus('');
-      } else {
-        setStatus('Failed to send message. Please try again.');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      setStatus('Error sending message. Please try again.');
+      },
+    });
+
+    if (result.ok) {
+      clearFinderAnswers();
+      setShowOverlay(true);
+      setStatus('');
+    } else {
+      setStatus(fieldErrorMessage(result) ?? 'Failed to send message. Please try again.');
     }
   };
 
@@ -129,6 +143,7 @@ const GetEstimatePage: React.FC = () => {
               value={formData.selectedProducts}
               readOnly
             />
+            <HoneypotField {...honeypotProps} />
 
             {/* Visible fields */}
             <label>
@@ -186,7 +201,7 @@ const GetEstimatePage: React.FC = () => {
               />
             </label>
 
-            <button type="submit" className={styles.submitButton}>
+            <button type="submit" className={styles.submitButton} disabled={sending}>
               Get An Estimate
             </button>
             {status && <p className={styles.statusMessage}>{status}</p>}

@@ -16,28 +16,33 @@ npm install
 npm run dev          # http://localhost:5173
 ```
 
-No environment variables are needed for the marketing site.
+Server-side variables live in the Vercel project settings (never in code). The
+site runs without any of them locally.
 
-The activity forms proxy to Google Apps Script and need two, set in the Vercel
-project settings for production and in a local `.env` if you are working on
-them:
+The lead forms send to Pipedrive through `api/lead-form.cjs` and need two (see
+[Leads → Pipedrive](#leads--pipedrive)). The activity forms proxy to Google Apps
+Script and need two more, set in Vercel for production and in a local `.env` if
+you are working on them:
 
 | Variable                         | Purpose                                                                                                                          |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `PIPEDRIVE_COMPANY_DOMAIN`       | Pipedrive account for website leads: the `yourcompany` in `yourcompany.pipedrive.com`                                            |
+| `PIPEDRIVE_API_TOKEN`            | That account's API token (Personal preferences → API). New leads are owned by the token's user                                   |
 | `VENTING_MACHINE_API_KEY`        | Shared secret the venting-machine Apps Script checks before accepting a write                                                    |
 | `VENTING_MACHINE_DEPLOYMENT_URL` | Deployed Apps Script web-app URL (`https://script.google.com/macros/s/<id>/exec`) that `api/venting-machine-form.cjs` proxies to |
 
 ## Scripts
 
-| Script              | What it does                                          |
-| ------------------- | ----------------------------------------------------- |
-| `npm run dev`       | Vite dev server, with `/api/*` proxied to Apps Script |
-| `npm run build`     | Production build into `docs/`                         |
-| `npm run preview`   | Serve the built output                                |
-| `npm run typecheck` | `tsc --noEmit`. See the note below                    |
-| `npm run lint`      | ESLint                                                |
-| `npm run format`    | Prettier write · `format:check` to verify only        |
-| `npm run knip`      | Unused files, exports and dependencies                |
+| Script                    | What it does                                                   |
+| ------------------------- | -------------------------------------------------------------- |
+| `npm run dev`             | Vite dev server, with activity `/api/*` proxied to Apps Script |
+| `npm run build`           | Production build into `docs/`                                  |
+| `npm run preview`         | Serve the built output                                         |
+| `npm run typecheck`       | `tsc --noEmit`. See the note below                             |
+| `npm run lint`            | ESLint                                                         |
+| `npm run format`          | Prettier write · `format:check` to verify only                 |
+| `npm run knip`            | Unused files, exports and dependencies                         |
+| `npm run setup:pipedrive` | Pipedrive custom fields for the lead form (see below)          |
 
 > **`typecheck` reports 6 known errors**, all in `src/pages/activities/`. They
 > are a frozen baseline, not new breakage. Anything _outside_ that directory
@@ -56,8 +61,8 @@ src/
   config/       site.ts (keys, endpoints), seo.ts (per-route metadata)
   context/      LikedProductsContext
   data/         products.ts, caseStudies.ts, faq.ts — app-wide data
-  hooks/        useEscapeKey, usePageEntrance, useDocumentMeta
-  lib/          web3forms.ts, findProduct.ts
+  hooks/        useEscapeKey, usePageEntrance, useDocumentMeta, useLeadForm
+  lib/          leads.ts, visitorContext.ts, finderAnswers.ts, web3forms.ts, findProduct.ts
   pages/<Page>/ <Page>.tsx + <Page>.module.css + components/<Name>/
   styles/       tokens.css (design tokens), global.css
   types/        product.ts
@@ -88,6 +93,40 @@ functions in `api/`. The Apps Script sources live in `apps-script-*/`
 
 In production these routes redirect to `activity.projectory.live` (see
 `vercel.json`).
+
+## Leads → Pipedrive
+
+The Contact form, Estimate request (with the Product Finder answers), footer
+intro-deck form and the partner Apply overlay post to `/api/lead-form`
+(`api/lead-form.cjs`). For each submission it finds or creates the organization
+(exact name) and person (exact email), creates a lead in Pipedrive's Leads Inbox
+with custom fields, and pins a note with the message. Leads also record where the
+visitor came from: UTM tags, referrer, landing page, and the page that led to the
+form (`src/lib/visitorContext.ts`). The Partners page "Register a Deal" button
+links to the contact form with `?source=register-deal`, which tags the lead.
+
+**Email backup.** If the function can't deliver (Pipedrive down, bad token, or the
+`PIPEDRIVE_*` variables not set), the browser sends the Web3Forms email the forms
+used before (`src/lib/leads.ts`), so no lead is lost. Bots are dropped by a hidden
+honeypot field and a minimum fill time.
+
+**It only runs on Vercel.** `npm run dev` has no local backend for it (unlike the
+activity endpoints, which Vite proxies straight to Apps Script), so there the forms
+fall back to the Web3Forms email, as they always have. Don't submit them while
+developing; test on the staging preview.
+
+**Custom fields** are found by name, so any Pipedrive account works once they
+exist. Create them once per account, with `PIPEDRIVE_COMPANY_DOMAIN` and
+`PIPEDRIVE_API_TOKEN` in a local `.env.local` (the script reads it; the field list
+comes from `api/lead-form.cjs`, so the two always match):
+
+```bash
+npm run setup:pipedrive             # preview what's missing (changes nothing)
+npm run setup:pipedrive -- --apply  # create the missing fields
+```
+
+The token's Pipedrive user needs permission to add custom fields. New-lead alerts
+are set up inside Pipedrive (notifications / automations).
 
 ## Deployment
 
