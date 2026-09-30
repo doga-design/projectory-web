@@ -6,7 +6,8 @@
  *   1. drops spam (hidden honeypot field filled, or filled in too fast)
  *   2. validates the form
  *   3. organization: reuses one with the exact company name, else creates it
- *   4. person: reuses one with the exact email, else creates them
+ *   4. person: reuses one with the exact email (filling in a missing name,
+ *      phone or organization), else creates them
  *   5. creates a lead in the Leads Inbox, with custom fields
  *   6. pins a note with the message and where the visitor came from
  *
@@ -223,7 +224,10 @@ async function findOrCreatePerson(config, { name, email, phone }, orgId) {
     `/v2/persons/search?term=${encodeURIComponent(email)}&fields=email&exact_match=true&limit=1`
   );
   const match = found.data.items[0] && found.data.items[0].item;
-  if (match) return { id: match.id };
+  if (match) {
+    await fillMissingPersonDetails(config, match.id, { name, email, phone }, orgId);
+    return { id: match.id };
+  }
   const created = await pipedrive(config, "POST", "/v2/persons", {
     name,
     emails: [{ value: email, primary: true, label: "work" }],
@@ -231,6 +235,31 @@ async function findOrCreatePerson(config, { name, email, phone }, orgId) {
     ...(orgId && { org_id: orgId }),
   });
   return { id: created.data.id };
+}
+
+// A returning person (e.g. intro deck first, contact form later) gets their
+// missing name, phone and organization filled in. Values already in Pipedrive
+// are never overwritten, and a failure here must never cost the lead.
+async function fillMissingPersonDetails(config, id, { name, email, phone }, orgId) {
+  try {
+    const person = (await pipedrive(config, "GET", `/v2/persons/${id}`)).data;
+    const storedName = String(person.name || "").trim().toLowerCase();
+    const patch = {
+      // The intro-deck form sends the email as the name; that's no better.
+      ...((!storedName || storedName === email) &&
+        name.toLowerCase() !== email && { name }),
+      ...(phone &&
+        !(person.phones || []).some((p) => p.value) && {
+          phones: [{ value: phone, primary: true, label: "work" }],
+        }),
+      ...(orgId && !person.org_id && { org_id: orgId }),
+    };
+    if (Object.keys(patch).length) {
+      await pipedrive(config, "PATCH", `/v2/persons/${id}`, patch);
+    }
+  } catch (error) {
+    console.warn(`[lead-form] person details not updated: ${error.message}`);
+  }
 }
 
 // ── Reading a submission ─────────────────────────────────────────────────────
