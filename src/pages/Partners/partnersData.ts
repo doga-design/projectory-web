@@ -1,14 +1,14 @@
 import type { Logo } from '@/components/LogoMarquee/LogoMarquee';
 import type { FeatureCardProps } from '@/components/FeatureCard/FeatureCard';
 import type { CyclingCardsItem } from '@/components/sections/CyclingCards/CyclingCards';
-import cibc from '@/assets/images/logos/cibc.webp';
-import oracle from '@/assets/images/logos/oracle.webp';
-import thomsonReuters from '@/assets/images/logos/thomsonReuters.webp';
-import canadianMedicalAssociation from '@/assets/images/logos/canadianMedicalAssociation.webp';
-import pcma from '@/assets/images/logos/pcma.webp';
-import royalCanadianMint from '@/assets/images/logos/royalCanadianMint.svg';
-import deloitte from '@/assets/images/logos/deloitte.webp';
-import enmax from '@/assets/images/logos/enmax.webp';
+import cvent from '@/assets/images/logos/cvent.svg';
+import sonar from '@/assets/images/logos/sonar.svg';
+import pcma from '@/assets/images/logos/pcma.svg';
+import opus from '@/assets/images/logos/opus.svg';
+import rainFocus from '@/assets/images/logos/rainFocus.svg';
+import shepard from '@/assets/images/logos/shepard.svg';
+import cema from '@/assets/images/logos/cema.svg';
+import loma from '@/assets/images/logos/loma.svg';
 
 /* In-page scroll targets for the hero and program card CTAs. */
 export const sectionIds = {
@@ -23,17 +23,20 @@ export const partnersHero = {
   cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 
-/* Logo band under the hero. Add or remove a logo here; list order is scroll order. */
-export const clientLogos = [
-  { src: cibc, alt: 'CIBC' },
-  { src: oracle, alt: 'Oracle' },
-  { src: thomsonReuters, alt: 'Thomson Reuters' },
-  { src: canadianMedicalAssociation, alt: 'Canadian Medical Association' },
-  { src: pcma, alt: 'PCMA Foundation' },
-  { src: royalCanadianMint, alt: 'Royal Canadian Mint' },
-  { src: deloitte, alt: 'Deloitte' },
-  { src: enmax, alt: 'ENMAX' },
+/* The page's logos: the band under the hero and "In Good Company". Add or remove a logo
+   here; list order is scroll and grid order. */
+const partnerLogos = [
+  { src: cvent, alt: 'Cvent' },
+  { src: sonar, alt: 'Sonar' },
+  { src: pcma, alt: 'PCMA' },
+  { src: opus, alt: 'Opus' },
+  { src: rainFocus, alt: 'RainFocus' },
+  { src: shepard, alt: 'Shepard' },
+  { src: cema, alt: 'CEMA' },
+  { src: loma, alt: 'Loma Agency' },
 ] satisfies Logo[];
+
+export const clientLogos = partnerLogos;
 
 /* The program cards; each card's Apply opens the application overlay on that program. */
 export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
@@ -103,15 +106,7 @@ export const whyPartner = {
 
 export const goodCompany = {
   title: 'In Good Company',
-  logos: [
-    { src: cibc, alt: 'CIBC' },
-    { src: oracle, alt: 'Oracle' },
-    { src: thomsonReuters, alt: 'Thomson Reuters' },
-    { src: canadianMedicalAssociation, alt: 'Canadian Medical Association' },
-    { src: pcma, alt: 'PCMA Foundation' },
-    { src: royalCanadianMint, alt: 'Royal Canadian Mint' },
-    { src: deloitte, alt: 'Deloitte' },
-  ] satisfies Logo[],
+  logos: partnerLogos,
 };
 
 export const testimonial = {

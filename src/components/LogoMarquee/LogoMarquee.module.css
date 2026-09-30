@@ -3,7 +3,11 @@
   --logo-height: 40px;
   --logo-gap: var(--block-4);
   width: 100%;
-  overflow: hidden;
+  /* Room above and below for a nudged logo (the mask clips to this box); the
+     negative margin keeps the band's footprint unchanged. */
+  padding-block: var(--space-4);
+  margin-block: calc(-1 * var(--space-4));
+  overflow-x: clip;
   /* Edge fade. A mask reads opacity, not colour, so it works on any
      background and these reference the primitive directly. */
   -webkit-mask-image: linear-gradient(
@@ -28,6 +32,21 @@
   width: auto;
   height: var(--logo-height);
   margin-right: var(--logo-gap);
+}
+
+/* The library's container clips both axes (overflow-x: hidden); clip only sideways. */
+.band :global(.rfm-marquee-container) {
+  overflow-x: clip;
+}
+
+/* Its dots sit above the wordmark, so it reads low next to the others. */
+.logo[alt='RainFocus'] {
+  transform: translateY(-28%);
+}
+
+/* Its descender (the p) pulls the wordmark high. */
+.logo[alt='Opus'] {
+  transform: translateY(12.5%);
 }
 
 @media (max-width: 768px) {

@@ -165,7 +165,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  margin: 0 0 var(--space-6);
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -191,10 +191,18 @@
   color: var(--color-text);
 }
 
-/* Pinned to the bottom, so CTAs line up across a row of cards. */
+
 .cta {
   margin-top: auto;
   white-space: nowrap;
+}
+
+/* Extra spacing in cards list items so they appear less padded–without ruining heights */
+@media (min-width: 1025px) {
+  .coral .featureList,
+  .lime .featureList {
+    gap: calc(var(--space-4) + 5px);
+  }
 }
 
 @media (max-width: 768px) {

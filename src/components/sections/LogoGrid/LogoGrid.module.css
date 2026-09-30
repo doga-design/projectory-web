@@ -23,6 +23,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--block-1) var(--block-2);
+  /* Wraps 8 logos into two even rows of 4 on desktop, as on tablet. */
+  max-width: 960px;
   margin: 0;
   padding: 0;
   list-style: none;

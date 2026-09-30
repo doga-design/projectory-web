@@ -100,7 +100,9 @@ The Contact form, Estimate request (with the Product Finder answers), footer
 intro-deck form and the partner Apply overlay post to `/api/lead-form`
 (`api/lead-form.cjs`). For each submission it finds or creates the organization
 (exact name) and person (exact email), creates a lead in Pipedrive's Leads Inbox
-with custom fields, and pins a note with the message. Leads also record where the
+with custom fields, and pins a note with the message. A returning person's missing
+name, phone or organization is filled in from the form; nothing already in
+Pipedrive is overwritten. Leads also record where the
 visitor came from: UTM tags, referrer, landing page, and the page that led to the
 form (`src/lib/visitorContext.ts`). The Partners page "Register a Deal" button
 links to the contact form with `?source=register-deal`, which tags the lead.
