@@ -1,0 +1,208 @@
+.section {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: start;
+  column-gap: var(--block-2);
+  width: 100%;
+  text-align: left;
+}
+
+/* ── Accents (eyebrow colour) ─── */
+
+.pink {
+  --accent: var(--brand-pink);
+}
+
+.coral {
+  --accent: var(--brand-coral);
+}
+
+.teal {
+  --accent: var(--brand-teal);
+}
+
+.lime {
+  --accent: var(--brand-lime);
+}
+
+/* ── Intro ─── */
+
+/* Sticky top clears the floating navbar (~90px) with room to breathe. */
+.intro {
+  position: sticky;
+  top: 140px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.eyebrow,
+.title {
+  margin: 0;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--font-size-xl);
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  color: var(--accent);
+}
+
+.title {
+  font-family: var(--font-medium);
+  font-size: var(--font-size-3xl);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  white-space: pre-line;
+}
+
+/* ── Cards ─── */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* --text-lift shifts the text up without changing the card's height:
+   it comes off the top padding and goes onto the bottom. */
+.card {
+  --text-lift: 6px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: calc(var(--block-1) - var(--text-lift)) var(--block-1)
+    calc(var(--block-1) + var(--text-lift));
+  border: none;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  text-align: left;
+  /* Buttons block text selection by default; the copy should be copyable. */
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    padding var(--transition-base);
+}
+
+/* Real pointers only: on touch, :hover sticks after a tap. */
+@media (hover: hover) {
+  .card:not(.cardOpen):hover {
+    background: var(--color-surface-hover);
+  }
+}
+
+.cardOpen {
+  padding: calc(var(--block-2) - var(--text-lift)) var(--block-2)
+    calc(var(--block-2) + var(--text-lift));
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  cursor: default;
+}
+
+.cardOpen .cardTitle,
+.cardOpen .body {
+  cursor: text;
+}
+
+/* Slide-open: a grid row animating 0fr → 1fr, so no height is measured in JS. */
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-base);
+}
+
+.cardOpen .reveal {
+  grid-template-rows: 1fr;
+}
+
+.revealInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.number {
+  display: block;
+  padding-bottom: 6px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xl);
+  line-height: var(--leading-relaxed);
+  color: var(--brand-coral);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+}
+
+.cardTitle {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xl);
+  font-weight: 400;
+  line-height: var(--leading-normal);
+  text-wrap: balance;
+  transition: font-size var(--transition-base);
+}
+
+/* The em cap keeps open headlines to the design's compact two lines. */
+.cardOpen .cardTitle {
+  max-width: 7.5em;
+  font-family: var(--font-medium);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: var(--leading-tight);
+}
+
+.body {
+  display: block;
+  padding-top: var(--block-1);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: 24px;
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+}
+
+.list > .card:first-child .body {
+  max-width: 25em;
+}
+
+.list > .card:nth-child(2) .body {
+  max-width: calc(100% - 15px);
+}
+
+@media (max-width: 1024px) {
+  .section {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--block-2);
+  }
+
+  .intro {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .cardTitle {
+    font-size: var(--font-size-lg);
+  }
+
+  .cardOpen {
+    padding: calc(var(--block-1) - var(--text-lift)) var(--block-1)
+      calc(var(--block-1) + var(--text-lift));
+  }
+
+  .cardOpen .cardTitle {
+    font-size: var(--font-size-2xl);
+  }
+}

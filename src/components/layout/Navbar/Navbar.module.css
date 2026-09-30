@@ -4,9 +4,9 @@
   --nav-pad: 18px;
   --nav-row-gap: 32px;
   --nav-radius: 10px;
-  --nav-glass-bg: rgba(19, 19, 19, 0.8);
+  --nav-glass-bg: var(--glass-bg);
   --nav-glass-border: 0.5px solid rgba(123, 123, 123, 0.5);
-  --nav-glass-shadow: 0 12px 36px 0 rgba(19, 19, 19, 0.12);
+  --nav-glass-shadow: var(--glass-shadow);
   --nav-ease: cubic-bezier(0.83, 0, 0.17, 1);
   --nav-motion: 0.45s var(--nav-ease);
   --nav-open-ease: cubic-bezier(0.83, 0, 0.17, 1);
@@ -73,7 +73,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: var(--nav-gap);
-  width: min(800px, calc(100% - 48px));
+  width: min(840px, calc(100% - 48px));
   margin: 18px auto 0;
   container-type: inline-size;
   container-name: nav;
@@ -196,7 +196,7 @@
   list-style: none;
 }
 
-.desktopNav a:not(.ctaButton) {
+.desktopNav a {
   display: inline-flex;
   align-items: center;
   padding: 10px 14px;
@@ -207,7 +207,7 @@
   transition: background-color 0.3s ease;
 }
 
-.desktopNav a:not(.ctaButton):hover {
+.desktopNav a:hover {
   background-color: var(--dark-gray);
   color: var(--white);
 }
@@ -218,47 +218,6 @@
   gap: 22px;
   margin-left: 8px;
   flex-shrink: 0;
-}
-
-.ctaButton {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 1rem;
-  line-height: 1.2;
-  white-space: nowrap;
-  background-color: var(--brand-coral);
-  color: var(--white);
-  font-family: 'FounderGrotesk_Regular', sans-serif;
-  font-weight: normal;
-  text-decoration: none;
-  overflow: hidden;
-}
-
-.ctaButtonLabel {
-  position: relative;
-  z-index: 1;
-  color: var(--white);
-}
-
-.ctaButton::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--linear-gradient);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-.ctaButton:hover::before,
-.ctaButton:focus-visible::before,
-.ctaButton:active::before {
-  opacity: 1;
 }
 
 .slideInToggleBtn {

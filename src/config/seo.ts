@@ -42,6 +42,11 @@ export const pageMeta = {
     description:
       'Every product, one price. Rent and run it with your team, or bring us in to facilitate.',
   },
+  partners: {
+    title: 'Partners',
+    description:
+      'Now that you’re here, let’s add unforgettable audience engagement to your next client’s event.',
+  },
   whoWeAre: {
     title: 'Who We Are',
     description:

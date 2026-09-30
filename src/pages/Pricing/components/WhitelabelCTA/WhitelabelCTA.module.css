@@ -1,10 +1,9 @@
 .whitelabelCta {
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   gap: clamp(32px, 5.5vw, 75px);
   width: 100%;
-  max-width: min(900px, 100%);
-  margin: 0 auto;
   text-align: left;
   box-sizing: border-box;
 }
@@ -66,10 +65,10 @@
 }
 
 .mediaColumn {
-  flex: 0 1 min(380px, 42%);
-  width: min(380px, 42%);
+  flex: 0 1 min(440px, 45%);
+  width: min(440px, 45%);
   min-width: 0;
-  max-width: 380px;
+  max-width: 440px;
 }
 
 .image {

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { lazy, Suspense, useState, useEffect, useCallback } from 'react';
 import Layout from '@/components/layout/Layout/Layout';
 import ScrollToTop from '@/components/layout/ScrollToTop/ScrollToTop';
+import PageViewTracker from '@/components/layout/PageViewTracker/PageViewTracker';
 import { LikedProductsProvider } from '@/context/LikedProductsContext';
 import LoadingScreen from '@/components/layout/LoadingScreen/LoadingScreen';
 
@@ -20,6 +21,7 @@ const LaserFocusForm = lazy(() => import('@/pages/activities/LaserFocus/LaserFoc
 const ScatterPlot = lazy(() => import('@/pages/activities/LaserFocus/ScatterPlot/ScatterPlot'));
 const VentingMachine = lazy(() => import('@/pages/activities/VentingMachine/VentingMachine'));
 const Pricing = lazy(() => import('@/pages/Pricing/Pricing'));
+const Partners = lazy(() => import('@/pages/Partners/Partners'));
 
 const MIN_LOADING_MS = 1200;
 const FADE_OUT_MS = 500;
@@ -66,6 +68,7 @@ const App = () => {
       {showLoader && <LoadingScreen fadeOut={fadeOut} />}
       <Router>
         <ScrollToTop />
+        <PageViewTracker />
         <Layout>
           <Suspense fallback={null}>
             <Routes>
@@ -74,6 +77,7 @@ const App = () => {
               <Route path="/products" element={<Product />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/case-studies" element={<CaseStudies />} />
+              <Route path="/partners" element={<Partners />} />
               <Route path="/case-study/:id" element={<CaseStudyPage />} />
               <Route path="/products/:id" element={<ProductPage />} />
               <Route path="/get-started" element={<GetStarted />} />

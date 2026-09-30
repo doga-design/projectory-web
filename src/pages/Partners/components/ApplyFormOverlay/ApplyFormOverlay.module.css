@@ -1,0 +1,344 @@
+/* ApplyFormOverlay
+ * ════════════════
+ * Navbar dark glass over a tinted, blurred page. Inputs keep the contact
+ * form's sizing (48px, 8px radius, hairline, 18/25 type) re-inked for dark.
+ * Accent is limited to the title's program and the Apply button, which is
+ * the program cards' Apply button filled with the accent.
+ */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--space-4);
+  overflow: hidden;
+  background: color-mix(in srgb, var(--color-bg) 60%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Sizes the panel and carries its entrance motion. */
+.frame {
+  width: min(640px, 100%);
+}
+
+/* ── Panel ─── */
+
+.panel {
+  box-sizing: border-box;
+  max-height: calc(100dvh - 48px);
+  /* Height is animated from JS to follow .content; x hidden so nothing spills mid-morph. */
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  /* Outline, not border (as on FeatureCard): keeps the measured content height equal to the panel's. */
+  outline: var(--border-hairline);
+  outline-offset: -0.5px;
+  border-radius: var(--radius-xl);
+  /* No blur of its own: .backdrop already blurs the page, and a nested one only
+   * re-blurs the tint, switching on once the frame's fade ends (a visible darkening). */
+  background: var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  color: var(--color-text);
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
+
+/* Measured for the panel's height morph, so the padding lives here. */
+.content {
+  padding: var(--block-2);
+}
+
+.coral {
+  --accent: var(--brand-coral);
+}
+
+.teal {
+  --accent: var(--brand-teal);
+}
+
+.lime {
+  --accent: var(--brand-lime);
+}
+
+/* ── Heading ─── */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+/* Title and close on one row, centred on each other. */
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.close {
+  display: flex;
+  flex-shrink: 0;
+  padding: var(--space-1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    color var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .close:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-muted);
+  }
+}
+
+.title {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-medium);
+  font-size: 38px;
+  font-weight: 500;
+  line-height: var(--leading-tight);
+}
+
+/* ── Program toggle ───
+ * The title's program word is the picker: a site-radius button washed in the
+ * accent at 5%, stronger on hover. Each click rolls the reel to the next one.
+ * The confirmation reuses the look as a static tag. */
+
+.programToggle,
+.programTag {
+  display: inline-flex;
+  vertical-align: baseline;
+  margin: 0 0 0 -2px;
+  padding: 0 var(--space-3) 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  color: var(--accent);
+  font: inherit;
+  line-height: inherit;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.programToggle {
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .programToggle:hover {
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+}
+
+.programToggle:active {
+  transform: scale(0.97);
+}
+
+.programToggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* All words share one grid cell: the hidden sizers set the width, and the
+ * clip turns the enter/exit slide into a reel. */
+.reel {
+  display: inline-grid;
+  overflow: hidden;
+}
+
+/* global.css sets the Regular face on `*`, which would thin the word out. */
+.reel,
+.sizer,
+.word {
+  font-family: inherit;
+}
+
+.sizer,
+.word {
+  grid-area: 1 / 1;
+  text-align: center;
+}
+
+.sizer {
+  visibility: hidden;
+}
+
+.word {
+  display: block;
+}
+
+/* ── Fields ─── */
+
+.fieldRow {
+  display: flex;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.label {
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  font-weight: 400;
+  line-height: 25px;
+}
+
+.field input,
+.field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px var(--space-4);
+  border: var(--border-hairline);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  font-weight: 400;
+  line-height: 25px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color var(--transition-fast);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--color-text-dim);
+  opacity: 1;
+}
+
+.field input:focus,
+.field textarea:focus {
+  border-color: color-mix(in srgb, var(--color-text) 60%, transparent);
+}
+
+/* Keep autofill from painting the glass inputs pale yellow. */
+.field input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text);
+  transition: background-color 9999s ease-out;
+}
+
+.field input {
+  height: 48px;
+}
+
+.field textarea {
+  height: 140px;
+  resize: none;
+}
+
+.submit {
+  align-self: flex-start;
+  margin-top: var(--space-2);
+  white-space: nowrap;
+}
+
+/* The cards' Apply button (Button "light"), filled with the program accent.
+ * One dark label on every accent; hover deepens the fill, as on the lime
+ * variant. Two classes so these outrank the Button's own `.light` vars. */
+.panel .submit {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--color-text-inverse);
+  --btn-bg-hover: color-mix(in srgb, var(--accent) 90%, black);
+  --btn-fg-hover: var(--color-text-inverse);
+}
+
+/* Shown only if the application couldn't be sent. */
+.statusMessage {
+  margin: 0;
+  color: var(--brand-coral-soft);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Confirmation ─── */
+
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--block-3) var(--space-4) var(--block-1);
+  text-align: center;
+}
+
+.successBody {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: 25px;
+}
+
+.backLink {
+  margin-top: var(--space-4);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-dim);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .backLink:hover {
+    color: var(--color-text-muted);
+  }
+}
+
+.backLink:focus-visible {
+  outline: none;
+  color: var(--color-text);
+}
+
+/* ── Responsive ─── */
+
+@media (max-width: 768px) {
+  .panel {
+    border-radius: var(--radius-lg);
+  }
+
+  .content {
+    padding: var(--block-1) var(--space-5);
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .fieldRow {
+    flex-direction: column;
+  }
+
+  .submit {
+    align-self: stretch;
+  }
+}

@@ -9,12 +9,28 @@
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  background: linear-gradient(90deg, var(--alpha-black-10) 0%, var(--alpha-black-10) 100%),
-    var(--brand-teal);
+  background: var(--banner-bg);
   overflow: visible;
+  /* Clears the fixed navbar when an in-page link scrolls here. */
+  scroll-margin-top: 100px;
 }
 
-.badgeTeal {
+/* ── Variants ─── */
+
+.teal {
+  --banner-bg: linear-gradient(90deg, var(--alpha-black-10) 0%, var(--alpha-black-10) 100%),
+    var(--brand-teal);
+  --badge-rotate: -16.545deg;
+}
+
+.lime {
+  --banner-bg: var(--brand-lime);
+  --badge-rotate: 21deg;
+}
+
+.lime .badge { right: 15%; bottom: -104px; }
+
+.badge {
   position: absolute;
   bottom: -80px;
   right: 5%;
@@ -23,7 +39,7 @@
   object-fit: contain;
   pointer-events: none;
   z-index: 2;
-  rotate: -16.545deg;
+  rotate: var(--badge-rotate);
   animation: bob 4.2s ease-in-out 0.6s infinite alternate;
 }
 
@@ -62,6 +78,7 @@
   line-height: var(--leading-none);
   color: var(--color-text);
   text-align: center;
+  white-space: pre-line;
 }
 
 .body {
@@ -94,7 +111,7 @@
     padding: 64px var(--space-6);
   }
 
-  .badgeTeal {
+  .badge {
     display: none;
   }
 
@@ -110,6 +127,10 @@
 
   .body {
     max-width: 100%;
+  }
+
+  .lime .body {
+    max-width: 16em;
   }
 
   .actions {

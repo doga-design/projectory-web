@@ -1,0 +1,38 @@
+.band {
+  /* Component tokens: logo geometry, retuned at the tablet breakpoint. */
+  --logo-height: 40px;
+  --logo-gap: var(--block-4);
+  width: 100%;
+  overflow: hidden;
+  /* Edge fade. A mask reads opacity, not colour, so it works on any
+     background and these reference the primitive directly. */
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--neutral-1000) 15%,
+    var(--neutral-1000) 85%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--neutral-1000) 15%,
+    var(--neutral-1000) 85%,
+    transparent 100%
+  );
+}
+
+.logo {
+  display: block;
+  flex-shrink: 0;
+  width: auto;
+  height: var(--logo-height);
+  margin-right: var(--logo-gap);
+}
+
+@media (max-width: 768px) {
+  .band {
+    --logo-height: 28px;
+    --logo-gap: var(--block-2);
+  }
+}

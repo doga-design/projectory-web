@@ -1,0 +1,62 @@
+.section {
+  /* Component token: logo height, retuned at the tablet breakpoint. */
+  --logo-height: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--block-3);
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 44px;
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.tiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--block-1) var(--block-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6) var(--block-1);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.logo {
+  display: block;
+  width: auto;
+  height: var(--logo-height);
+}
+
+@media (max-width: 768px) {
+  .section {
+    --logo-height: 28px;
+  }
+
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .tiles {
+    gap: var(--space-3);
+  }
+
+  .tile {
+    padding: var(--space-4) var(--space-5);
+  }
+}

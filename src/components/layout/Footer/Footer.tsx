@@ -8,30 +8,34 @@ import { FiInstagram } from 'react-icons/fi';
 import logo from '@/assets/images/logo.svg';
 import privacyPolicyPdf from '@/assets/documents/privacy-policy.pdf';
 import cookieNoticePdf from '@/assets/documents/cookie-notice.pdf';
-import { submitToWeb3Forms } from '@/lib/web3forms';
 import Button from '@/components/Button/Button';
+import HoneypotField from '@/components/HoneypotField/HoneypotField';
+import { useLeadForm } from '@/hooks/useLeadForm';
+import { fieldErrorMessage } from '@/lib/leads';
 
 const Footer = () => {
   const [introDeckEmail, setIntroDeckEmail] = useState('');
   const [introDeckStatus, setIntroDeckStatus] = useState('');
+  const { send, sending, honeypotProps } = useLeadForm();
 
   const handleIntroDeckSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIntroDeckStatus('Sending...');
-    try {
-      const { response, result } = await submitToWeb3Forms({
+    const result = await send({
+      form: 'intro-deck',
+      fields: { email: introDeckEmail },
+      fallback: {
         name: 'Intro deck request',
         email: introDeckEmail,
         message: 'Request for Projectory intro deck (from website footer).',
-      });
-      if (response.ok && result.success !== false) {
-        setIntroDeckStatus("Thanks! We'll share the deck with you soon.");
-        setIntroDeckEmail('');
-      } else {
-        setIntroDeckStatus('Something went wrong. Please try again.');
-      }
-    } catch {
-      setIntroDeckStatus('Something went wrong. Please try again.');
+      },
+      embedded: true,
+    });
+    if (result.ok) {
+      setIntroDeckStatus("Thanks! We'll share the deck with you soon.");
+      setIntroDeckEmail('');
+    } else {
+      setIntroDeckStatus(fieldErrorMessage(result) ?? 'Something went wrong. Please try again.');
     }
   };
 
@@ -120,6 +124,7 @@ const Footer = () => {
           <h4 className={styles.columnHeading}>Get Started</h4>
           <Link to="/get-started-form">Product finder</Link>
           <Link to="/pricing">Pricing</Link>
+          <Link to="/partners">Partners</Link>
           <Link to="/get-started#faq">FAQ</Link>
           <Link to="/get-started#contact-form">Contact us</Link>
           <Link to="/get-started#schedule-demo">Schedule a demo</Link>
@@ -131,6 +136,7 @@ const Footer = () => {
         {/* Column 5: Intro deck + Contact & Support */}
         <div className={styles.footerColumn}>
           <form className={styles.introDeck} onSubmit={handleIntroDeckSubmit}>
+            <HoneypotField {...honeypotProps} />
             <h4 className={styles.columnHeading}>Get an intro deck</h4>
             <input
               type="email"
@@ -150,7 +156,7 @@ const Footer = () => {
               variant="light"
               size="small"
               className={styles.submitBtn}
-              disabled={introDeckStatus === 'Sending...'}
+              disabled={sending}
             >
               Submit
             </Button>

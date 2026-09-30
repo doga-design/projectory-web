@@ -11,6 +11,8 @@ type FaqAccordionProps = {
   items: FaqAccordionItem[];
   id?: string;
   className?: string;
+  /** Span the full content column: title left, list right. */
+  split?: boolean;
 };
 
 const PlusIcon = ({ className }: { className?: string }) => (
@@ -78,7 +80,7 @@ const FAQCard = ({
   );
 };
 
-const FaqAccordion = ({ title, items, id, className }: FaqAccordionProps) => {
+const FaqAccordion = ({ title, items, id, className, split }: FaqAccordionProps) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
@@ -86,7 +88,10 @@ const FaqAccordion = ({ title, items, id, className }: FaqAccordionProps) => {
   };
 
   return (
-    <section id={id} className={`${styles.faq}${className ? ` ${className} ${styles.fill}` : ''}`}>
+    <section
+      id={id}
+      className={`${styles.faq}${className ? ` ${className} ${styles.fill}` : ''}${split ? ` ${styles.split}` : ''}`}
+    >
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.list}>
         {items.map((item, index) => (

@@ -5,6 +5,7 @@ import { products } from '@/data/products';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import { useLikedProducts } from '@/context/LikedProductsContext';
 import { useNavigate } from 'react-router-dom';
+import { saveFinderAnswers } from '@/lib/finderAnswers';
 
 type Filters = { type: string[]; objectives: string[]; seating: string[] };
 
@@ -150,6 +151,8 @@ const GetStartedForm: React.FC = () => {
       if (filters.seating.includes('Mixed/Other')) {
         score += 1;
       } else {
+        // Known bug, left as-is: 'Round Tables' / 'Not Sure Yet' never match the product data's
+        // 'Round tables' / 'Not sure yet' (case-sensitive compare), so those answers never score.
         score += product.filters.seating.filter((s) => filters.seating.includes(s)).length;
       }
       return { product, score };
@@ -182,6 +185,9 @@ const GetStartedForm: React.FC = () => {
         toggleLike(p.id);
       }
     });
+
+    // Sent to Pipedrive with the estimate request (seating is skipped for installation-only).
+    saveFinderAnswers({ ...filters, seating: onlyInteractive ? [] : filters.seating });
 
     setRecommended(recommendations);
   };
