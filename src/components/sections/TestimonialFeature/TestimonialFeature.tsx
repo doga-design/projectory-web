@@ -37,10 +37,10 @@ const TestimonialFeature = ({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
-  // The card rises into place as the section enters, then rests; the floater keeps drifting.
-  const cardY = useTransform(scrollYProgress, [0, 0.5], [160, 0]);
-  const cardRotate = useTransform(scrollYProgress, [0, 0.5], [-8, 0]);
-  const floaterY = useTransform(scrollYProgress, [0, 1], [24, -24]);
+  // The card slowly rotates into place as the section scrolls through, without moving; the
+  // floater settles with it, on the video's bottom edge.
+  const cardRotate = useTransform(scrollYProgress, [0, 0.6], [-6, 0]);
+  const floaterY = useTransform(scrollYProgress, [0, 0.6], [16, 0]);
 
   useEscapeKey(() => setIsLightboxOpen(false), isLightboxOpen);
   useScrollLock(isLightboxOpen);
@@ -84,7 +84,7 @@ const TestimonialFeature = ({
         />
       </div>
 
-      <motion.figure className={styles.card} style={{ y: cardY, rotate: cardRotate }}>
+      <motion.figure className={styles.card} style={{ rotate: cardRotate }}>
         <blockquote className={styles.quote}>{quote}</blockquote>
         <figcaption className={styles.caption}>
           <span className={styles.name}>{name}</span>
