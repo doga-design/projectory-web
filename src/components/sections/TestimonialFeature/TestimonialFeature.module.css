@@ -28,6 +28,8 @@
  * while the section keeps its natural height. */
 
 .card {
+  /* How far the card overlaps the video; the floater sits on that edge. */
+  --overlap: 130px;
   position: relative;
   z-index: 1;
   display: flex;
@@ -35,7 +37,7 @@
   align-items: center;
   gap: var(--block-1);
   width: min(480px, 100%);
-  margin: -130px var(--block-4) 0 auto;
+  margin: calc(-1 * var(--overlap)) var(--block-4) 0 auto;
   padding: var(--block-3) var(--block-2);
   border: var(--border-hairline);
   border-radius: var(--radius-xl);
@@ -73,11 +75,12 @@
   color: var(--color-text);
 }
 
-/* Straddles the card's right edge, a little below the corner. */
+/* Straddles the card's right edge, centred on the video's bottom edge. */
 .floater {
   position: absolute;
-  top: 50px;
+  top: var(--overlap);
   right: -32px;
+  translate: 0 -50%;
   width: 65px;
   height: auto;
   pointer-events: none;
@@ -143,8 +146,9 @@
   }
 
   .card {
+    --overlap: 90px;
     width: auto;
-    margin: -90px var(--space-4) 0;
+    margin: calc(-1 * var(--overlap)) var(--space-4) 0;
     padding: var(--block-2) var(--space-6);
   }
 
@@ -156,6 +160,7 @@
   .floater {
     top: -24px;
     right: var(--space-5);
+    translate: none;
     width: 48px;
   }
 
