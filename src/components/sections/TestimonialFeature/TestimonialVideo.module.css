@@ -1,0 +1,151 @@
+/* Frosted glass, same recipe as the homepage reel's cursor pill. */
+.cursor,
+.control {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: var(--white);
+}
+
+.media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  cursor: pointer;
+}
+
+/* The glass circle stands in for the pointer while it can unmute. */
+.unmuteCursor {
+  cursor: none;
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.media:fullscreen {
+  border: none;
+  border-radius: 0;
+  background-color: #000;
+}
+
+.media:fullscreen .video {
+  object-fit: contain;
+}
+
+/* ── Controls ───
+ * Bottom-left, clear of the quote card that overlaps the bottom-right. */
+
+.controls {
+  position: absolute;
+  left: var(--space-5);
+  bottom: var(--space-5);
+  display: flex;
+  gap: var(--space-2);
+  cursor: default;
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  transition:
+    opacity var(--transition-base),
+    transform var(--transition-base),
+    background var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    backdrop-filter var(--transition-base),
+    -webkit-backdrop-filter var(--transition-base);
+}
+
+/* Hidden, each button fades itself while its glass ramps down to nothing. Never fade the
+   wrapper: while a parent is translucent, the buttons' backdrop blur has nothing behind it
+   to blur, so the blur would only snap in once the fade finished. */
+
+/* With a mouse they show on hover (and while paused or keyboard-focused). */
+@media (hover: hover) {
+  .media:not(:hover):not(.paused) .controls:not(:has(:focus-visible)) .control {
+    opacity: 0;
+    border-color: rgba(255, 255, 255, 0);
+    background: rgba(0, 0, 0, 0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+  }
+}
+
+/* On touch a tap slides them up for a few seconds; hidden, taps fall through to the video. */
+@media (hover: none) {
+  .media:not(.controlsUp) .controls {
+    pointer-events: none;
+  }
+
+  .media:not(.controlsUp) .control {
+    opacity: 0;
+    border-color: rgba(255, 255, 255, 0);
+    background: rgba(0, 0, 0, 0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0);
+    -webkit-backdrop-filter: blur(0);
+    transform: translateY(12px);
+  }
+}
+
+.control:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* Fixed to the viewport and moved by transform; the negative margin centres it on the pointer. */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  font-size: 26px;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+@media (max-width: 768px) {
+  .media {
+    aspect-ratio: 4 / 5;
+  }
+
+  /* The quote card covers the bottom 90px on phones, so sit above it. */
+  .controls {
+    left: var(--space-4);
+    bottom: calc(90px + var(--space-3));
+  }
+
+  .media:fullscreen .controls {
+    bottom: var(--space-5);
+  }
+}

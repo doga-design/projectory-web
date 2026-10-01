@@ -19,7 +19,7 @@ export const sectionIds = {
 export const partnersHero = {
   eyebrow: 'Projectory Partner Network',
   title: 'Your Partners\nin Engagement',
-  body: 'The Projectory Partner Network is for planners,\n agencies, and event organizers who wish to add\naudience engagement to their client’s events.',
+  body: 'The Projectory Partner Network is for planners, agencies, and event organizers who wish to add audience engagement to their client’s events.',
   cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 

@@ -13,7 +13,7 @@ interface CyclingCardsProps {
 }
 
 /** How long each card stays open before the next one takes over. */
-const CYCLE_MS = 3000;
+const CYCLE_MS = 2000;
 
 /** True while the user has text selected inside `el`. */
 const hasSelectionIn = (el: HTMLElement | null) => {
