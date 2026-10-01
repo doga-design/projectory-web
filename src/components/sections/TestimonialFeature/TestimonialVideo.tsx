@@ -33,6 +33,8 @@ const TestimonialVideo = ({ src, poster }: TestimonialVideoProps) => {
   const [fullscreen, setFullscreen] = useState(false);
   const [hovering, setHovering] = useState(false);
   const [controlsUp, setControlsUp] = useState(false);
+  // Brief centre icon confirming a play/pause the viewer just did.
+  const [flash, setFlash] = useState<{ key: number; nowPlaying: boolean } | null>(null);
   const controlsTimer = useRef<number>(undefined);
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
@@ -91,11 +93,13 @@ const TestimonialVideo = ({ src, poster }: TestimonialVideoProps) => {
     } else unmute();
   };
 
+  // A new key each time, so repeated toggles replay the flash from the start.
   const togglePlay = () => {
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) video.play().catch(() => {});
     else video.pause();
+    setFlash({ key: Date.now(), nowPlaying: !video.paused });
   };
 
   const toggleFullscreen = () => {
@@ -180,6 +184,22 @@ const TestimonialVideo = ({ src, poster }: TestimonialVideoProps) => {
           {fullscreen ? <FiMinimize /> : <FiMaximize />}
         </button>
       </div>
+
+      <AnimatePresence>
+        {flash && (
+          <motion.div
+            key={flash.key}
+            className={styles.flash}
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: [0, 1, 1, 0], scale: [0.85, 1, 1, 1.08] }}
+            transition={{ duration: 0.7, times: [0, 0.25, 0.6, 1], ease: 'easeOut' }}
+            onAnimationComplete={() => setFlash(null)}
+            aria-hidden
+          >
+            {flash.nowPlaying ? <FiPlay /> : <FiPause />}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {createPortal(
         <AnimatePresence>
