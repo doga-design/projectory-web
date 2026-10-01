@@ -79,7 +79,7 @@ export const partnerPrograms = {
       ],
     },
   ] satisfies (Omit<FeatureCardProps, 'cta'> & { title: PartnerProgram })[],
-  note: 'Partner rates apply to engagements booked through our Partner Network.',
+  note: 'Partner rates apply to engagements\nbooked through our Partner Network.',
 };
 
 export const whyPartner = {
