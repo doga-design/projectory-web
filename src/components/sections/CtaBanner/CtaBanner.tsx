@@ -1,5 +1,6 @@
 import Button, { type ButtonVariant } from '@/components/Button/Button';
 import { limeOlive } from '@/assets/images/shapes/floaters';
+import { scrollToId } from '@/lib/scrollToId';
 import styles from './CtaBanner.module.css';
 
 const tealBadge =
@@ -11,7 +12,19 @@ const VARIANTS = {
   lime: { badge: limeOlive, button: 'limeLight' },
 } as const satisfies Record<string, { badge: string; button: ButtonVariant }>;
 
-type CtaLink = { label: string; to: string };
+/** Either a route (`to`) or an in-page section id to smooth-scroll to (`scrollTo`). */
+type CtaLink = { label: string } & ({ to: string } | { scrollTo: string });
+
+const CtaButton = ({ link, variant }: { link: CtaLink; variant: ButtonVariant }) =>
+  'scrollTo' in link ? (
+    <Button variant={variant} onClick={() => scrollToId(link.scrollTo)}>
+      {link.label}
+    </Button>
+  ) : (
+    <Button variant={variant} to={link.to}>
+      {link.label}
+    </Button>
+  );
 
 interface CtaBannerProps {
   variant: keyof typeof VARIANTS;
@@ -32,14 +45,8 @@ const CtaBanner = ({ variant, id, title, body, primary, secondary }: CtaBannerPr
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.body}>{body}</p>
         <div className={styles.actions}>
-          <Button variant={button} to={primary.to}>
-            {primary.label}
-          </Button>
-          {secondary && (
-            <Button variant="outline" to={secondary.to}>
-              {secondary.label}
-            </Button>
-          )}
+          <CtaButton link={primary} variant={button} />
+          {secondary && <CtaButton link={secondary} variant="outline" />}
         </div>
       </div>
       <img src={badge} alt="" className={styles.badge} aria-hidden />

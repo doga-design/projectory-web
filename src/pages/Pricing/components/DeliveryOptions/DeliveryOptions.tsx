@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { deliveryOptions, deliveryOptionsNote } from '../../pricingData';
 import Button from '@/components/Button/Button';
+import MutedNote from '@/components/MutedNote/MutedNote';
 import { usePageEntrance } from '@/hooks/usePageEntrance';
 import { above } from '@/config/breakpoints';
 import styles from './DeliveryOptions.module.css';
@@ -173,7 +174,7 @@ const DeliveryOptions = ({ entrance }: DeliveryOptionsProps) => {
           </div>
         ))}
       </div>
-      <p className={styles.mutedNote}>{deliveryOptionsNote}</p>
+      <MutedNote>{deliveryOptionsNote}</MutedNote>
     </motion.section>
   );
 };
