@@ -1,6 +1,7 @@
 /* Frosted glass, same recipe as the homepage reel's cursor pill. */
 .cursor,
-.control {
+.control,
+.flash {
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
@@ -114,6 +115,22 @@
 .control:focus-visible {
   outline: 2px solid var(--white);
   outline-offset: 2px;
+}
+
+/* Centre play/pause confirmation; framer fades it in and out over the video. */
+.flash {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  font-size: 26px;
+  pointer-events: none;
 }
 
 /* Fixed to the viewport and moved by transform; the negative margin centres it on the pointer. */
