@@ -19,7 +19,7 @@ export const sectionIds = {
 export const partnersHero = {
   eyebrow: 'Projectory Partner Network',
   title: 'Your Partners\nin Engagement',
-  body: 'We’ll get the room talking.\nYou focus on everything else.',
+  body: 'The Projectory Partner Network is for planners,\n agencies, and event organizers who wish to add\naudience engagement to their client’s events.',
   cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 
@@ -42,17 +42,17 @@ export const clientLogos = partnerLogos;
 export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
 
 export const partnerPrograms = {
-  eyebrow: 'Find your fit, and we’ll get to work',
+  eyebrow: 'Find your fit, and let’s get to work',
   title: 'Great Events,\nBuilt Together',
   cards: [
     {
       accent: 'coral',
       title: 'Refer',
       caption: 'Freelancers and independent planners',
-      body: 'Know someone who’d love us? Make the intro and we’ll get them excited.',
+      body: 'Know someone who’d love us?\nMake the intro and let us wow them.',
       features: [
         'A 10% referral fee on every booking',
-        'Set the meeting, and we’ll do the talking.',
+        'Set the meeting, and we’ll get them excited',
         'Keep earning on repeat bookings.',
       ],
     },
@@ -79,6 +79,14 @@ export const partnerPrograms = {
       ],
     },
   ] satisfies (Omit<FeatureCardProps, 'cta'> & { title: PartnerProgram })[],
+  /* Muted note under the cards; `link` is appended to the second line. */
+  note: {
+    lines: [
+      'Partner rates apply to engagements booked through our Partner Network.',
+      'Booking for your own event? See our',
+    ],
+    link: { label: 'standard pricing', to: '/pricing' },
+  },
 };
 
 export const whyPartner = {
@@ -111,9 +119,9 @@ export const goodCompany = {
 
 export const testimonial = {
   videoSrc:
-    'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1770743158/RampUp_Sizzle_h1eqb9.mp4',
+    'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1790870122/CVENT_Testimonial_Sizzle_for_Web_V1_cyyxer.mp4',
   poster:
-    'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto/v1770743158/RampUp_Sizzle_h1eqb9.jpg',
+    'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto/v1790870122/CVENT_Testimonial_Sizzle_for_Web_V1_cyyxer.jpg',
   quote:
     '“Projectory was able to take us to a new level and bring a fun and interactive experience to our partners.”',
   name: 'Denise Sutter',
@@ -123,6 +131,5 @@ export const testimonial = {
 export const ctaBanner = {
   title: 'Ready to Apply?\nRegister a Deal.',
   body: 'Your client stays yours. Register it and we’ll protect the dates, even if the event is months away.',
-  // ?source= tells the contact form (and Pipedrive) this came from Register a Deal.
-  primary: { label: 'Register a Deal', to: '/get-started?source=register-deal#contact-form' },
+  primary: { label: 'Register a Deal', scrollTo: sectionIds.programs },
 };

@@ -447,20 +447,6 @@
   border-color: var(--brand-coral-soft);
 }
 
-.mutedNote {
-  margin: 0;
-  max-width: 500px;
-  width: 100%;
-  padding: 0 var(--space-6);
-  font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.45;
-  color: var(--color-text-dim);
-  text-align: center;
-  box-sizing: border-box;
-}
-
 .column:nth-child(1) .card:hover .ctaCurrency,
 .column:nth-child(1) .card:hover .ctaCaption {
   color: var(--color-text);
@@ -490,12 +476,6 @@
     flex-direction: column;
     align-items: center;
     gap: var(--block-2);
-  }
-
-  .mutedNote {
-    max-width: 380px;
-    padding: 0;
-    font-size: var(--font-size-xs);
   }
 
   .column {

@@ -27,18 +27,27 @@ const CyclingCards = ({ eyebrow, title, items, accent = 'pink' }: CyclingCardsPr
   const listRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { amount: 0.3 });
   const [active, setActive] = useState(0);
+  // Card under the mouse, if any. The open card holds still while it's being read.
+  const [hovered, setHovered] = useState<number | null>(null);
+  const paused = hovered === active;
 
   // Keyed on `active`, so a click also restarts the clock from the clicked card.
-  // Only leaving the viewport stops it — never hover, taps or selections.
+  // Leaving the viewport or resting the mouse on the open card stops it; moving off
+  // restarts a full cycle.
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || paused) return;
     const id = window.setTimeout(() => setActive((i) => (i + 1) % items.length), CYCLE_MS);
     return () => window.clearTimeout(id);
-  }, [active, inView, items.length]);
+  }, [active, inView, paused, items.length]);
 
   // A drag-select ends in a click; don't treat it as picking a card.
   const open = (index: number) => {
     if (!hasSelectionIn(listRef.current)) setActive(index);
+  };
+
+  // Real mouse only: on touch, pointerenter fires on tap with no matching leave.
+  const hover = (e: React.PointerEvent, index: number | null) => {
+    if (e.pointerType === 'mouse') setHovered(index);
   };
 
   return (
@@ -56,6 +65,8 @@ const CyclingCards = ({ eyebrow, title, items, accent = 'pink' }: CyclingCardsPr
               type="button"
               className={`${styles.card}${isOpen ? ` ${styles.cardOpen}` : ''}`}
               onClick={() => open(index)}
+              onPointerEnter={(e) => hover(e, index)}
+              onPointerLeave={(e) => hover(e, null)}
               aria-expanded={isOpen}
             >
               <span className={styles.reveal}>
