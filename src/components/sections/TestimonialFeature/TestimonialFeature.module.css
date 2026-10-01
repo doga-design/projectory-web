@@ -80,11 +80,9 @@
     font-size: var(--font-size-md);
   }
 
-  /* No room beside the card on phones, so it straddles the top edge instead of the text. */
+  /* Smaller, but still centred on the card's right edge and the video's bottom edge. */
   .floater {
-    top: -24px;
-    right: var(--space-5);
-    translate: none;
+    right: -24px;
     width: 48px;
   }
 }

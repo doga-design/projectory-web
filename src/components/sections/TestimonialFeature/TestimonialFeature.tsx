@@ -23,22 +23,23 @@ const TestimonialFeature = ({
   role,
   floater = yellowCoral,
 }: TestimonialFeatureProps) => {
-  const sectionRef = useRef<HTMLElement>(null);
+  const cardRef = useRef<HTMLElement>(null);
 
+  // From the card's top edge entering the screen until the whole card is in view.
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
+    target: cardRef,
+    offset: ['start end', 'end end'],
   });
-  // The card slowly rotates into place as the section scrolls through, without moving; the
-  // floater settles with it, on the video's bottom edge.
-  const cardRotate = useTransform(scrollYProgress, [0, 0.6], [-6, 0]);
-  const floaterY = useTransform(scrollYProgress, [0, 0.6], [16, 0]);
+  // The card rotates into place as it scrolls in, without moving, and is straight by the time
+  // it's fully on screen; the floater settles with it, on the video's bottom edge.
+  const cardRotate = useTransform(scrollYProgress, [0, 1], [-6, 0]);
+  const floaterY = useTransform(scrollYProgress, [0, 1], [16, 0]);
 
   return (
-    <section ref={sectionRef} className={styles.section}>
+    <section className={styles.section}>
       <TestimonialVideo src={videoSrc} poster={poster} />
 
-      <motion.figure className={styles.card} style={{ rotate: cardRotate }}>
+      <motion.figure ref={cardRef} className={styles.card} style={{ rotate: cardRotate }}>
         <blockquote className={styles.quote}>{quote}</blockquote>
         <figcaption className={styles.caption}>
           <span className={styles.name}>{name}</span>
