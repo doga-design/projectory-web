@@ -8,17 +8,21 @@
  * In flow with a negative top margin, so it overlaps the video's bottom edge
  * while the section keeps its natural height. */
 
-.card {
+.cardWrap {
   /* How far the card overlaps the video; the floater sits on that edge. */
   --overlap: 130px;
   position: relative;
   z-index: 1;
+  width: min(480px, 100%);
+  margin: calc(-1 * var(--overlap)) var(--block-4) 0 auto;
+}
+
+.card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--block-1);
-  width: min(480px, 100%);
-  margin: calc(-1 * var(--overlap)) var(--block-4) 0 auto;
+  margin: 0;
   padding: var(--block-3) var(--block-2);
   border: var(--border-hairline);
   border-radius: var(--radius-xl);
@@ -69,10 +73,13 @@
 }
 
 @media (max-width: 768px) {
-  .card {
+  .cardWrap {
     --overlap: 90px;
     width: auto;
     margin: calc(-1 * var(--overlap)) var(--space-4) 0;
+  }
+
+  .card {
     padding: var(--block-2) var(--space-6);
   }
 
