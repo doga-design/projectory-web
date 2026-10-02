@@ -26,7 +26,7 @@ export const sectionIds = {
 export const partnersHero = {
   eyebrow: 'Projectory Partner Network',
   title: 'Your Partners\nin Engagement',
-  body: 'The Projectory Partner Network is for planners, agencies, and event organizers who wish to add audience engagement to their client’s events.',
+  body: 'The Projectory Partner Network is for planners, agencies and event organizers who wish to add audience engagement to their clients’ events.',
   cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 
@@ -66,7 +66,7 @@ export const partnerPrograms = {
       accent: 'teal',
       title: 'Resell',
       caption: 'Consultants, agencies, production companies',
-      body: 'You own the client relationship. We partner with you to build and pitch the deal.',
+      body: 'You own the client relationship. We’ll partner to build and pitch together.',
       features: [
         'A 30% discounted partner rate to mark up or pass through.',
         'Full sales support, from the first call to signing.',
@@ -133,9 +133,9 @@ export const goodCompany = {
 
 export const testimonial = {
   videoSrc:
-    'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1790870122/CVENT_Testimonial_Sizzle_for_Web_V1_cyyxer.mp4',
+    'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1790961537/CVENT_Testimonial_Sizzle_for_Web_V2_di4dvr.mp4',
   poster:
-    'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto/v1790870122/CVENT_Testimonial_Sizzle_for_Web_V1_cyyxer.jpg',
+    'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto/v1790961537/CVENT_Testimonial_Sizzle_for_Web_V2_di4dvr.jpg',
   quote:
     '“Projectory was able to take us to a new level and bring a fun and interactive experience to our partners.”',
   name: 'Denise Sutter',
@@ -145,5 +145,5 @@ export const testimonial = {
 export const ctaBanner = {
   title: 'Which dates should we\nhold for your client?',
   body: 'Even if it’s months away. We’ll protect\nthe dates and wait for your sign.',
-  primary: { label: 'Register a Deal', scrollTo: sectionIds.programs },
+  primary: { label: 'Hold the Dates', scrollTo: sectionIds.programs },
 };

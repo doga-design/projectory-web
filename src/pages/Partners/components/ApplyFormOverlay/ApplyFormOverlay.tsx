@@ -1,6 +1,6 @@
 // Partner enquiry as a dark-glass overlay, opened from a program card's "Learn more".
-// Fields mirror the Get Started contact form. The title's program and the submit
-// button (the cards' "Learn more" button, filled with the accent) take the program's accent.
+// Fields mirror the Get Started contact form. The submit button (the cards' "Learn more"
+// button, filled with the accent) and the confirmation's program tag take the card's accent.
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -66,8 +66,8 @@ const ApplyFormOverlay = ({ program, onClose }: ApplyFormOverlayProps) => {
             exit={{ opacity: 0, y: 12, scale: 0.98 }}
             transition={{ duration: 0.45, ease: EASE }}
           >
-            {/* Mounted per open, so every open starts from the clicked card with a fresh form. */}
-            <OverlayPanel initialProgram={program} onClose={onClose} />
+            {/* Mounted per open, so every open starts with a fresh form. */}
+            <OverlayPanel program={program} onClose={onClose} />
           </motion.div>
         </motion.div>
       )}
@@ -77,12 +77,11 @@ const ApplyFormOverlay = ({ program, onClose }: ApplyFormOverlayProps) => {
 };
 
 interface OverlayPanelProps {
-  initialProgram: PartnerProgram;
+  program: PartnerProgram;
   onClose: () => void;
 }
 
-const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
-  const [selected, setSelected] = useState<PartnerProgram>(initialProgram);
+const OverlayPanel = ({ program, onClose }: OverlayPanelProps) => {
   const [formData, setFormData] = useState(emptyForm);
   const [submitted, setSubmitted] = useState(false);
   const [status, setStatus] = useState('');
@@ -105,13 +104,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
     return () => ro.disconnect();
   }, []);
 
-  const card = cardFor(selected);
-
-  const cycle = () => {
-    const { cards } = partnerPrograms;
-    const i = cards.findIndex((c) => c.title === selected);
-    setSelected(cards[(i + 1) % cards.length].title);
-  };
+  const card = cardFor(program);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -123,12 +116,12 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
     setStatus('');
     const result = await send({
       form: 'partner-application',
-      fields: { ...formData, program: selected },
+      fields: { ...formData, program },
       fallback: {
-        subject: `Partner application (${selected})`,
+        subject: `Partner application (${program})`,
         from_name: formData.name,
         ...formData,
-        program: selected,
+        program,
       },
       embedded: true,
     });
@@ -161,7 +154,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
               transition={{ duration: 0.35, ease: EASE, delay: 0.15 }}
             >
               <h2 id={titleId} className={styles.title}>
-                Request sent for <span className={styles.programTag}>{selected}</span>
+                Request sent for <span className={styles.programTag}>{program}</span>
               </h2>
               <p className={styles.successBody}>
                 Thanks, {formData.name.split(' ')[0]}. We’ll be in touch shortly.
@@ -179,42 +172,17 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
               transition={{ duration: 0.25, ease: EASE }}
             >
               <div className={styles.heading}>
-                {/* The program is picked from the title: each click rolls to the next one. */}
                 <h2 id={titleId} className={styles.title}>
-                  Learn about{' '}
-                  <button
-                    type="button"
-                    className={styles.programToggle}
-                    onClick={cycle}
-                    aria-label={`Program: ${selected}. Change program`}
-                  >
-                    <span className={styles.reel}>
-                      {/* Invisible sizers keep the button as wide as the widest program, so nothing shifts mid-roll. */}
-                      {partnerPrograms.cards.map(({ title }) => (
-                        <span key={title} className={styles.sizer} aria-hidden>
-                          {title}
-                        </span>
-                      ))}
-                      <AnimatePresence initial={false}>
-                        <motion.span
-                          key={selected}
-                          className={styles.word}
-                          initial={{ y: reduceMotion ? 0 : '100%', opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          exit={{ y: reduceMotion ? 0 : '-100%', opacity: 0 }}
-                          transition={{ duration: 0.28, ease: EASE }}
-                        >
-                          {selected}
-                        </motion.span>
-                      </AnimatePresence>
-                    </span>
-                  </button>
+                  Which dates should we hold?
                 </h2>
                 <button type="button" className={styles.close} onClick={onClose} aria-label="Close">
                   <FiX size={32} strokeWidth={1.25} aria-hidden />
                 </button>
               </div>
-              <input type="hidden" name="program" value={selected} />
+              <p className={styles.intro}>
+                Even if it’s months away. We’ll protect the dates and wait for your sign.
+              </p>
+              <input type="hidden" name="program" value={program} />
               <HoneypotField {...honeypotProps} />
 
               <div className={styles.fieldRow}>
