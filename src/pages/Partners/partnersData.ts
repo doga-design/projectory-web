@@ -68,7 +68,7 @@ export const partnerPrograms = {
       caption: 'Consultants, agencies, production companies',
       body: 'You own the client relationship. We partner with you to build and pitch the deal.',
       features: [
-        'A 30% exclusive discount to mark up or pass through.',
+        'A 30% discounted partner rate to mark up or pass through.',
         'Full sales support, from the first call to signing.',
         'Ready materials for your RFPs and proposals.',
       ],
