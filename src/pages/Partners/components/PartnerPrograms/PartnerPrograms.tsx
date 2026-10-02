@@ -22,7 +22,7 @@ const PartnerPrograms = () => {
             <FeatureCard
               key={card.title}
               {...card}
-              cta={{ label: 'Apply', onClick: () => setProgram(card.title) }}
+              cta={{ label: 'Learn more', onClick: () => setProgram(card.title) }}
             />
           ))}
         </div>

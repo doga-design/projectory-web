@@ -1,14 +1,21 @@
 import type { Logo } from '@/components/LogoMarquee/LogoMarquee';
 import type { FeatureCardProps } from '@/components/FeatureCard/FeatureCard';
 import type { CyclingCardsItem } from '@/components/sections/CyclingCards/CyclingCards';
-import cvent from '@/assets/images/logos/cvent.svg';
+import cvent from '@/assets/images/logos/partners-hero/cvent.svg';
 import sonar from '@/assets/images/logos/sonar.svg';
-import pcma from '@/assets/images/logos/pcma.svg';
-import opus from '@/assets/images/logos/opus.svg';
-import rainFocus from '@/assets/images/logos/rainFocus.svg';
-import shepard from '@/assets/images/logos/shepard.svg';
-import cema from '@/assets/images/logos/cema.svg';
-import loma from '@/assets/images/logos/loma.svg';
+import pcma from '@/assets/images/logos/partners-hero/pcma.svg';
+import opus from '@/assets/images/logos/partners-hero/opus.svg';
+import rainFocus from '@/assets/images/logos/partners-hero/rainFocus.svg';
+import shepard from '@/assets/images/logos/partners-hero/shepard.svg';
+import gpj from '@/assets/images/logos/partners-hero/gpj.svg';
+import clubIchi from '@/assets/images/logos/partners-hero/clubIchi.svg';
+import mig from '@/assets/images/logos/partners-hero/mig.svg';
+import cema from '@/assets/images/logos/partners-good-company/cema.svg';
+import loma from '@/assets/images/logos/partners-good-company/loma.svg';
+import destinationCleveland from '@/assets/images/logos/partners-good-company/destinationCleveland.svg';
+import destinationToronto from '@/assets/images/logos/partners-good-company/destinationToronto.svg';
+import eventMarketer from '@/assets/images/logos/partners-good-company/eventMarketer.svg';
+import txg from '@/assets/images/logos/partners-good-company/txg.svg';
 
 /* In-page scroll targets for the hero and program card CTAs. */
 export const sectionIds = {
@@ -23,22 +30,21 @@ export const partnersHero = {
   cta: { label: 'Join the network', scrollTo: sectionIds.programs },
 };
 
-/* The page's logos: the band under the hero and "In Good Company". Add or remove a logo
-   here; list order is scroll and grid order. */
-const partnerLogos = [
+/* The band under the hero. Its own set (partners-hero/), separate from "In Good Company";
+   list order is scroll order. */
+export const heroLogos = [
   { src: cvent, alt: 'Cvent' },
   { src: sonar, alt: 'Sonar' },
   { src: pcma, alt: 'PCMA' },
   { src: opus, alt: 'Opus' },
   { src: rainFocus, alt: 'RainFocus' },
   { src: shepard, alt: 'Shepard' },
-  { src: cema, alt: 'CEMA' },
-  { src: loma, alt: 'Loma Agency' },
+  { src: gpj, alt: 'George P. Johnson' },
+  { src: clubIchi, alt: 'Club Ichi' },
+  { src: mig, alt: 'MIG' },
 ] satisfies Logo[];
 
-export const clientLogos = partnerLogos;
-
-/* The program cards; each card's Apply opens the application overlay on that program. */
+/* The program cards; each card's "Learn more" opens the application overlay on that program. */
 export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
 
 export const partnerPrograms = {
@@ -60,7 +66,7 @@ export const partnerPrograms = {
       accent: 'teal',
       title: 'Resell',
       caption: 'Consultants, agencies, production companies',
-      body: 'We build and pitch the deal together. You choose how to handle the pricing.',
+      body: 'You own the client relationship. We partner with you to build and pitch the deal.',
       features: [
         'A 30% exclusive discount to mark up or pass through.',
         'Full sales support, from the first call to signing.',
@@ -73,7 +79,7 @@ export const partnerPrograms = {
       caption: 'Organizers of event industry gatherings.',
       body: 'When your audience is planners, we’ll make it worth showing off.',
       features: [
-        'Up to 70% off our rates.',
+        'Up to 70% off, in exchange for visibility with your audience.',
         'First access to our newest and debut products.',
         'Add to sponsorship packages and other show elements.',
       ],
@@ -112,9 +118,17 @@ export const whyPartner = {
   ] satisfies CyclingCardsItem[],
 };
 
+/* Its own set (partners-good-company/), separate from the hero band; list order is grid order. */
 export const goodCompany = {
   title: 'In Good Company',
-  logos: partnerLogos,
+  logos: [
+    { src: cema, alt: 'CEMA' },
+    { src: loma, alt: 'Loma Agency' },
+    { src: destinationCleveland, alt: 'Destination Cleveland' },
+    { src: destinationToronto, alt: 'Destination Toronto' },
+    { src: eventMarketer, alt: 'Event Marketer' },
+    { src: txg, alt: 'TXG, The Experiential Group' },
+  ] satisfies Logo[],
 };
 
 export const testimonial = {

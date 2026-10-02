@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { partnersHero, clientLogos } from '../../partnersData';
+import { partnersHero, heroLogos } from '../../partnersData';
 import { usePageEntrance } from '@/hooks/usePageEntrance';
 import { scrollToId } from '@/lib/scrollToId';
 import Button from '@/components/Button/Button';
@@ -58,7 +58,7 @@ const PartnersHero = ({ entrance }: PartnersHeroProps) => {
         animate={entrance.fade.animate}
         transition={entrance.transition(0.48)}
       >
-        <LogoMarquee logos={clientLogos} />
+        <LogoMarquee logos={heroLogos} />
       </motion.div>
     </section>
   );
