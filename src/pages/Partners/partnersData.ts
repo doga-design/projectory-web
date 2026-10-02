@@ -143,7 +143,7 @@ export const testimonial = {
 };
 
 export const ctaBanner = {
-  title: 'Ready to Apply?\nRegister a Deal.',
-  body: 'Your client stays yours. Register it and we’ll protect the dates, even if the event is months away.',
+  title: 'Which dates should we\nhold for your client?',
+  body: 'Even if it’s months away. We’ll protect\nthe dates and wait for your sign.',
   primary: { label: 'Register a Deal', scrollTo: sectionIds.programs },
 };
