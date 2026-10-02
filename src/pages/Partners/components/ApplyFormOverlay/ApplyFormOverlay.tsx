@@ -1,6 +1,6 @@
-// Partner application as a dark-glass overlay, opened from a program card's "Apply".
-// Fields mirror the Get Started contact form. The title's program and the Apply
-// button (the cards' Apply button, filled with the accent) take the program's accent.
+// Partner enquiry as a dark-glass overlay, opened from a program card's "Learn more".
+// Fields mirror the Get Started contact form. The title's program and the submit
+// button (the cards' "Learn more" button, filled with the accent) take the program's accent.
 import { useId, useLayoutEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
@@ -15,7 +15,7 @@ import { partnerPrograms, type PartnerProgram } from '../../partnersData';
 import styles from './ApplyFormOverlay.module.css';
 
 interface ApplyFormOverlayProps {
-  /** The card whose Apply was clicked; `null` keeps the overlay closed. */
+  /** The card whose "Learn more" was clicked; `null` keeps the overlay closed. */
   program: PartnerProgram | null;
   onClose: () => void;
 }
@@ -161,7 +161,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
               transition={{ duration: 0.35, ease: EASE, delay: 0.15 }}
             >
               <h2 id={titleId} className={styles.title}>
-                Application sent for <span className={styles.programTag}>{selected}</span>
+                Request sent for <span className={styles.programTag}>{selected}</span>
               </h2>
               <p className={styles.successBody}>
                 Thanks, {formData.name.split(' ')[0]}. We’ll be in touch shortly.
@@ -181,7 +181,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
               <div className={styles.heading}>
                 {/* The program is picked from the title: each click rolls to the next one. */}
                 <h2 id={titleId} className={styles.title}>
-                  Apply to{' '}
+                  Learn about{' '}
                   <button
                     type="button"
                     className={styles.programToggle}
@@ -278,7 +278,7 @@ const OverlayPanel = ({ initialProgram, onClose }: OverlayPanelProps) => {
               </label>
 
               <Button type="submit" variant="light" className={styles.submit} disabled={sending}>
-                Apply
+                Learn more
               </Button>
               {status && (
                 <p className={styles.statusMessage} role="alert">

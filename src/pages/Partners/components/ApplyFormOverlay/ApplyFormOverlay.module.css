@@ -2,8 +2,8 @@
  * ════════════════
  * Navbar dark glass over a tinted, blurred page. Inputs keep the contact
  * form's sizing (48px, 8px radius, hairline, 18/25 type) re-inked for dark.
- * Accent is limited to the title's program and the Apply button, which is
- * the program cards' Apply button filled with the accent.
+ * Accent is limited to the title's program and the submit button, which is
+ * the program cards' "Learn more" button filled with the accent.
  */
 
 .backdrop {
@@ -258,7 +258,7 @@
   white-space: nowrap;
 }
 
-/* The cards' Apply button (Button "light"), filled with the program accent.
+/* The cards' "Learn more" button (Button "light"), filled with the program accent.
  * One dark label on every accent; hover deepens the fill, as on the lime
  * variant. Two classes so these outrank the Button's own `.light` vars. */
 .panel .submit {

@@ -44,7 +44,7 @@ export const heroLogos = [
   { src: mig, alt: 'MIG' },
 ] satisfies Logo[];
 
-/* The program cards; each card's "Learn more" opens the application overlay on that program. */
+/* The program cards; each card's "Learn more" opens the enquiry overlay on that program. */
 export type PartnerProgram = 'Refer' | 'Resell' | 'Trade';
 
 export const partnerPrograms = {
