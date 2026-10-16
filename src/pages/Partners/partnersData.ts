@@ -16,6 +16,7 @@ import destinationCleveland from '@/assets/images/logos/partners-good-company/de
 import destinationToronto from '@/assets/images/logos/partners-good-company/destinationToronto.svg';
 import eventMarketer from '@/assets/images/logos/partners-good-company/eventMarketer.svg';
 import txg from '@/assets/images/logos/partners-good-company/txg.svg';
+import t3Expo from '@/assets/images/logos/partners-good-company/t3Expo.svg';
 
 /* In-page scroll targets for the hero and program card CTAs. */
 export const sectionIds = {
@@ -133,6 +134,7 @@ export const goodCompany = {
     { src: destinationToronto, alt: 'Destination Toronto' },
     { src: eventMarketer, alt: 'Event Marketer' },
     { src: txg, alt: 'TXG, The Experiential Group' },
+    { src: t3Expo, alt: 'T3 Expo' },
   ] satisfies Logo[],
 };
 
