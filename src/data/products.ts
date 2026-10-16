@@ -1757,9 +1757,9 @@ export const products = [
     categoryHighlight: 'Party',
     categoryColor: '#F37655',
     heroVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1746457037/Block_Party_Website_IP_V4_Final_Colour_Pass_rynhdv.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167383/Block_Party_Web_2026Sep17_3D_CEMA_Update_V2_pnkmid.mp4',
     bgVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/q_auto/v1746457037/Block_Party_Website_IP_V4_Final_Colour_Pass_rynhdv.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167383/Block_Party_Web_2026Sep17_3D_CEMA_Update_V2_pnkmid.mp4',
     tags: ['Networking', 'Peer learning'],
     thumbnail:
       'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749475445/BlockParty3_xlbixw.webp',
@@ -2613,9 +2613,9 @@ export const products = [
     categoryHighlight: 'Ideas',
     categoryColor: '#E26D4F',
     heroVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/v1776350538/BoulderIdease_Compress_ayuits.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167351/Boulder_Ideas_Web_2026Aug31_CEMA_Update_V1_yyqjln.mp4',
     bgVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/v1776350538/BoulderIdease_Compress_ayuits.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167351/Boulder_Ideas_Web_2026Aug31_CEMA_Update_V1_yyqjln.mp4',
     tags: ['Reflect & synthesize', 'Peer learning', 'Networking'],
     thumbnail: 'https://res.cloudinary.com/dazzkestf/image/upload/v1776350761/DSC07165_rbkt0o.webp',
     shortDescription: 'A structured reflection installation that keeps the insights stacking up',
@@ -2761,9 +2761,9 @@ export const products = [
     categoryHighlight: 'Builder',
     categoryColor: '#E26D4F',
     heroVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/v1779993505/fortuneBuilder_yqoucp.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167369/Fortune_Builder_for_Web_V2_nsn6f4.mp4',
     bgVideo:
-      'https://res.cloudinary.com/dazzkestf/video/upload/v1779993505/fortuneBuilder_yqoucp.mp4',
+      'https://res.cloudinary.com/dazzkestf/video/upload/v1792167369/Fortune_Builder_for_Web_V2_nsn6f4.mp4',
     tags: ['Inspire creativity', 'Networking', 'Peer learning'],
     thumbnail:
       'https://res.cloudinary.com/dazzkestf/image/upload/v1779993308/FortuneBuilder_5_llzlm1.webp',
