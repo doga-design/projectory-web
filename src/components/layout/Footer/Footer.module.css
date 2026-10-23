@@ -156,13 +156,13 @@
   display: none;
 }
 
-/* Contact links */
-.contactLink {
+.footerColumn .contactLink {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-3);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-s);
   text-decoration: none;
-  margin-bottom: var(--space-1);
   line-height: var(--leading-loose);
   transition: color var(--transition-fast);
 }
@@ -176,7 +176,7 @@
 .socialIcons {
   display: flex;
   gap: var(--space-3);
-  margin-top: 14px;
+  margin-top: 0;
 }
 
 .socialIcon {

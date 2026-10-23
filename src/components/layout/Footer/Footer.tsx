@@ -163,10 +163,6 @@ const Footer = () => {
             {introDeckStatus && <p className={styles.introDeckStatus}>{introDeckStatus}</p>}
           </form>
 
-          <h4 className={`${styles.columnHeading} ${styles.subHeading}`}>Contact &amp; support</h4>
-          <a href="tel:8009668802" className={styles.contactLink}>
-            (800) 966-8802
-          </a>
           <a href="mailto:info@projectory.live" className={styles.contactLink}>
             info@projectory.live
           </a>
