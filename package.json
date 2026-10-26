@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "preview": "vite preview",
-    "lint": "eslint .",
+    "lint": "eslint . && npm run lint:css",
     "lint:fix": "eslint . --fix",
+    "lint:css": "node scripts/check-css-modules.cjs",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
