@@ -27,14 +27,14 @@
   background-color: var(--off-black);
 }
 
-h3 {
+.ctaWrapper h3 {
   font-size: 35px;
   font-weight: normal;
   margin-bottom: 15px;
   line-height: 1;
 }
 
-p {
+.ctaWrapper p {
   font-size: 20px;
   margin-bottom: 25px;
 }

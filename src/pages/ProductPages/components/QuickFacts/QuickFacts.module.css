@@ -24,6 +24,11 @@
   margin-bottom: 20px;
 }
 
+.gridWrapper p {
+  font-size: 20px;
+  margin-bottom: 25px;
+}
+
 @media screen and (max-width: 768px) {
   .gridWrapper {
     grid-template-columns: 1fr;

@@ -17,10 +17,13 @@
 
 .textContent p {
   font-size: 25px;
+  margin-bottom: 25px;
 }
 
 .features h3 {
   font-size: 24px;
+  font-weight: normal;
+  line-height: 1;
   margin-bottom: 10px;
   color: #b3c100; /* Dynamic category color can be added */
   border-bottom: 1px solid white;
