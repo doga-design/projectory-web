@@ -3,8 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import Button from '@/components/Button/Button';
 import styles from './ContactForm.module.css';
 import HoneypotField from '@/components/HoneypotField/HoneypotField';
+import { useLikedProducts } from '@/context/LikedProductsContext';
 import { useLeadForm } from '@/hooks/useLeadForm';
 import { fieldErrorMessage } from '@/lib/leads';
+import { getProductsByIds } from '@/lib/findProduct';
+import { readFinderAnswers } from '@/lib/finderAnswers';
 
 const MailIcon = () => (
   <svg
@@ -55,6 +58,7 @@ const ContactForm = () => {
 
   const [status, setStatus] = useState('');
   const { send, sending, honeypotProps } = useLeadForm();
+  const { likedProducts } = useLikedProducts();
 
   // The Partners page "Register a Deal" button links here with ?source=register-deal.
   const [searchParams] = useSearchParams();
@@ -69,9 +73,13 @@ const ContactForm = () => {
     setStatus('Sending...');
 
     const source = registerDeal ? { source: 'register-deal' } : {};
+    // Hearted products and Product Finder answers from this browser, sent like the estimate form
+    // sends them. The answers aren't cleared, so a later estimate request still has them.
+    const products = getProductsByIds(likedProducts).map((p) => p.name);
+    const finder = readFinderAnswers();
     const result = await send({
       form: 'contact',
-      fields: { ...formData, ...source },
+      fields: { ...formData, ...source, products, finder },
       fallback: {
         name: formData.name,
         email: formData.email,
@@ -79,6 +87,12 @@ const ContactForm = () => {
         company: formData.company,
         message: formData.message,
         ...source,
+        ...(products.length > 0 && { selectedProducts: products.join(', ') }),
+        ...(finder && {
+          experienceType: finder.type.join(', '),
+          objectives: finder.objectives.join(', '),
+          seating: finder.seating.join(', '),
+        }),
       },
     });
 
