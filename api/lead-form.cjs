@@ -60,6 +60,13 @@ const FIELDS = [
     type: "enum",
     options: [...PARTNER_PROGRAMS, REGISTER_A_DEAL],
   },
+  // The team's own field (Direct / Partner); the website only ever sets Partner.
+  {
+    id: "salesChannel",
+    name: "Sales channel",
+    type: "enum",
+    options: ["Partner"],
+  },
   { id: "eventDate", name: "Event date", type: "date" },
   // Partners page Hold the Dates form; "Event date" holds its start date.
   { id: "eventEndDate", name: "Event end date", type: "date" },
@@ -470,6 +477,8 @@ function fieldValues(s) {
     ...s.context,
     websiteForm: FORM_LABELS[s.form],
     partnerProgram: s.program,
+    // Partner applications and deal registrations; other forms leave it to the team.
+    salesChannel: s.program && "Partner",
     eventDate: s.eventDate,
     eventEndDate: s.eventEndDate,
     eventLocation: s.eventLocation,
