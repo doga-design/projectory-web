@@ -67,8 +67,8 @@ const FIELDS = [
     type: "enum",
     options: ["Partner"],
   },
-  { id: "eventDate", name: "Event date", type: "date" },
-  // Partners page Hold the Dates form; "Event date" holds its start date.
+  // The team's own field. Estimate requests send the event date; Hold the Dates its start date.
+  { id: "eventDate", name: "Event Start Date", type: "date" },
   { id: "eventEndDate", name: "Event end date", type: "date" },
   // Address type to match the "Event location" field the team already uses.
   { id: "eventLocation", name: "Event location", type: "address" },
