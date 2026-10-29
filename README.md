@@ -130,6 +130,11 @@ npm run setup:pipedrive -- --apply  # create the missing fields
 The token's Pipedrive user needs permission to add custom fields. New-lead alerts
 are set up inside Pipedrive (notifications / automations).
 
+If a field is renamed or removed in Pipedrive, leads still arrive, but the pinned note
+ends with **"Not saved to Pipedrive fields: …"** naming what couldn't be filled (also
+logged in Vercel as `[lead-form] fields not filled`). Run the preview above to see which
+names no longer match.
+
 ## Deployment
 
 Vercel builds `docs/` and serves it, rewriting all unmatched paths to

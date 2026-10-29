@@ -195,22 +195,33 @@ async function getFieldMap(config) {
   return map;
 }
 
-/** { fieldId: value } → { "<field key>": value }, skipping unknown ones. */
+/**
+ * { fieldId: value } → { payload: { "<field key>": value }, unsaved }. `unsaved` names the
+ * fields that had a value but nowhere to go: the Pipedrive field (or dropdown option) is
+ * missing, usually because it was renamed or removed. With an empty map, every field with a
+ * value is unsaved.
+ */
 function buildCustomFields(map, values) {
   const payload = {};
+  const unsaved = [];
   for (const [id, raw] of Object.entries(values)) {
-    const field = map[id];
+    const spec = FIELDS.find((f) => f.id === id);
     const value = Array.isArray(raw) ? raw.join(", ") : raw;
-    if (!field || !value) continue;
-    if (field.type === "enum") {
+    // Context keys without a field of their own (utmTerm, utmContent) are only in the note.
+    if (!spec || !value) continue;
+    const field = map[id];
+    if (!field) {
+      unsaved.push(spec.name);
+    } else if (field.type === "enum") {
       const optionId = field.options[String(value).toLowerCase()];
       if (optionId !== undefined) payload[field.key] = optionId;
+      else unsaved.push(spec.name);
     } else {
       const max = field.type === "text" ? 5000 : 255;
       payload[field.key] = String(value).slice(0, max);
     }
   }
-  return payload;
+  return { payload, unsaved };
 }
 
 async function findOrCreateOrganization(config, name) {
@@ -400,8 +411,11 @@ function escapeHtml(text) {
     .replace(/'/g, "&#39;");
 }
 
-/** Note HTML. Every value is escaped; empty sections are left out. */
-function noteHtml(s) {
+/**
+ * Note HTML. Every value is escaped; empty sections are left out. `unsaved` (field names) adds
+ * a closing warning, so the team sees on the lead itself when a field stopped being filled.
+ */
+function noteHtml(s, unsaved) {
   const intro = {
     contact:
       s.program === REGISTER_A_DEAL
@@ -450,6 +464,12 @@ function noteHtml(s) {
     {
       heading: "Where they came from",
       items: CONTEXT.map(({ key, label }) => [label, s.context[key]]),
+    },
+    {
+      heading: "Not saved to Pipedrive fields",
+      body: unsaved.length
+        ? `${unsaved.join(", ")}\nA field may have been renamed or removed in Pipedrive. The details are in this note; please let the website team know.`
+        : "",
     },
   ];
 
@@ -536,14 +556,17 @@ async function handler(req, res) {
     );
 
     // Missing custom fields must never block a lead; the note has it all.
+    const values = fieldValues(submission);
     let customFields = {};
+    let unsaved;
     try {
-      customFields = buildCustomFields(
+      ({ payload: customFields, unsaved } = buildCustomFields(
         await getFieldMap(config),
-        fieldValues(submission)
-      );
+        values
+      ));
     } catch (error) {
       console.warn(`[lead-form] custom fields skipped: ${error.message}`);
+      ({ unsaved } = buildCustomFields({}, values));
     }
 
     const leadBody = {
@@ -569,9 +592,14 @@ async function handler(req, res) {
       if (!rejected) throw error;
       console.warn(`[lead-form] custom fields rejected: ${error.message}`);
       lead = await pipedrive(config, "POST", "/v1/leads", leadBody);
+      ({ unsaved } = buildCustomFields({}, values));
+    }
+    if (unsaved.length) {
+      // Field names only, never the submitted values.
+      console.warn(`[lead-form] fields not filled: ${unsaved.join(", ")}`);
     }
     await pipedrive(config, "POST", "/v1/notes", {
-      content: noteHtml(submission),
+      content: noteHtml(submission, unsaved),
       lead_id: lead.data.id,
       pinned_to_lead_flag: 1,
     });
