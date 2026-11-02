@@ -1,0 +1,188 @@
+/* The text column is exactly as wide as its copy and the card takes the rest,
+   so the gap between them is only ever the gap below. */
+.section {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: start;
+  gap: var(--block-3);
+  width: 100%;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  text-align: left;
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lead);
+  line-height: var(--leading-normal);
+  color: var(--brand-pink);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-medium);
+  font-size: var(--font-size-2xl);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  /* Line breaks come from the copy, as in the design. */
+  white-space: pre-line;
+}
+
+/* Global `*` sets the Regular font on every element, so these opt back in. */
+.titleColumn,
+.titleWide {
+  font-family: inherit;
+}
+
+.titleWide {
+  display: none;
+}
+
+.cta {
+  margin-top: var(--space-3);
+}
+
+/* The text is in flow, so the card holds 16:9 whenever it fits and grows
+   when it doesn't (narrow screens). That growth needs `overflow: clip`:
+   `hidden` makes a scroll container, which stays at the ratio and cuts the
+   text off. */
+.card {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  aspect-ratio: 16 / 9;
+  overflow: clip;
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  cursor: pointer;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bottom shade so the text reads on any photo. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+}
+
+/* Hover tint, signalling the card is clickable. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--alpha-black-15);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .card:hover::after {
+    opacity: 1;
+  }
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-6);
+}
+
+.headline,
+.subtitle {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.headline {
+  font-size: var(--font-size-xl);
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+  /* Even lines, no single word left on the last one. */
+  text-wrap: balance;
+}
+
+.subtitle {
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-normal);
+}
+
+.learnMore {
+  margin-top: var(--space-3);
+}
+
+@media (max-width: 1024px) {
+  .section {
+    gap: var(--block-2);
+  }
+}
+
+/* The text fills most of a narrower card, so the shade starts at the top. */
+@media (min-width: 551px) and (max-width: 1024px) {
+  .card::before {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.85) 100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    grid-template-columns: 1fr;
+    gap: var(--block-1);
+  }
+
+  .card {
+    order: -1;
+  }
+
+  /* Below 410px the wide copy's first line doesn't fit, so it wraps on its own. */
+  .titleColumn {
+    white-space: normal;
+  }
+}
+
+/* Full width, and wide enough for the wide copy's first line to fit. */
+@media (min-width: 410px) and (max-width: 768px) {
+  .titleColumn {
+    display: none;
+  }
+
+  .titleWide {
+    display: inline;
+  }
+}
+
+/* Small phones: room above the text, so the photo shows behind and above it
+   at any width. The card grows by that much, and the regular shade leaves
+   that strip clear. */
+@media (max-width: 550px) {
+  .content {
+    padding-top: var(--block-5);
+  }
+}

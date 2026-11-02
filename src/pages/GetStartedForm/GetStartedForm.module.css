@@ -127,8 +127,10 @@
   margin: auto;
 }
 
+/* A real width: the square ProductCard takes its height from it. */
 .recommendedCard {
-  max-width: 360px;
+  width: 360px;
+  max-width: 100%;
 }
 
 .estimateWrapper {

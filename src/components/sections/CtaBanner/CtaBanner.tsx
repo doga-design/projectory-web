@@ -1,14 +1,11 @@
 import Button, { type ButtonVariant } from '@/components/Button/Button';
-import { limeOlive } from '@/assets/images/shapes/floaters';
+import { limeOlive, tealP } from '@/assets/images/shapes/floaters';
 import { scrollToId } from '@/lib/scrollToId';
 import styles from './CtaBanner.module.css';
 
-const tealBadge =
-  'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1786649241/projectory-p-teal_twddmb.png';
-
 /** Per-variant pieces CSS can't carry. Colours and badge rotation live in the module. */
 const VARIANTS = {
-  teal: { badge: tealBadge, button: 'teal' },
+  teal: { badge: tealP, button: 'teal' },
   lime: { badge: limeOlive, button: 'limeLight' },
 } as const satisfies Record<string, { badge: string; button: ButtonVariant }>;
 

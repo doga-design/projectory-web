@@ -1,0 +1,21 @@
+<svg width="24" height="22" viewBox="5.5 7.5 24 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="mask0_heart" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="6" y="8" width="23" height="22">
+<path d="M17.5248 29.0827L23.583 23.1507C24.3516 22.4005 25.0862 21.5926 25.787 20.7502L27.4824 18.6959C29.6186 16.0992 29.4942 12.1176 27.1433 9.70555C24.8828 7.3743 21.2999 7.47817 18.9829 9.74018L17.5022 11.1943L16.0216 9.74018C13.7046 7.47817 10.1217 7.3743 7.86114 9.70555C5.51021 12.1176 5.37458 16.0992 7.52206 18.6959L9.21745 20.7502C9.9069 21.5926 10.6529 22.389 11.4214 23.1507L17.4796 29.0827" fill="white"/>
+</mask>
+<g mask="url(#mask0_heart)">
+<path d="M34.4181 11.9544L25.6348 2.98592L8.73144 20.2456L17.5148 29.2142L34.4181 11.9544Z" fill="url(#paint0_heart)"/>
+<path d="M17.3356 29.3966L26.3027 20.2404L9.39941 2.98071L0.432253 12.1369L17.3356 29.3966Z" fill="url(#paint1_heart)"/>
+</g>
+<defs>
+<linearGradient id="paint0_heart" x1="12.2405" y1="6.57025" x2="26.1903" y2="20.2321" gradientUnits="userSpaceOnUse">
+<stop offset="0.3" stop-color="#F3DA00"/>
+<stop offset="0.5" stop-color="#F7B11B"/>
+<stop offset="0.7" stop-color="#FC803D"/>
+<stop offset="0.8" stop-color="#FF6D4A"/>
+</linearGradient>
+<linearGradient id="paint1_heart" x1="7.66755" y1="10.362" x2="20.579" y2="23.0068" gradientUnits="userSpaceOnUse">
+<stop offset="0.1" stop-color="#B6194A"/>
+<stop offset="0.9" stop-color="#FF6D4A"/>
+</linearGradient>
+</defs>
+</svg>

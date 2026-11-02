@@ -6,6 +6,8 @@ export type ButtonVariant =
   | 'lime'
   | 'limeLight'
   | 'coral'
+  | 'coralLight'
+  | 'pink'
   | 'teal'
   | 'plum'
   | 'light'

@@ -367,17 +367,20 @@ iframe {
   text-align: center;
 }
 
+/* Same 3 / 2 / 1 columns as the Products page grid. */
 .productsGrid {
   display: grid;
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
   padding-top: 80px;
   width: 90%;
   margin: auto;
 }
 
-.row {
-  display: grid;
-  gap: 20px;
+@media (max-width: 1024px) {
+  .productsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .btnOutlinePrimary {
@@ -508,7 +511,7 @@ iframe {
   }
 
   .productsGrid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 
   .secondarySizzleWrapper {

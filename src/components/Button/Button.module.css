@@ -58,6 +58,23 @@
   --btn-fg-hover: color-mix(in srgb, var(--brand-lime) 90%, black);
 }
 
+.pink {
+  --btn-bg: var(--brand-pink);
+  --btn-fg: var(--color-text);
+  --btn-border-width: 0.5px;
+  --btn-border: var(--brand-pink);
+  --btn-bg-hover: color-mix(in srgb, var(--brand-pink) 90%, black);
+  --btn-border-hover: color-mix(in srgb, var(--brand-pink) 90%, black);
+}
+
+.coralLight {
+  --btn-bg: var(--color-surface-inverse);
+  --btn-fg: var(--brand-coral);
+  --btn-border-width: 0.5px;
+  --btn-border: var(--color-surface-inverse);
+  --btn-fg-hover: color-mix(in srgb, var(--brand-coral) 90%, black);
+}
+
 .coral {
   --btn-bg: var(--brand-coral);
   --btn-fg: var(--color-text);
