@@ -1,0 +1,24 @@
+/* `translate` is separate from the transform Framer Motion writes, so the two stack. */
+@keyframes float {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -18px;
+  }
+}
+
+.shape {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0.8;
+  will-change: transform;
+  animation: float 4.6s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shape {
+    animation: none;
+  }
+}

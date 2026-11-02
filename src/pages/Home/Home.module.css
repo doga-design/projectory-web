@@ -40,305 +40,72 @@ iframe {
   height: 100%;
 }
 
-.wrapper {
-  position: relative;
-  height: 350vh;
-  scroll-behavior: smooth;
-  scroll-snap-type: none;
+/*
+ * The hero and the pinned copy, fitted to the screen as one piece. The reel takes all
+ * the height the words and gaps leave, so everything is always in view; gaps scale with
+ * the screen to keep the design's proportions. --reel-aspect sets how wide it runs from
+ * there (the 16:9 video crops to fit). The copy reads --reel-w to share the reel's left
+ * edge. Update --sub-lines if the subtitle's wrapping changes.
+ */
+.fitted {
+  --nav-clear: 90px; /* Navbar: 18px offset + 72px island. */
+  --side-pad: 50px;
+  --title-size: min(var(--font-size-hero), 7.8svh);
+  --sub-size: var(--font-size-md);
+  --sub-lines: 2;
+  --button-h: 48px;
+  --gap-top: 6.5svh;
+  --gap-sub: 2.6svh;
+  --gap-buttons: 2.3svh;
+  --gap-reel: 5svh;
+  --gap-bottom: 2.6svh;
+  --reel-w-max: 76.6vw; /* The reference's reel: 1103 of 1440. */
+  --reel-aspect: 2.2;
+  --reel-h: max(
+    160px,
+    min(
+      100svh - var(--nav-clear) - 2 * var(--title-size) - var(--sub-lines) *
+        var(--leading-relaxed) * var(--sub-size) - var(--button-h) - var(--gap-top) -
+        var(--gap-sub) - var(--gap-buttons) - var(--gap-reel) - var(--gap-bottom),
+      var(--reel-w-max) / var(--reel-aspect)
+    )
+  );
+  --reel-w: calc(var(--reel-h) * var(--reel-aspect));
 }
 
-.homeSection {
-  width: 100%;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  left: 0;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--black);
+@media (min-height: 1000px) {
+  .fitted {
+    --sub-size: var(--font-size-lead);
+  }
 }
 
-.content {
-  position: absolute;
-  bottom: 80px;
-  text-align: center;
-  z-index: 2;
-}
-
-.videoSlides {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 1;
-}
-
-.videoSlide {
-  width: 100%;
-  height: 100%;
-  margin: 0 20px;
-  flex-shrink: 0;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 25px;
-  overflow: hidden;
-}
-
-.middleVideoSlide {
-  position: relative;
-}
-
-.tapToPlayOverlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.5);
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-family: inherit;
-  border-radius: inherit;
-  transition: background 0.2s ease;
-}
-
-.tapToPlayOverlay:hover {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.tapToPlayOverlay:active {
-  background: rgba(0, 0, 0, 0.35);
-}
-
-.tapToPlayIcon {
-  width: 56px;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--black);
-  font-size: 22px;
-  line-height: 1;
-  padding-inline-start: 4px;
-}
-
-.tapToPlayText {
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
-}
-
-.videoSlide video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 25px;
-}
-
-.iconShapes {
-  position: absolute;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.icon {
-  width: 50px;
-  position: absolute;
-}
-
-.icon:nth-child(1) {
-  top: 9%;
-  left: 18%;
-  width: 150px;
-  transform: rotate(20deg);
-}
-
-.icon:nth-child(2) {
-  top: 55%;
-  left: 70%;
-  transform: rotate(-50deg);
-  width: 300px;
-}
-
-.icon:nth-child(3) {
-  top: 82%;
-  right: 38%;
-  width: 108px;
-  transform: rotate(-24deg);
-}
-
-.icon:nth-child(4) {
-  top: 20%;
-  right: 9%;
-  transform: rotate(-20deg);
-  width: 220px;
-}
-
-.secondWrapper {
-  /* Art-directed copy size per breakpoint; the fit below only ever shrinks it. */
-  --copy-size: 53px;
-  --copy-gap: clamp(16px, 2.5vw, 30px);
-  --copy-pad: 50px;
-  /* Navbar footprint: 18px offset + 72px island (see Navbar.module.css). */
-  --nav-clear: 90px;
-
-  position: relative;
-  height: 400vh;
-  padding: 0 var(--copy-pad);
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  .secondWrapper {
-    --copy-size: 42px;
+/* Upright screens run out of width first: the reel takes the column, the rest centres. */
+@media (max-aspect-ratio: 1/1) {
+  .fitted {
+    --reel-w-max: calc(100vw - 2 * var(--side-pad));
+    --reel-aspect: calc(16 / 9);
   }
 }
 
 /* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
 @media (max-width: 808px) {
-  .secondWrapper {
+  .fitted {
     --nav-clear: 66px;
   }
 }
 
 @media (max-width: 768px) {
-  .secondWrapper {
-    --copy-size: 30px;
-    --copy-pad: 30px;
+  .fitted {
+    --side-pad: 30px;
+    /* The longest headline line is 8.2em wide, and it must stay on one line. */
+    --title-size: min(var(--font-size-3xl), (100vw - 2 * var(--side-pad)) / 8.2);
   }
 }
 
-@media (min-width: 2000px) {
-  .secondWrapper {
-    --copy-size: 80px;
+@media (max-width: 480px) {
+  .fitted {
+    --sub-lines: 3;
   }
-}
-
-/*
- * The seven lines keep their art-directed size wherever it fits between the
- * navbar and the bottom of the screen, and shrink just enough where it
- * doesn't.
- *
- * How the copy wraps depends only on how many em fit on a row. Measured for
- * this copy in Founders Grotesk: ≥21em → 7 rows, ≥19em → 8, ≥11em → 14,
- * ≥10.5em → 15, ≥10em → 16, ≥8.5em → 19. Each candidate is the largest size
- * that keeps that row count AND fits the height (rows + 6 gaps, the gap being
- * the art-directed one or 0.6em once the type shrinks); the largest wins.
- * Update the numbers if the copy changes.
- */
-.secondSection {
-  --fit-w: calc(100vw - 2 * var(--copy-pad));
-  --fit-h: calc(100vh - 2 * var(--nav-clear));
-  --rows-7: min(
-    var(--fit-w) / 21.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 7, var(--fit-h) / 10.6)
-  );
-  --rows-8: min(
-    var(--fit-w) / 19,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 8, var(--fit-h) / 11.6)
-  );
-  --rows-14: min(
-    var(--fit-w) / 11,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 14, var(--fit-h) / 17.6)
-  );
-  --rows-15: min(
-    var(--fit-w) / 10.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 15, var(--fit-h) / 18.6)
-  );
-  --rows-16: min(
-    var(--fit-w) / 10,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 16, var(--fit-h) / 19.6)
-  );
-  --rows-19: min(
-    var(--fit-w) / 8.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 19, var(--fit-h) / 22.6)
-  );
-
-  position: sticky;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-content: safe center;
-  gap: min(var(--copy-gap), 0.6em);
-  padding-block: var(--nav-clear);
-  font-size: max(
-    16px,
-    min(
-      var(--copy-size),
-      max(
-        var(--rows-7),
-        var(--rows-8),
-        var(--rows-14),
-        var(--rows-15),
-        var(--rows-16),
-        var(--rows-19)
-      )
-    )
-  );
-}
-
-/* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
-@supports (height: 100svh) {
-  .secondSection {
-    --fit-h: calc(100svh - 2 * var(--nav-clear));
-
-    height: 100svh;
-  }
-}
-
-.text {
-  font-size: inherit;
-  line-height: 1;
-  transition: color 0.3s ease;
-  text-shadow:
-    0.1px 0.1px 0 var(--background-dark-gray),
-    -0.1px 0.1px 0 var(--background-dark-gray),
-    -0.1px -0.1px 0 var(--background-dark-gray),
-    0.1px -0.1px 0 var(--background-dark-gray);
-}
-
-.gradientText {
-  background: linear-gradient(90deg, var(--brand-teal) 0%, #f4dca8 30%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  display: inline-block;
-  -webkit-text-stroke-color: var(--background-dark-gray);
-}
-
-.mainSizzleWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100vh;
-  padding: 0 50px;
-}
-
-.mainSizzle {
-  width: 100%;
-  height: 80%;
-  border-radius: 25px;
-  overflow: hidden;
-  background-color: rgb(40, 40, 40);
-  outline: none;
 }
 
 .secondarySizzleWrapper {
@@ -400,76 +167,7 @@ iframe {
   color: white;
 }
 
-@media (max-width: 1024px) {
-  .homeSection h1 {
-    font-size: 80px;
-  }
-
-  .homeSection {
-    height: 100vh;
-  }
-
-  .icon {
-    display: none;
-  }
-
-  .wrapper {
-    height: auto;
-  }
-
-  .homeSection {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-  }
-
-  .videoSlides {
-    width: 100%;
-    height: 100vh;
-  }
-
-  .videoSlide {
-    border-radius: 0;
-  }
-
-  .videoSlide video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .middleVideoSlide {
-    cursor: pointer;
-  }
-
-  .customCursor {
-    display: none;
-  }
-}
-
 @media (max-width: 768px) {
-  .homeSection {
-    height: 100vh;
-  }
-
-  .homeSection h1 {
-    font-size: 40px;
-  }
-
-  .content {
-    bottom: 50px;
-  }
-
-  .mainSizzleWrapper {
-    height: 80vh;
-  }
-
-  .mainSizzle {
-    height: 70%;
-  }
-
   .secondarySizzle {
     flex-direction: column;
   }
@@ -478,48 +176,13 @@ iframe {
     width: 100%;
   }
 
-  .secondWrapper {
-    --copy-pad: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .homeSection {
-    height: 90vh;
-  }
-
-  .homeSection h1 {
-    font-size: 35px;
-    font-weight: 100;
-  }
-
-  .content {
-    bottom: 40px;
-  }
-
-  .mainSizzleWrapper {
-    height: 70vh;
-    padding: 0 20px;
-  }
-
   .secondarySizzleWrapper {
+    width: calc(100% - 40px);
     padding: 0 20px;
-  }
-
-  .mockSection {
-    height: 80vh;
   }
 
   .productsGrid {
     grid-template-columns: 1fr;
-  }
-
-  .secondarySizzleWrapper {
-    width: calc(100% - 40px);
-  }
-
-  .secondarySizzleTitle {
-    width: 100%;
   }
 
   .secondarySizzle h2 {
@@ -533,18 +196,6 @@ iframe {
 
 /* Large-screen enhancements */
 @media (min-width: 2000px) {
-  .homeSection h1 {
-    font-size: 120px;
-  }
-
-  .mainSizzleWrapper {
-    height: 90vh;
-  }
-
-  .mainSizzle {
-    height: 80%;
-  }
-
   .secondarySizzleWrapper {
     width: calc(100% - 200px);
   }
@@ -555,70 +206,5 @@ iframe {
 
   .secondarySizzle h4 {
     font-size: 30px;
-  }
-}
-
-.lightboxBackdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  cursor: zoom-out;
-}
-
-.lightboxContent {
-  width: 90%;
-  max-width: 1200px;
-  position: relative;
-  cursor: default;
-}
-
-.lightboxVideo {
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-}
-
-.lightboxCloseButton {
-  position: fixed;
-  top: 30px;
-  right: 30px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: white;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10001;
-}
-
-.lightboxCloseButton:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1);
-}
-
-@media (max-width: 768px) {
-  .lightboxContent {
-    width: 95%;
-  }
-
-  .lightboxCloseButton {
-    top: 20px;
-    right: 20px;
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
   }
 }

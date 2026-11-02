@@ -1,0 +1,198 @@
+.wrapper {
+  /* 38px where the reel is ~890px wide (a 1440×900 laptop), growing with it. The fit
+     below only ever shrinks this. Layout values come from .fitted in Home.module.css. */
+  --copy-gap: var(--space-3);
+  --line-height: 1.15;
+  /* Shares the reel's left edge; never tighter than the page's side padding. */
+  --copy-left: max(var(--side-pad), (100vw - var(--reel-w)) / 2);
+  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
+  --copy-size: min(
+    max(var(--font-size-statement), var(--reel-w) * 0.0427),
+    (100vw - var(--copy-left) - var(--side-pad)) / 21.5
+  );
+
+  position: relative;
+  height: 250vh;
+  /* `clip`, unlike `hidden`, keeps the pin sticky. Bleeding shapes add no scroll width. */
+  overflow-x: clip;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    --copy-size: var(--font-size-2xl);
+  }
+}
+
+/*
+ * The seven lines keep their size wherever it fits between the navbar and the bottom
+ * of the screen, and shrink just enough where it doesn't.
+ *
+ * How the copy wraps depends only on how many em fit on a row. Measured for this copy
+ * in Founders Grotesk: ≥21em → 7 rows, ≥19em → 8, ≥11em → 14, ≥10.5em → 15, ≥10em → 16,
+ * ≥8.5em → 19. Each candidate is the largest size that keeps that row count AND fits
+ * the height (rows + 6 gaps, the gap being the set one or 0.3em once the type shrinks);
+ * the largest wins. Update the numbers if the copy changes.
+ */
+.pin {
+  --fit-w: calc(100vw - var(--copy-left) - var(--side-pad));
+  --fit-h: calc(100vh - 2 * var(--nav-clear));
+  --rows-7: min(
+    var(--fit-w) / 21.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (7 * var(--line-height)),
+      var(--fit-h) / (7 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-8: min(
+    var(--fit-w) / 19,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (8 * var(--line-height)),
+      var(--fit-h) / (8 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-14: min(
+    var(--fit-w) / 11,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (14 * var(--line-height)),
+      var(--fit-h) / (14 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-15: min(
+    var(--fit-w) / 10.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (15 * var(--line-height)),
+      var(--fit-h) / (15 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-16: min(
+    var(--fit-w) / 10,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (16 * var(--line-height)),
+      var(--fit-h) / (16 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-19: min(
+    var(--fit-w) / 8.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (19 * var(--line-height)),
+      var(--fit-h) / (19 * var(--line-height) + 1.8)
+    )
+  );
+
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-content: safe center;
+  width: 100%;
+  height: 100vh;
+  padding: var(--nav-clear) var(--side-pad) var(--nav-clear) var(--copy-left);
+  font-size: max(
+    16px,
+    min(
+      var(--copy-size),
+      max(
+        var(--rows-7),
+        var(--rows-8),
+        var(--rows-14),
+        var(--rows-15),
+        var(--rows-16),
+        var(--rows-19)
+      )
+    )
+  );
+}
+
+/* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
+@supports (height: 100svh) {
+  .pin {
+    --fit-h: calc(100svh - 2 * var(--nav-clear));
+
+    height: 100svh;
+  }
+}
+
+.copy {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: min(var(--copy-gap), 0.3em);
+}
+
+.line {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: inherit;
+  line-height: var(--line-height);
+  color: var(--neutral-700);
+}
+
+.lit {
+  position: absolute;
+  inset: 0;
+  color: var(--color-text);
+}
+
+.litAccent {
+  color: var(--brand-teal);
+}
+
+/*
+ * Shapes hold the room above and below the copy, as big as they can be without
+ * reaching the navbar or the screen's edge: half of what the copy leaves free.
+ */
+.shapeTop,
+.shapeBottom {
+  --copy-height: calc(7 * var(--line-height) * 1em + 6 * var(--copy-gap));
+  --room: calc((100svh - 2 * var(--nav-clear) - var(--copy-height)) / 2);
+
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.shapeTop {
+  bottom: calc(100% + var(--space-5));
+  left: calc(var(--reel-w) * 0.31);
+  width: clamp(0px, calc(var(--room) - var(--space-5)), var(--reel-w) * 0.125);
+}
+
+.shapeBottom {
+  top: calc(100% + var(--space-2));
+  left: calc(var(--reel-w) * 0.88);
+  width: clamp(0px, calc(var(--room) - var(--space-2)), var(--reel-w) * 0.163);
+}
+
+/* Lines wrap to fill the phone screen, so the shapes bleed off its edges behind them. */
+@media (max-width: 768px) {
+  .shapeTop {
+    top: calc(100% + var(--space-2));
+    bottom: auto;
+    left: auto;
+    right: -64px;
+    width: 92px;
+  }
+
+  .shapeBottom {
+    top: calc(100% + var(--space-2));
+    left: -44px;
+    width: 92px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
+  }
+
+  .pin {
+    position: static;
+  }
+
+  .lit {
+    opacity: 1 !important;
+  }
+}

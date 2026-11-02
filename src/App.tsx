@@ -5,6 +5,7 @@ import ScrollToTop from '@/components/layout/ScrollToTop/ScrollToTop';
 import PageViewTracker from '@/components/layout/PageViewTracker/PageViewTracker';
 import { LikedProductsProvider } from '@/context/LikedProductsContext';
 import LoadingScreen from '@/components/layout/LoadingScreen/LoadingScreen';
+import { markLoaderLifted } from '@/lib/homeEntrance';
 
 const Home = lazy(() => import('@/pages/Home/Home'));
 const WhoWeAre = lazy(() => import('@/pages/WhoWeAre/WhoWeAre'));
@@ -28,6 +29,7 @@ const FADE_OUT_MS = 500;
 
 /** Build-time kill switch, so the loader can be A/B'd per deploy without a code change. */
 const LOADING_SCREEN_ON = import.meta.env.VITE_LOADING_SCREEN !== 'off';
+if (!LOADING_SCREEN_ON) markLoaderLifted();
 
 const App = () => {
   const [showLoader, setShowLoader] = useState(LOADING_SCREEN_ON);
@@ -35,6 +37,7 @@ const App = () => {
 
   const dismiss = useCallback(() => {
     setFadeOut(true);
+    markLoaderLifted();
     setTimeout(() => setShowLoader(false), FADE_OUT_MS);
   }, []);
 
