@@ -1,215 +1,136 @@
-/* ── Card container ─────────────────────────────────────────────────────── */
-.productCard {
+/* ProductCard
+ * ═══════════
+ * Square tile: thumbnail, hover video above it, a bottom shade, then the copy.
+ * Hover effects are for real pointers only; on touch a tap just navigates. */
+
+.card {
   position: relative;
-  width: 100%;
-  height: 400px;
-  border-radius: 24px;
-  overflow: hidden;
+  z-index: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
   cursor: pointer;
-  transition: all 0.3s ease;
-  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.7));
 }
 
-.productCard::before {
+/* Bottom shade so the copy reads on any photo. */
+.card::before {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0.85) 100%);
-  z-index: 3;
   pointer-events: none;
 }
 
-/* ── Background layer ──────────────────────────────────────────────────── */
-.bgLayer {
+.media {
   position: absolute;
   inset: 0;
-  overflow: hidden;
-  z-index: 0;
-  transform-origin: center center;
-}
-
-.productCard:hover,
-.productCard:hover .bgImage,
-.productCard:hover .bgVideoWrapper {
-  transform: scale(1.105);
-}
-
-.productCard:hover .learnMoreButton {
-  background-color: white;
-  color: black;
-}
-
-/* static image */
-.bgImage {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* video wrapper */
-.bgVideoWrapper {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  transition: transform 0.3s ease;
-}
-
-/* fill video to cover */
-.bgVideo {
-  width: 180%;
-  height: 180%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-/* fade image to reveal video */
-.productCard:hover .bgImage {
+.video {
+  z-index: 1;
   opacity: 0;
+  transition: opacity var(--transition-base);
 }
 
-.cardContent {
+.content {
   position: relative;
-  z-index: 4;
-  padding: 20px;
-  color: var(--white);
-  transform-style: preserve-3d;
-  backface-visibility: hidden;
-}
-
-.productName {
-  margin-bottom: 10px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-5);
+  color: var(--color-text);
 }
 
 .title {
-  font-family: 'FounderGrotesk_Regular';
-  font-size: 30px;
-  margin-bottom: 8px;
-  letter-spacing: 0.6px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-xl);
+  font-weight: 400;
+  line-height: var(--leading-snug);
 }
 
 .title strong {
-  letter-spacing: 0.6px;
   font-family: 'FoundersGrotesk_Bold';
+  font-weight: normal;
 }
 
-/* collapsible description */
+/* Collapsed to zero rows; opens to the description's own height on hover. */
 .descWrapper {
-  height: 0;
-  overflow: hidden;
-  transition: height 0.3s ease;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-base);
 }
 
 .description {
-  margin: 0;
-  width: 95%;
+  min-height: 0;
+  overflow: hidden;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-snug);
+  transition: margin-top var(--transition-base);
 }
 
-/* ── Learn more button ─────────────────────────────────────────────────── */
-.learnMoreButton {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 8px 16px;
-  border: 1px solid var(--white);
-  border-radius: 50px;
-  color: var(--white);
-  text-decoration: none;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
-}
-
-.learnMoreButton:hover {
-  background-color: var(--white);
-  color: var(--true-black);
-}
-
-/* ── Like button ───────────────────────────────────────────────────────── */
-.likeButton {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  z-index: 5;
-  background-color: transparent;
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+.actions {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  margin-top: var(--space-3);
 }
 
-.likeButton img {
-  width: 40px;
-  height: 40px;
-  transition: transform 0.2s ease;
+.heart {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0.5px solid var(--color-text);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+  transition: background var(--transition-fast);
 }
 
-.likeButton:hover {
-  background-color: rgba(255, 255, 255, 0.3);
+.heart img {
+  width: 20px;
+  height: auto;
 }
 
-.heartIcon {
-  width: 40px;
-  height: 40px;
+.liked {
+  background: var(--color-surface-inverse);
 }
 
-/* ── Mobile fixes ───────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .productCard:hover .bgImage,
-  .productCard:hover .bgVideoWrapper {
-    transform: none;
+@media (hover: hover) {
+  .card:hover .video {
+    opacity: 1;
   }
 
-  /* no scaling on hover for mobile */
-  .productCard:hover {
-    transform: none;
+  .card:hover .descWrapper {
+    grid-template-rows: 1fr;
   }
 
-  /* Disable hover fade effects on mobile */
-  .bgImage {
-    opacity: 1 !important;
-    transition: none !important;
-  }
-}
-
-@media screen and (min-width: 2000px) {
-  .productCard {
-    width: 100%;
-    height: 500px;
+  .card:hover .description {
+    margin-top: var(--space-2);
   }
 
-  .title {
-    font-size: 40px;
+  /* Learn More fills while anywhere on the card is hovered, through the
+     Button's own custom properties. */
+  .card:hover .learnMore {
+    --btn-bg: var(--color-surface-inverse);
+    --btn-fg: var(--color-text-inverse);
   }
 
-  .description {
-    font-size: 30px;
-  }
-
-  .learnMoreButton {
-    font-size: 20px;
-  }
-  .likeButton {
-    width: 50px;
-    height: 50px;
-  }
-  .likeButton img {
-    width: 50px;
-    height: 50px;
+  .heart:not(.liked):hover {
+    background: var(--alpha-white-12);
   }
 }

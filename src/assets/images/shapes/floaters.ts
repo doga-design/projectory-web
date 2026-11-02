@@ -18,3 +18,5 @@ export const apricot =
   'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1786649238/Projectory_GradientSymbol_Apricot_15_qbqflg.png';
 export const redLime =
   'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1786453900/whoWeAre-Abstarct_gelxxd.avif';
+export const tealP =
+  'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1786649241/projectory-p-teal_twddmb.png';

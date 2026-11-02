@@ -1,209 +1,114 @@
-.carouselWrapper {
+.section {
+  width: 100%;
+}
+
+/* Copy left, image right, both top-aligned. The whole slide fades out, swaps
+   product, then fades back in; --fade is set from FeaturedCarousel.tsx. */
+.slide {
   display: grid;
-  position: relative;
-  grid-template-columns: 1fr 1.4fr;
-  width: 100%;
-  height: 500px;
-  max-height: 650px;
-  color: white;
-  position: relative;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: var(--block-2);
+  text-align: left;
+  transition: opacity var(--fade) cubic-bezier(0.65, 0, 0.35, 1);
 }
 
-.leftColumn {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  padding: 60px;
-  padding-right: 0;
-  gap: 20px;
-}
-
-.featuredText {
-  font-size: 16px;
-  margin-bottom: 10px;
-  opacity: 0.7;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-.productInfo {
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.fadeIn {
-  opacity: 1;
-  transition: opacity 0.5s ease;
-}
-
-.fadeOut {
+.faded {
   opacity: 0;
-  transition: opacity 0.5s ease;
 }
 
-.title {
-  font-size: 50px;
-  margin-bottom: 10px;
+/* Only the active copy is shown; the rest hold the cell's height. */
+.slides {
+  display: grid;
+  min-width: 0;
 }
 
-.categoryLine {
-  font-size: 25px;
-  margin-bottom: 20px;
+.slides > .copy {
+  grid-area: 1 / 1;
+  visibility: hidden;
 }
 
-.categoryLine strong {
-  font-family: 'FoundersGrotesk_Bold';
+.slides > .copyActive {
+  visibility: visible;
 }
 
-.learnMoreButton {
-  width: fit-content;
-  display: inline-block;
-  padding: 12px 24px;
-  background: white;
-  color: black;
-  border-radius: 100px;
-  text-decoration: none;
-}
-
-.timerBarWrapper {
-  width: 4px;
-  height: 100px;
-  border-radius: 100px;
-  background: rgba(255, 255, 255, 0.2);
-  position: absolute;
-  left: 0px;
-  bottom: 5px;
-}
-
-.timerBarFill {
-  width: 100%;
-  background: var(--white);
-  height: 0;
-  transition: height 0.1s linear;
-  border-radius: 100px;
-}
-
-.rightColumn {
-  position: relative;
-  overflow: hidden;
-}
-
-.imageWrapper {
+.copy {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 90%;
-  height: 100%;
-  margin: auto;
-  margin-right: 50px;
-  border-radius: 24px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.headline {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-2xl);
+  font-weight: 400;
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+}
+
+.name {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lead);
+  line-height: var(--leading-normal);
+}
+
+.name strong {
+  font-family: 'FoundersGrotesk_Bold';
+  font-weight: normal;
+}
+
+.button {
+  margin-top: var(--space-3);
+}
+
+.media {
+  position: relative;
+  display: block;
+  aspect-ratio: 3 / 2;
   overflow: hidden;
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
 }
 
-.productImage {
-  border-radius: 24px;
+/* Hover tint, signalling the image is clickable. */
+.media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--alpha-black-15);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .media:hover::after {
+    opacity: 1;
+  }
+}
+
+.image {
+  display: block;
+  width: 100%;
   height: 100%;
+  object-fit: cover;
 }
 
-@media screen and (max-width: 1024px) {
-  .carouselWrapper {
+@media (max-width: 768px) {
+  .slide {
     grid-template-columns: 1fr;
-    align-items: center;
-    justify-content: center;
-    height: 90vh;
-    max-height: 90vh;
-    gap: -100px;
+    gap: var(--space-6);
   }
 
-  .learnMoreButton {
-    padding: 10px 20px;
-    margin-top: -7px;
-    margin-left: -3px;
+  .media {
+    order: -1;
   }
 
-  .title {
-    font-size: 40px;
-  }
-
-  .leftColumn {
-    padding: 30px;
-    padding-bottom: 0;
-    gap: 0;
-    position: static;
-    order: 2;
-    margin-bottom: -70px;
-  }
-
-  .timerBarWrapper {
-    display: none;
-    position: static;
-    margin-top: 20px;
-    right: auto;
-    bottom: auto;
-  }
-
-  .title {
-    font-size: 30px;
-  }
-  .categoryLine {
-    font-size: 20px;
-  }
-
-  .featuredText {
-    font-size: 14px;
-  }
-
-  .rightColumn {
-    height: 50vh;
-    margin-top: 15px;
-    margin-bottom: -90px;
-  }
-
-  .imageWrapper {
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .productImage {
-    width: auto;
-    height: 100%;
-    margin: 0;
-    border-radius: 12px;
-    object-fit: cover;
-  }
-}
-
-@media screen and (min-width: 2000px) {
-  .carouselWrapper {
-    height: 70vh;
-    max-height: 70vh;
-  }
-
-  .leftColumn {
-    padding: 80px;
-    padding-right: 0;
-  }
-
-  .productImage {
-    width: auto;
-    height: 100%;
-    margin: 0;
-    border-radius: 12px;
-    object-fit: cover;
-  }
-
-  .imageWrapper {
-    width: 100%;
-    height: 100%;
-    margin: auto;
-    border-radius: 12px;
-    overflow: hidden;
+  .headline {
+    font-size: var(--font-size-xl);
   }
 }

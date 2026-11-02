@@ -1,5 +1,101 @@
 .productPage {
-  background-color: var(--black);
+  background-color: var(--color-bg);
+}
+
+/* Same content column as Pricing and Partners. Sections move in here as
+   they're redesigned. */
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-5);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--block-4) 50px var(--block-5);
+}
+
+/* Tag wheel, description and grid. Also the box the sticky wheel stays
+   stuck inside, so it travels with the grid and leaves with it. Clipped, so
+   the wheel's backdrop and fade never spill past the section as it leaves
+   (onto the CTA badges below); `clip`, unlike `hidden`, keeps it sticky. */
+.catalogue {
+  /* Where the sticky tag wheel pins (just below the floating navbar) and the
+     room around it; read by TagWheel and by .anchor below. */
+  --wheel-top: 90px;
+  --wheel-pad: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: clip;
+}
+
+/* Scroll target, directly above the strip; lands it where it sticks. */
+.anchor {
+  scroll-margin-top: calc(var(--wheel-top) + var(--wheel-pad));
+}
+
+.descriptions {
+  display: grid;
+  max-width: 720px;
+  margin-top: var(--block-3);
+}
+
+.descriptionsAll {
+  max-width: 480px;
+}
+
+/* The old one fades out quickly, then the new one fades in just after. */
+.description {
+  grid-area: 1 / 1;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease,
+    visibility 0s linear 0.15s;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lead);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.descriptionActive {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.25s ease 0.1s;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Rows keep their own height even while the grid is held open during a scroll
+     (useCatalogueScroll); any held space stays empty below the last row. */
+  align-content: start;
+  gap: var(--space-6);
+  width: 100%;
+  margin-top: var(--block-3);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: var(--block-4) 30px var(--block-5);
+  }
+
+  .catalogue {
+    --wheel-top: 70px;
+    --wheel-pad: var(--space-4);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .hero {
@@ -27,190 +123,5 @@
 
     /* lime floater (lower slot) sits closer to the bottom */
     --lh-lower-bottom: 11%;
-  }
-}
-
-.productGridWrapper {
-  position: relative;
-}
-
-.productsGrid {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 20px;
-  margin-top: 40px;
-  padding: 100px 50px;
-  padding-top: 0;
-}
-
-.row {
-  display: grid;
-  gap: 20px;
-}
-
-.tagContent {
-  display: grid;
-  position: relative;
-  z-index: 11;
-  grid-template-columns: 1fr 1fr;
-  padding: 100px 50px 0px 50px;
-  margin-bottom: -70px;
-}
-
-.tagBarHeading {
-  font-size: 60px;
-  margin-bottom: 25px;
-  margin-top: -18px;
-}
-
-.tagBarSubheading {
-  font-size: 25px;
-}
-
-.tagBarWrapper {
-  position: sticky;
-  top: 0;
-  padding: 108px 0px 70px 0px;
-  background: linear-gradient(
-    to bottom,
-    rgba(19, 19, 19, 1) 50%,
-    rgba(19, 19, 19, 0.85) 75%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  z-index: 10;
-}
-
-.tagBar {
-  width: calc(100% - 90px);
-  margin: auto;
-  display: flex;
-  overflow-x: auto;
-  padding: 10px;
-  border-radius: 100px;
-  justify-content: space-between;
-  background-color: var(--graphite);
-  bottom: 20px;
-}
-
-.tagBar::-webkit-scrollbar {
-  display: none;
-}
-
-.tagButton {
-  display: inline;
-  white-space: nowrap;
-  padding: 8px 16px;
-  background: transparent;
-  border: none;
-  border-radius: 50px;
-  font-size: 18px;
-  cursor: pointer;
-  color: white;
-  border: 1px solid transparent;
-  white-space: nowrap;
-  transition:
-    background 0.3s ease,
-    color 0.3s ease;
-}
-
-.activeTag {
-  border: 1px solid white;
-  background: white;
-  color: black;
-  font-size: 18px;
-  padding: 8px 16px;
-  border-radius: 50px;
-  cursor: pointer;
-  display: inline;
-  white-space: nowrap;
-}
-
-.imageRow {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: -7vw;
-  gap: 40px;
-  left: 0;
-}
-
-.gradientOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  /* z-index: 10; */
-  background: linear-gradient(to bottom, rgba(19, 19, 19, 0) 90%, rgba(19, 19, 19, 0.7) 100%);
-}
-
-.imageRow img {
-  width: 15%;
-  height: auto;
-  max-width: 100%;
-}
-
-@media screen and (max-width: 900px) {
-  .productsGrid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    width: 100%;
-    padding: 30px;
-    margin: auto;
-  }
-
-  .row {
-    grid-template-columns: 1fr !important;
-  }
-
-  .tagContent {
-    grid-template-columns: 1fr;
-    padding: 30px;
-    padding-top: 100px;
-    padding-bottom: 0;
-    margin: auto;
-    z-index: 999;
-    margin-bottom: -50px;
-  }
-  .tagBarWrapper {
-    position: sticky;
-    top: 0;
-    padding: 20px 0px;
-    padding-top: 108px;
-    background: linear-gradient(
-      to bottom,
-      rgba(19, 19, 19, 1) 50%,
-      rgba(19, 19, 19, 0.85) 75%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  }
-
-  .tagBar {
-    width: calc(100% - 20px);
-    margin: auto;
-    display: flex;
-    overflow-x: auto;
-    padding: 10px;
-    border-radius: 100px;
-    justify-content: space-between;
-    background-color: var(--graphite);
-  }
-}
-
-@media screen and (min-width: 2000px) {
-  .tagBarHeading {
-    font-size: 80px;
-  }
-
-  .tagButton {
-    font-size: 25px;
-  }
-  .tagBarSubheading {
-    font-size: 40px;
-  }
-  .activeTag {
-    font-size: 25px;
   }
 }

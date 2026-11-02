@@ -1,0 +1,125 @@
+/* Same columns and gap as the product grid above, so the edges line up. */
+.pair {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-6);
+  width: 100%;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  padding: var(--block-3) var(--block-2);
+  border-radius: var(--radius-xl);
+  background-color: var(--card-bg);
+}
+
+/* ── Accents ─── */
+
+.coral {
+  --card-bg: var(--brand-coral);
+}
+
+.teal {
+  --card-bg: var(--brand-teal);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  text-align: center;
+}
+
+/* Trimmed to cap height and baseline, so the one gap above reads as equal
+   space between title, body and button (as in Figma), instead of the title's
+   larger leading padding out the space beneath it. Browsers without
+   text-box (Firefox, for now) keep the untrimmed boxes. */
+.title,
+.body {
+  margin: 0;
+  color: var(--color-text);
+  text-box: trim-both cap alphabetic;
+}
+
+.title {
+  font-family: var(--font-medium);
+  font-size: var(--font-size-3xl);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  /* Line breaks come from the copy, as in the design. */
+  white-space: pre-line;
+  /* A touch more room under the title than the shared gap gives. */
+  margin-bottom: var(--space-2);
+}
+
+.body {
+  max-width: 334px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-normal);
+}
+
+/* Hangs off a corner of its card, bobbing like CtaBanner's badge. As the
+   viewport narrows it slides in from the side, from its full overhang at
+   1440px to 12px inside the card at 769px (the last two-column width), so it
+   never crowds the screen edge; the clamps hold both ends. Vertical offsets
+   stay put, so it keeps sitting on the card's top/bottom edge. */
+.badge {
+  position: absolute;
+  z-index: 2;
+  width: clamp(90px, 11vw, 160px);
+  height: auto;
+  pointer-events: none;
+  rotate: var(--badge-rotate);
+  animation: bob 4.2s ease-in-out 0.6s infinite alternate;
+}
+
+.coral .badge {
+  --badge-rotate: 12deg;
+  top: -46px;
+  left: clamp(-44px, calc(76px - 8.35vw), 12px);
+}
+
+.teal .badge {
+  --badge-rotate: -16.545deg;
+  right: clamp(-60px, calc(94px - 10.7vw), 12px);
+  bottom: -52px;
+}
+
+@keyframes bob {
+  from {
+    translate: 0 0;
+  }
+  to {
+    translate: 0 -18px;
+  }
+}
+
+/* Narrower cards: smaller titles, so the copy's line breaks still fit. */
+@media (max-width: 1024px) {
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .pair {
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    min-height: 360px;
+    padding: var(--block-2) var(--space-6);
+  }
+
+  .badge {
+    display: none;
+  }
+}

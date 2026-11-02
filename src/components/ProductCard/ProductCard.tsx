@@ -1,14 +1,14 @@
-// src/components/ProductCard/ProductCard.tsx
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import styles from './ProductCard.module.css';
+import { memo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLikedProducts } from '@/context/LikedProductsContext';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinaryHelpers';
+import Button from '@/components/Button/Button';
 import CloudinaryImage from '@/components/CloudinaryImage/CloudinaryImage';
-import HeartIconSVG from '@/assets/images/heartIcon.svg';
-import HeartIconSVG_Outline from '@/assets/images/heartIcon_outline.svg';
+import heartIcon from '@/assets/images/heart.svg';
+import heartOutlineIcon from '@/assets/images/heart_outline.svg';
+import styles from './ProductCard.module.css';
 
-export type ProductCardProduct = {
+type ProductCardProduct = {
   id: string;
   name: string;
   category: string;
@@ -19,129 +19,71 @@ export type ProductCardProduct = {
   shortDescription?: string;
 };
 
-const ProductCard: React.FC<{ product: ProductCardProduct }> = ({ product }) => {
+/** A square product tile. On hover (real pointers only) the video plays, the description opens
+ *  and Learn More fills; the heart saves the product to the liked list. */
+const ProductCard = ({ product }: { product: ProductCardProduct }) => {
   const navigate = useNavigate();
   const { likedProducts, toggleLike } = useLikedProducts();
   const isLiked = likedProducts.includes(product.id);
+  const href = `/products/${product.id}`;
 
-  const optimizedThumbnail = optimizeCloudinaryUrl(product.thumbnail, 'f_auto,q_auto,w_900');
-  const optimizedBgVideo = product.bgVideo
-    ? optimizeCloudinaryUrl(product.bgVideo, 'q_auto,w_900')
-    : undefined;
+  // The video is only fetched once the card is first hovered.
+  const [loadVideo, setLoadVideo] = useState(false);
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [descHeight, setDescHeight] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 900);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const descRef = useRef<HTMLParagraphElement>(null);
-
-  useEffect(() => {
-    const el = descRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        setDescHeight(entry.target.scrollHeight);
-      }
-    });
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [product.shortDescription]);
-
-  // Only load video when hovered (deferred loading)
-  useEffect(() => {
-    if (isHovered && !isMobile && product.bgVideo && !shouldLoadVideo) {
-      setShouldLoadVideo(true);
-    }
-  }, [isHovered, isMobile, product.bgVideo, shouldLoadVideo]);
-
-  // Memoize video component to prevent recreation
-  const videoComponent = useMemo(() => {
-    if (!shouldLoadVideo || !optimizedBgVideo) return null;
-
-    return (
-      <video
-        className={styles.bgVideo}
-        src={optimizedBgVideo}
-        poster={optimizedThumbnail}
-        preload="none"
-        autoPlay
-        muted
-        loop
-        playsInline
-      />
-    );
-  }, [shouldLoadVideo, optimizedBgVideo, optimizedThumbnail]);
+  const thumbnail = optimizeCloudinaryUrl(product.thumbnail, 'f_auto,q_auto,w_900');
+  const video = product.bgVideo && optimizeCloudinaryUrl(product.bgVideo, 'q_auto,w_900');
 
   return (
     <div
-      className={styles.productCard}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={() => navigate(`/products/${product.id}`)}
-      style={{ zIndex: isHovered ? 2 : 1 }}
+      className={styles.card}
+      onClick={() => navigate(href)}
+      onMouseEnter={() => setLoadVideo(true)}
     >
-      <div className={styles.bgLayer}>
-        <CloudinaryImage
-          className={styles.bgImage}
-          src={optimizedThumbnail}
-          alt={product.name}
-          loading="lazy"
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+      <CloudinaryImage className={styles.media} src={thumbnail} alt={product.name} loading="lazy" />
+      {loadVideo && video && (
+        <video
+          className={`${styles.media} ${styles.video}`}
+          src={video}
+          poster={thumbnail}
+          preload="none"
+          autoPlay
+          muted
+          loop
+          playsInline
         />
-        {!isMobile && videoComponent && (
-          <div
-            className={styles.bgVideoWrapper}
-            style={{
-              opacity: isHovered ? 1 : 0,
-              transition: 'opacity 0.3s ease-in-out',
-            }}
-          >
-            {videoComponent}
-          </div>
-        )}
-      </div>
+      )}
 
-      <div className={styles.cardContent}>
-        <div className={styles.productName}>
-          <h3 className={styles.title} style={{ color: product.categoryColor || '#fff' }}>
-            {product.category}
-            {product.categoryHighlight && <strong>{product.categoryHighlight}</strong>}
-          </h3>
+      <div className={styles.content}>
+        <h3 className={styles.title} style={{ color: product.categoryColor }}>
+          {product.category}
+          {product.categoryHighlight && <strong>{product.categoryHighlight}</strong>}
+        </h3>
 
-          <div className={styles.descWrapper} style={{ height: isHovered ? descHeight : 0 }}>
-            <p ref={descRef} className={styles.description}>
-              {product.shortDescription}
-            </p>
-          </div>
+        <div className={styles.descWrapper}>
+          <p className={styles.description}>{product.shortDescription}</p>
+        </div>
 
-          <Link
-            to={`/products/${product.id}`}
-            className={styles.learnMoreButton}
+        <div className={styles.actions}>
+          <Button
+            variant="outline"
+            size="small"
+            to={href}
+            className={styles.learnMore}
             onClick={(e) => e.stopPropagation()}
           >
             Learn More
-          </Link>
-
+          </Button>
           <button
-            className={styles.likeButton}
+            type="button"
+            className={`${styles.heart}${isLiked ? ` ${styles.liked}` : ''}`}
+            aria-pressed={isLiked}
+            aria-label={`Save ${product.name}`}
             onClick={(e) => {
               e.stopPropagation();
               toggleLike(product.id);
             }}
           >
-            <img
-              className={styles.heartIcon}
-              src={isLiked ? HeartIconSVG : HeartIconSVG_Outline}
-              alt="Like"
-            />
+            <img src={isLiked ? heartIcon : heartOutlineIcon} alt="" />
           </button>
         </div>
       </div>
@@ -149,15 +91,5 @@ const ProductCard: React.FC<{ product: ProductCardProduct }> = ({ product }) => 
   );
 };
 
-// Memoize component to prevent unnecessary re-renders
-export default React.memo(
-  ProductCard,
-  (prevProps: { product: ProductCardProduct }, nextProps: { product: ProductCardProduct }) => {
-    // Only re-render if product data actually changes
-    return (
-      prevProps.product.id === nextProps.product.id &&
-      prevProps.product.thumbnail === nextProps.product.thumbnail &&
-      prevProps.product.bgVideo === nextProps.product.bgVideo
-    );
-  }
-);
+// Products come straight from the static data, so the reference only changes when the product does.
+export default memo(ProductCard);

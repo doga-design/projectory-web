@@ -15,7 +15,6 @@ import ProductCard from '@/components/ProductCard/ProductCard';
 import CustomCursor from './components/CustomCursor/CustomCursor';
 
 import { products as allProducts } from '@/data/products';
-import type { Product } from '@/types/product';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import icon1 from '@/assets/images/shapes/pMonograms/Projectory_GradientSymbol_Apricot_15.svg';
@@ -157,33 +156,9 @@ const Home = () => {
 
   // Memoize random product selection to prevent recalculation on every render
   const randomProducts = useMemo(() => {
-    return [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 5);
+    // Six fills two rows of the three-column grid.
+    return [...allProducts].sort(() => 0.5 - Math.random()).slice(0, 6);
   }, []); // Only calculate once on mount
-
-  // Memoize product grouping
-  const groupProductsByPattern = useMemo(() => {
-    const groups: Product[][] = [];
-    const pattern = [3, 3, 2];
-    let i = 0;
-    let patternIndex = 0;
-
-    while (i < randomProducts.length) {
-      const count = pattern[patternIndex];
-      groups.push(randomProducts.slice(i, i + count));
-      i += count;
-      patternIndex = (patternIndex + 1) % pattern.length;
-    }
-
-    // If the last group has only 1 item, merge it with the previous group
-    if (groups.length > 1 && groups[groups.length - 1].length === 1) {
-      const lastGroup = groups.pop();
-      if (lastGroup) {
-        groups[groups.length - 1] = groups[groups.length - 1].concat(lastGroup);
-      }
-    }
-
-    return groups;
-  }, [randomProducts]);
 
   // Common video props
   const commonVideoProps = {
@@ -329,16 +304,8 @@ const Home = () => {
           </div>
 
           <div className={styles.productsGrid}>
-            {groupProductsByPattern.map((group, groupIndex) => (
-              <div
-                key={groupIndex}
-                className={styles.row}
-                style={{ gridTemplateColumns: isMobile ? '1fr' : `repeat(${group.length}, 1fr)` }}
-              >
-                {group.map((prod) => (
-                  <ProductCard key={prod.id} product={prod} />
-                ))}
-              </div>
+            {randomProducts.map((prod) => (
+              <ProductCard key={prod.id} product={prod} />
             ))}
           </div>
           <Link to="/products" className={styles.btnOutlinePrimary}>
