@@ -53,24 +53,19 @@
 
 .description {
   max-width: 480px;
-  margin: var(--gap-sub) 0 0;
+  margin: var(--gap-text) 0 0;
   font-family: var(--font-body);
   font-size: var(--sub-size);
+  font-weight: normal;
   line-height: var(--leading-relaxed);
   color: var(--color-text);
-}
-
-@media (max-height: 999px) {
-  .description {
-    max-width: 400px;
-  }
 }
 
 .buttons {
   display: flex;
   justify-content: center;
   gap: var(--space-5);
-  margin-top: var(--gap-buttons);
+  margin-top: var(--gap-text);
 }
 
 /* The shared outline is bright; the reference keeps this one a quiet hairline. */
@@ -149,13 +144,22 @@
   pointer-events: none;
 }
 
-@media (max-width: 768px) {
+/* Phones and tablets, including large ones held sideways. This shape bleeds off the
+   screen's edge by design, which only reads as intended on a desktop. */
+@media (max-width: 1024px), (hover: none) and (pointer: coarse) {
   .shapeTopLeft {
-    --shape-w: 104px;
-
-    top: calc(var(--nav-clear) - var(--space-5));
+    display: none;
   }
+}
 
+/* Upright tablets: the frame's edge is close to the screen's, so this stays on screen. */
+@media (max-width: 1024px) and (max-aspect-ratio: 1/1) {
+  .shapeFrameCorner {
+    translate: 25% -50%;
+  }
+}
+
+@media (max-width: 768px) {
   /* Stays on the screen and clear of the buttons: on a phone everything sits closer. */
   .shapeFrameCorner {
     width: 52px;

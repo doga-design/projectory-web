@@ -54,8 +54,8 @@ const Statement = () => {
               src={yellowCoral}
               progress={scrollYProgress}
               x={[0, -24]}
-              y={[0, -30]}
-              rotate={[-8, -30]}
+              y={[0, -6]}
+              rotate={[-8, -20]}
               flipX
               floatDelay={0.3}
             />
@@ -74,8 +74,8 @@ const Statement = () => {
               src={limeOlive}
               progress={scrollYProgress}
               x={[0, 30]}
-              y={[0, 24]}
-              rotate={[-14, 12]}
+              y={[0, -14]}
+              rotate={[-14, 4]}
               floatDelay={0.9}
             />
           </div>

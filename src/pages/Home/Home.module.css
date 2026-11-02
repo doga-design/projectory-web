@@ -51,39 +51,38 @@ iframe {
   --nav-clear: 90px; /* Navbar: 18px offset + 72px island. */
   --side-pad: 50px;
   --title-size: min(var(--font-size-hero), 7.8svh);
-  --sub-size: var(--font-size-md);
+  --sub-size: var(--font-size-lg);
   --sub-lines: 2;
   --button-h: 48px;
   --gap-top: 6.5svh;
-  --gap-sub: 2.6svh;
-  --gap-buttons: 2.3svh;
+  --gap-text: var(--space-7); /* Headline to subtitle, subtitle to buttons. */
   --gap-reel: 5svh;
   --gap-bottom: 2.6svh;
   --reel-w-max: 76.6vw; /* The reference's reel: 1103 of 1440. */
   --reel-aspect: 2.2;
+  --reel-h-max: calc(var(--reel-w-max) / var(--reel-aspect));
   --reel-h: max(
     160px,
     min(
       100svh - var(--nav-clear) - 2 * var(--title-size) - var(--sub-lines) *
-        var(--leading-relaxed) * var(--sub-size) - var(--button-h) - var(--gap-top) -
-        var(--gap-sub) - var(--gap-buttons) - var(--gap-reel) - var(--gap-bottom),
-      var(--reel-w-max) / var(--reel-aspect)
+        var(--leading-relaxed) * var(--sub-size) - var(--button-h) - var(--gap-top) - 2 *
+        var(--gap-text) - var(--gap-reel) - var(--gap-bottom),
+      var(--reel-h-max)
     )
   );
   --reel-w: calc(var(--reel-h) * var(--reel-aspect));
 }
 
-@media (min-height: 1000px) {
-  .fitted {
-    --sub-size: var(--font-size-lead);
-  }
-}
-
-/* Upright screens run out of width first: the reel takes the column, the rest centres. */
+/* Upright screens have height to spare: the words move up, and the reel takes the
+   column's full width and all the height they leave, cropping the video to fit. */
 @media (max-aspect-ratio: 1/1) {
   .fitted {
+    --gap-top: var(--space-5);
+    --gap-reel: var(--block-1);
+    --gap-bottom: var(--space-7);
     --reel-w-max: calc(100vw - 2 * var(--side-pad));
-    --reel-aspect: calc(16 / 9);
+    --reel-h-max: 100svh;
+    --reel-w: var(--reel-w-max);
   }
 }
 
@@ -102,7 +101,16 @@ iframe {
   }
 }
 
-@media (max-width: 480px) {
+/* Phones held upright: more air above the words, around the reel and below it. */
+@media (max-width: 768px) and (max-aspect-ratio: 1/1) {
+  .fitted {
+    --gap-top: var(--block-2);
+    --gap-reel: var(--block-2);
+    --gap-bottom: var(--block-2);
+  }
+}
+
+@media (max-width: 429px) {
   .fitted {
     --sub-lines: 3;
   }

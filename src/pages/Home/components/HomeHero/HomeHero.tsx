@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import ReactDOM from 'react-dom';
-import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { cubicBezier, motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import { FiX } from 'react-icons/fi';
 import Button from '@/components/Button/Button';
 import { coralBurgundy, coralTeal } from '@/assets/images/shapes/floaters';
@@ -15,7 +15,10 @@ import styles from './HomeHero.module.css';
 const RISE_EASE = (t: number) => 1 - Math.pow(1 - t, 4);
 const RISE_DURATION = 0.8;
 const FADE_DURATION = 0.7;
-const SHAPE_DURATION = 1;
+/** Heavy: eases out slowly, speeds up through the middle, then takes its time to land. */
+const SHAPE_EASE = cubicBezier(0.12, 0, 0.48, 1);
+const SHAPE_DURATION = 1.9;
+const SHAPE_FADE_DURATION = 0.85;
 /** The custom cursor is for real pointers on wide layouts, as it always was on Home. */
 const CURSOR_MEDIA = '(max-width: 1024px)';
 
@@ -61,10 +64,10 @@ const ShapeEntrance = ({
   children: ReactNode;
 }) => {
   const range = [start, start + SHAPE_DURATION];
-  const opacity = useTransform(time, [start, start + 0.3], [0, 1]);
-  const x = useTransform(time, range, [from.x, 0], { ease: RISE_EASE });
-  const y = useTransform(time, range, [from.y, 0], { ease: RISE_EASE });
-  const rotate = useTransform(time, range, [from.rotate, 0], { ease: RISE_EASE });
+  const opacity = useTransform(time, [start, start + SHAPE_FADE_DURATION], [0, 1]);
+  const x = useTransform(time, range, [from.x, 0], { ease: SHAPE_EASE });
+  const y = useTransform(time, range, [from.y, 0], { ease: SHAPE_EASE });
+  const rotate = useTransform(time, range, [from.rotate, 0], { ease: SHAPE_EASE });
   return (
     <motion.div className={className} style={{ opacity, x, y, rotate }}>
       {children}
@@ -233,7 +236,7 @@ const HomeHero = () => {
           <HomeShape
             src={coralBurgundy}
             progress={scrollYProgress}
-            x={[0, 50]}
+            x={[0, -30]}
             y={[0, -36]}
             rotate={[210, 245]}
             floatDelay={0.7}

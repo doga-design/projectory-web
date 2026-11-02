@@ -157,7 +157,8 @@
 .shapeTop {
   bottom: calc(100% + var(--space-5));
   left: calc(var(--reel-w) * 0.31);
-  width: clamp(0px, calc(var(--room) - var(--space-5)), var(--reel-w) * 0.125);
+  /* 1.6: a turned shape stands taller than its own width, and it drifts up a little. */
+  width: clamp(0px, calc((var(--room) - var(--space-5)) / 1.6), var(--reel-w) * 0.125);
 }
 
 .shapeBottom {
@@ -166,20 +167,34 @@
   width: clamp(0px, calc(var(--room) - var(--space-2)), var(--reel-w) * 0.163);
 }
 
-/* Lines wrap to fill the phone screen, so the shapes bleed off its edges behind them. */
+/* Upright tablets: the copy runs the column's width, so this one moves in to stay on screen. */
+@media (max-aspect-ratio: 1/1) {
+  .shapeBottom {
+    left: calc(var(--reel-w) * 0.78);
+  }
+}
+
+/* Lines wrap to fill the phone screen, so both shapes sit in the corners below them, fully
+   on screen. Anchored to the pin rather than the copy, whose height changes with the wrap. */
 @media (max-width: 768px) {
+  .copy {
+    position: static;
+  }
+
+  .shapeTop,
+  .shapeBottom {
+    top: auto;
+    bottom: var(--space-2);
+    width: min(84px, 8svh);
+  }
+
   .shapeTop {
-    top: calc(100% + var(--space-2));
-    bottom: auto;
     left: auto;
-    right: -64px;
-    width: 92px;
+    right: var(--side-pad);
   }
 
   .shapeBottom {
-    top: calc(100% + var(--space-2));
-    left: -44px;
-    width: 92px;
+    left: var(--side-pad);
   }
 }
 

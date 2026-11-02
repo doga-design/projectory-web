@@ -12,7 +12,6 @@
   display: block;
   width: 100%;
   height: auto;
-  opacity: 0.8;
   will-change: transform;
   animation: float 4.6s ease-in-out infinite alternate;
 }

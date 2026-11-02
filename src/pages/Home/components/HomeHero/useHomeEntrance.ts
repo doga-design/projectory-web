@@ -14,19 +14,19 @@ const FAST_FINISH_S = 0.3;
 
 /** Seconds from the loader starting to lift. Everything on the hero reads one clock. */
 const STAGE_TIMELINE = {
-  end: 1.9,
+  end: 2.55,
   navbar: 0.35,
   pull: { start: 0.2, duration: 1 },
   title: [0.55, 0.65],
   description: 0.85,
   buttons: 0.95,
-  shapes: [0.7, 0.85],
+  shapes: [0.45, 0.6],
   frame: null,
 };
 
 /** Phones: no full-screen stage, so the words lead and the frame follows. */
 const SIMPLE_TIMELINE = {
-  end: 1.8,
+  end: 2.45,
   navbar: 0,
   pull: null,
   title: [0.1, 0.2],
