@@ -80,9 +80,7 @@ const Products = () => {
           />
           {/* All descriptions share one cell, so the block keeps the tallest one's height and
               the grid never shifts; switching tags only cross-fades them. */}
-          <div
-            className={`${styles.descriptions}${activeIndex === 0 ? ` ${styles.descriptionsAll}` : ''}`}
-          >
+          <div className={styles.descriptions}>
             {productTags.map((tag, i) => (
               <p
                 key={tag.value}

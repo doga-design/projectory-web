@@ -7,22 +7,22 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--block-5);
+  gap: var(--block-6);
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--block-4) 50px var(--block-5);
+  padding: calc(var(--block-4) - 10px) 50px var(--block-6);
 }
 
 /* Tag wheel, description and grid. Also the box the sticky wheel stays
    stuck inside, so it travels with the grid and leaves with it. Clipped, so
-   the wheel's backdrop and fade never spill past the section as it leaves
+   the wheel's backdrop never spills past the section as it leaves
    (onto the CTA badges below); `clip`, unlike `hidden`, keeps it sticky. */
 .catalogue {
   /* Where the sticky tag wheel pins (just below the floating navbar) and the
      room around it; read by TagWheel and by .anchor below. */
   --wheel-top: 90px;
-  --wheel-pad: var(--space-6);
+  --wheel-pad: var(--block-2);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -37,11 +37,7 @@
 .descriptions {
   display: grid;
   max-width: 720px;
-  margin-top: var(--block-3);
-}
-
-.descriptionsAll {
-  max-width: 480px;
+  margin-top: var(--space-8);
 }
 
 /* The old one fades out quickly, then the new one fades in just after. */
@@ -72,9 +68,9 @@
   /* Rows keep their own height even while the grid is held open during a scroll
      (useCatalogueScroll); any held space stays empty below the last row. */
   align-content: start;
-  gap: var(--space-6);
+  gap: var(--space-5);
   width: 100%;
-  margin-top: var(--block-3);
+  margin-top: var(--space-8);
 }
 
 @media (max-width: 1024px) {
@@ -85,6 +81,7 @@
 
 @media (max-width: 768px) {
   .container {
+    gap: var(--block-5);
     padding: var(--block-4) 30px var(--block-5);
   }
 
@@ -93,8 +90,14 @@
     --wheel-pad: var(--space-4);
   }
 
+  .descriptions {
+    margin-top: var(--block-3);
+  }
+
   .grid {
     grid-template-columns: 1fr;
+    gap: var(--space-6);
+    margin-top: var(--block-3);
   }
 }
 

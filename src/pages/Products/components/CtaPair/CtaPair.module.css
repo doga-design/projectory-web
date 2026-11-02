@@ -1,4 +1,4 @@
-/* Same columns and gap as the product grid above, so the edges line up. */
+/* Fills the same column as the product grid above, so the outer edges line up. */
 .pair {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -50,7 +50,7 @@
 
 .title {
   font-family: var(--font-medium);
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-heading);
   font-weight: 500;
   line-height: var(--leading-tight);
   /* Line breaks come from the copy, as in the design. */
