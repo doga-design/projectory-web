@@ -53,13 +53,29 @@ const PROMINENT_BOOST = 1.6;
 const AWAY_COLOR = { plain: 'var(--color-text-muted)', prominent: 'var(--brand-pink)' };
 
 /**
- * Per size: the pill's horizontal padding (each side), the gap between labels (it has to
- * clear the pill's padding and the centre tag's scale with room to spare), and
- * [opacity, scale] by distance from the centre in tags (0, 1, 2, …).
+ * Per size: the pill's horizontal padding (each side), [opacity, scale] by distance from
+ * the centre in tags (0, 1, 2, …), and how tags are spaced.
+ *
+ * Desktop's scale takes the centre tag's 24px down to 18px everywhere else (--font-size-xl
+ * to --font-size-md), so its spacing follows each tag's current size, and its gap comes
+ * from `--block-3` (read in the measure below) and clears the pill's padding. Mobile keeps
+ * a fixed gap between full-size labels, which clears the pill and the centre tag's boost.
  */
 const FALLOFF = {
-  desktop: { pillPad: 20, gap: 56, opacity: [1, 0.65, 0.3, 0], scale: [1, 0.95, 0.9, 0.9] },
-  mobile: { pillPad: 14, gap: 44, opacity: [1, 0.6, 0], scale: [1.12, 1.04, 1] },
+  desktop: {
+    pillPad: 20,
+    gap: 0,
+    opacity: [1, 0.65, 0.3, 0],
+    scale: [1, 0.75, 0.75, 0.75],
+    scaledSpacing: true,
+  },
+  mobile: {
+    pillPad: 14,
+    gap: 44,
+    opacity: [1, 0.6, 0],
+    scale: [1.12, 1.04, 1],
+    scaledSpacing: false,
+  },
 };
 
 const mod = (a: number, n: number) => ((a % n) + n) % n;
@@ -93,6 +109,7 @@ const TagWheel = ({ items, activeIndex, onSelect }: TagWheelProps) => {
   // Pixels between the centre tag and the next; converts drag distance to tags.
   const step = useRef(0);
   const widths = useRef<number[]>([]);
+  const tokenGap = useRef(0);
   const tagRefs = useRef<(HTMLAnchorElement | null)[]>([]);
   const pillRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -108,20 +125,33 @@ const TagWheel = ({ items, activeIndex, onSelect }: TagWheelProps) => {
   const layout = useCallback(() => {
     const w = widths.current;
     if (w.length !== n) return;
-    const { pillPad, gap, opacity, scale } = isMobile ? FALLOFF.mobile : FALLOFF.desktop;
+    const falloff = isMobile ? FALLOFF.mobile : FALLOFF.desktop;
+    const { pillPad, opacity, scale, scaledSpacing } = falloff;
+    const gap = scaledSpacing ? tokenGap.current : falloff.gap;
     const p = pos.get();
     const a = Math.floor(p);
     const f = p - a;
     const half = Math.floor(n / 2);
 
+    // A tag's current on-screen width, and the space between neighbours. Beside the pill,
+    // its padding is added (easing away with distance) so the gap is measured from its edge.
+    const widthAt = (k: number) => {
+      const full = w[mod(a + k, n)];
+      return scaledSpacing ? full * along(scale, Math.abs(k - f)) : full;
+    };
+    const gapBetween = (k: number, l: number) => {
+      if (!scaledSpacing) return gap;
+      return gap + pillPad * Math.max(0, 1 - Math.min(Math.abs(k - f), Math.abs(l - f)));
+    };
+
     // Centre of each tag relative to tag `a`, walking outward both ways. Labels differ in
     // width, so the spacing is built from the measured widths rather than equal slots.
     const centre: Record<number, number> = { 0: 0 };
     for (let k = 1; k <= n - 1 - half; k++) {
-      centre[k] = centre[k - 1] + w[mod(a + k - 1, n)] / 2 + gap + w[mod(a + k, n)] / 2;
+      centre[k] = centre[k - 1] + widthAt(k - 1) / 2 + gapBetween(k - 1, k) + widthAt(k) / 2;
     }
     for (let k = -1; k >= -half; k--) {
-      centre[k] = centre[k + 1] - w[mod(a + k + 1, n)] / 2 - gap - w[mod(a + k, n)] / 2;
+      centre[k] = centre[k + 1] - widthAt(k + 1) / 2 - gapBetween(k, k + 1) - widthAt(k) / 2;
     }
     step.current = centre[1];
 
@@ -157,6 +187,9 @@ const TagWheel = ({ items, activeIndex, onSelect }: TagWheelProps) => {
   useLayoutEffect(() => {
     const measure = () => {
       widths.current = tagRefs.current.map((el) => el?.offsetWidth ?? 0);
+      tokenGap.current = parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue('--block-3')
+      );
       layout();
     };
     measure();

@@ -59,6 +59,7 @@
   --space-4: 16px;
   --space-5: 20px;
   --space-6: 24px;
+  --space-8: 50px;
 
   /* Block */
   --block-1: 28px;
@@ -66,6 +67,7 @@
   --block-3: 56px;
   --block-4: 80px;
   --block-5: 100px;
+  --block-6: 140px;
 
   /* Type */
   --font-body: 'FounderGrotesk_Regular', sans-serif;
@@ -80,6 +82,8 @@
   --font-size-lead: 23px;
   --font-size-xl: 24px;
   --font-size-2xl: 32px;
+  --font-size-statement: 38px;
+  --font-size-heading: 40px;
   --font-size-3xl: 48px;
   --font-size-display: 55px;
   --font-size-hero: 70px;

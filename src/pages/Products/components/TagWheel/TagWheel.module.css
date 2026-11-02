@@ -25,17 +25,6 @@
   background-color: var(--color-bg);
 }
 
-/* Fades the cards out as they reach the bar. */
-.bar::after {
-  content: '';
-  position: absolute;
-  inset-inline: 0;
-  top: 100%;
-  height: var(--block-2);
-  background: linear-gradient(to bottom, var(--color-bg), transparent);
-  pointer-events: none;
-}
-
 /* Tags and pill are positioned from TagWheel.tsx; the strip only sets the
    height and clips whatever spins past its edges, softly. */
 .strip {
@@ -84,6 +73,17 @@
 }
 
 @media (max-width: 768px) {
+  /* Phones only: fades the cards out as they reach the bar. */
+  .bar::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: var(--block-2);
+    background: linear-gradient(to bottom, var(--color-bg), transparent);
+    pointer-events: none;
+  }
+
   /* Room for the centre tag's size boost (TagWheel's mobile falloff). */
   .strip {
     --tag-size: var(--font-size-sm);
