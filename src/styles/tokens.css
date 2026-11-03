@@ -60,6 +60,7 @@
   --space-5: 20px;
   --space-6: 24px;
   --space-7: 30px;
+  --space-8: 50px;
 
   /* Block */
   --block-1: 28px;
@@ -83,6 +84,7 @@
   --font-size-xl: 24px;
   --font-size-2xl: 32px;
   --font-size-statement: 38px;
+  --font-size-heading: 40px;
   --font-size-3xl: 48px;
   --font-size-display: 55px;
   --font-size-hero: 70px;
