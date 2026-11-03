@@ -14,7 +14,6 @@ const TestimonialSizzle: React.FC<TestimonialSizzleProps> = ({ videoSrc, quote, 
   return (
     <div className={styles.flowWrapper}>
       <section ref={ref} className={styles.testimonialWrapper}>
-        <div className={styles.topLeftGraphic}></div>
         <div className={styles.videoContainer}>
           {videoSrc &&
             inView &&
@@ -52,7 +51,6 @@ const TestimonialSizzle: React.FC<TestimonialSizzleProps> = ({ videoSrc, quote, 
             </div>
           )}
         </div>
-        <div className={styles.bottomRightGraphic}></div>
       </section>
     </div>
   );

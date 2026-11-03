@@ -28,12 +28,6 @@ h5 {
   margin-bottom: 10px;
 }
 
-.secondarySizzleTitle h4 {
-  font-size: 28px;
-  font-weight: lighter;
-  margin-bottom: 50px;
-}
-
 iframe {
   border-radius: 30px;
   width: 100%;
@@ -47,9 +41,17 @@ iframe {
   scroll-snap-type: none;
 }
 
+/* Exactly the screen on every device. `svh` is the screen with phone toolbars showing,
+   so nothing is hidden behind them and the video doesn't jump as they collapse.
+
+   Layers, bottom to top: videos 0, icons 1, shade 2, text and buttons 10. Isolated, so
+   these numbers can't interact with anything else on the page. */
 .homeSection {
+  z-index: 1;
+  isolation: isolate;
   width: 100%;
   height: 100vh;
+  height: 100svh;
   position: sticky;
   top: 0;
   left: 0;
@@ -61,11 +63,52 @@ iframe {
   background-color: var(--black);
 }
 
+/* Its own compositor layer, so the playing video underneath can't interfere with it. */
 .content {
   position: absolute;
-  bottom: 80px;
+  bottom: var(--space-8);
+  z-index: 10;
+  transform: translateZ(0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
   text-align: center;
+  cursor: default;
+}
+
+/* Darkens the video behind the text, the same fade as Get Started's hero. Fixed to the
+   screen rather than the scaling videos, and clicks pass through to the video. */
+.heroShade {
+  position: absolute;
+  inset: 0;
   z-index: 2;
+  background: linear-gradient(180deg, rgba(19, 19, 19, 0) 40%, var(--color-bg) 100%);
+  pointer-events: none;
+}
+
+/* Explicit margin and weight: the global h1 rule at the top of this file still applies. */
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-medium);
+  font-size: var(--font-size-hero);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.heroButtons {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+}
+
+/* The longest line is 8.2em wide, and the headline stays on two lines. */
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: min(var(--font-size-3xl), (100vw - 60px) / 8.2);
+  }
 }
 
 .videoSlides {
@@ -77,7 +120,7 @@ iframe {
   position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  z-index: 0;
 }
 
 .videoSlide {
@@ -90,8 +133,34 @@ iframe {
   overflow: hidden;
 }
 
+/* Clickable: opens the lightbox. The label follows alongside this cursor. */
 .middleVideoSlide {
   position: relative;
+  cursor: pointer;
+}
+
+/* Out of sight until a keyboard reaches it. Mouse and touch use the slide itself. */
+.reelButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.reelButton:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .tapToPlayOverlay {
@@ -140,11 +209,13 @@ iframe {
   letter-spacing: 0.02em;
 }
 
+/* The slide handles hover and clicks, not the media element. */
 .videoSlide video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 25px;
+  pointer-events: none;
 }
 
 .iconShapes {
@@ -188,227 +259,18 @@ iframe {
   width: 220px;
 }
 
-.secondWrapper {
-  /* Art-directed copy size per breakpoint; the fit below only ever shrinks it. */
-  --copy-size: 53px;
-  --copy-gap: clamp(16px, 2.5vw, 30px);
-  --copy-pad: 50px;
-  /* Navbar footprint: 18px offset + 72px island (see Navbar.module.css). */
-  --nav-clear: 90px;
-
-  position: relative;
-  height: 400vh;
-  padding: 0 var(--copy-pad);
-  width: 100%;
-}
-
-@media (max-width: 1024px) {
-  .secondWrapper {
-    --copy-size: 42px;
-  }
-}
-
-/* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
-@media (max-width: 808px) {
-  .secondWrapper {
-    --nav-clear: 66px;
-  }
-}
-
-@media (max-width: 768px) {
-  .secondWrapper {
-    --copy-size: 30px;
-    --copy-pad: 30px;
-  }
-}
-
-@media (min-width: 2000px) {
-  .secondWrapper {
-    --copy-size: 80px;
-  }
-}
-
-/*
- * The seven lines keep their art-directed size wherever it fits between the
- * navbar and the bottom of the screen, and shrink just enough where it
- * doesn't.
- *
- * How the copy wraps depends only on how many em fit on a row. Measured for
- * this copy in Founders Grotesk: ≥21em → 7 rows, ≥19em → 8, ≥11em → 14,
- * ≥10.5em → 15, ≥10em → 16, ≥8.5em → 19. Each candidate is the largest size
- * that keeps that row count AND fits the height (rows + 6 gaps, the gap being
- * the art-directed one or 0.6em once the type shrinks); the largest wins.
- * Update the numbers if the copy changes.
- */
-.secondSection {
-  --fit-w: calc(100vw - 2 * var(--copy-pad));
-  --fit-h: calc(100vh - 2 * var(--nav-clear));
-  --rows-7: min(
-    var(--fit-w) / 21.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 7, var(--fit-h) / 10.6)
-  );
-  --rows-8: min(
-    var(--fit-w) / 19,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 8, var(--fit-h) / 11.6)
-  );
-  --rows-14: min(
-    var(--fit-w) / 11,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 14, var(--fit-h) / 17.6)
-  );
-  --rows-15: min(
-    var(--fit-w) / 10.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 15, var(--fit-h) / 18.6)
-  );
-  --rows-16: min(
-    var(--fit-w) / 10,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 16, var(--fit-h) / 19.6)
-  );
-  --rows-19: min(
-    var(--fit-w) / 8.5,
-    max((var(--fit-h) - 6 * var(--copy-gap)) / 19, var(--fit-h) / 22.6)
-  );
-
-  position: sticky;
-  height: 100vh;
-  top: 0;
-  left: 0;
+/* Same content column as Pricing, Partners and Products. */
+.column {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  justify-content: safe center;
-  gap: min(var(--copy-gap), 0.6em);
-  padding-block: var(--nav-clear);
-  font-size: max(
-    16px,
-    min(
-      var(--copy-size),
-      max(
-        var(--rows-7),
-        var(--rows-8),
-        var(--rows-14),
-        var(--rows-15),
-        var(--rows-16),
-        var(--rows-19)
-      )
-    )
-  );
-}
-
-/* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
-@supports (height: 100svh) {
-  .secondSection {
-    --fit-h: calc(100svh - 2 * var(--nav-clear));
-
-    height: 100svh;
-  }
-}
-
-.text {
-  font-size: inherit;
-  line-height: 1;
-  transition: color 0.3s ease;
-  text-shadow:
-    0.1px 0.1px 0 var(--background-dark-gray),
-    -0.1px 0.1px 0 var(--background-dark-gray),
-    -0.1px -0.1px 0 var(--background-dark-gray),
-    0.1px -0.1px 0 var(--background-dark-gray);
-}
-
-.gradientText {
-  background: linear-gradient(90deg, var(--brand-teal) 0%, #f4dca8 30%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  display: inline-block;
-  -webkit-text-stroke-color: var(--background-dark-gray);
-}
-
-.mainSizzleWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  gap: var(--block-7);
   width: 100%;
-  height: 100vh;
+  max-width: 1200px;
+  margin: var(--block-7) auto 0;
   padding: 0 50px;
 }
 
-.mainSizzle {
-  width: 100%;
-  height: 80%;
-  border-radius: 25px;
-  overflow: hidden;
-  background-color: rgb(40, 40, 40);
-  outline: none;
-}
-
-.secondarySizzleWrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: var(--background-dark-gray);
-  width: calc(100% - 100px);
-  border-radius: 25px;
-  margin: auto;
-}
-
-.secondarySizzle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 100px 0;
-}
-
-.secondarySizzleTitle {
-  width: 64%;
-  text-align: center;
-}
-
-/* Same 3 / 2 / 1 columns as the Products page grid. */
-.productsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
-  padding-top: 80px;
-  width: 90%;
-  margin: auto;
-}
-
 @media (max-width: 1024px) {
-  .productsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.btnOutlinePrimary {
-  border: none;
-  cursor: pointer;
-  background-color: white;
-  padding: 15px 20px;
-  border-radius: 100px;
-  font-size: 20px;
-  transition: all 0.3s ease;
-  color: black;
-  margin-top: 50px;
-}
-
-.btnOutlinePrimary:hover {
-  background-color: var(--brand-lime);
-  color: white;
-}
-
-@media (max-width: 1024px) {
-  .homeSection h1 {
-    font-size: 80px;
-  }
-
-  .homeSection {
-    height: 100vh;
-  }
-
   .icon {
     display: none;
   }
@@ -427,7 +289,6 @@ iframe {
 
   .videoSlides {
     width: 100%;
-    height: 100vh;
   }
 
   .videoSlide {
@@ -439,122 +300,15 @@ iframe {
     height: 100%;
     object-fit: cover;
   }
-
-  .middleVideoSlide {
-    cursor: pointer;
-  }
-
-  .customCursor {
-    display: none;
-  }
 }
 
 @media (max-width: 768px) {
-  .homeSection {
-    height: 100vh;
-  }
-
-  .homeSection h1 {
-    font-size: 40px;
-  }
-
-  .content {
-    bottom: 50px;
-  }
-
-  .mainSizzleWrapper {
-    height: 80vh;
-  }
-
-  .mainSizzle {
-    height: 70%;
-  }
-
-  .secondarySizzle {
-    flex-direction: column;
-  }
-
-  .secondarySizzleTitle {
-    width: 100%;
-  }
-
-  .secondWrapper {
-    --copy-pad: 30px;
-  }
-}
-
-@media (max-width: 768px) {
-  .homeSection {
-    height: 90vh;
-  }
-
-  .homeSection h1 {
-    font-size: 35px;
-    font-weight: 100;
-  }
-
   .content {
     bottom: 40px;
   }
 
-  .mainSizzleWrapper {
-    height: 70vh;
-    padding: 0 20px;
-  }
-
-  .secondarySizzleWrapper {
-    padding: 0 20px;
-  }
-
-  .mockSection {
-    height: 80vh;
-  }
-
-  .productsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .secondarySizzleWrapper {
-    width: calc(100% - 40px);
-  }
-
-  .secondarySizzleTitle {
-    width: 100%;
-  }
-
-  .secondarySizzle h2 {
-    font-size: 50px;
-  }
-
-  .secondarySizzle h4 {
-    font-size: 20px;
-  }
-}
-
-/* Large-screen enhancements */
-@media (min-width: 2000px) {
-  .homeSection h1 {
-    font-size: 120px;
-  }
-
-  .mainSizzleWrapper {
-    height: 90vh;
-  }
-
-  .mainSizzle {
-    height: 80%;
-  }
-
-  .secondarySizzleWrapper {
-    width: calc(100% - 200px);
-  }
-
-  .secondarySizzle h2 {
-    font-size: 80px;
-  }
-
-  .secondarySizzle h4 {
-    font-size: 30px;
+  .column {
+    padding: 0 30px;
   }
 }
 

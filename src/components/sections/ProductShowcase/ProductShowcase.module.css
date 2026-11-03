@@ -1,0 +1,73 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-4);
+  width: 100%;
+}
+
+/* Same content column as Pricing, Partners and Products. */
+.intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4) var(--block-2);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 50px;
+}
+
+.eyebrow {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lead);
+  line-height: var(--leading-normal);
+  color: var(--brand-pink);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-medium);
+  font-size: var(--font-size-heading);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  /* Line breaks come from the copy, as in the design. */
+  white-space: pre-line;
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+}
+
+.body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-normal);
+  color: var(--color-text);
+}
+
+@media (max-width: 1024px) {
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    gap: var(--block-2);
+  }
+
+  .intro {
+    grid-template-columns: 1fr;
+    padding: 0 30px;
+  }
+
+  .body {
+    font-size: var(--font-size-md);
+  }
+}

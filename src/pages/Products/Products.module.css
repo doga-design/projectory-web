@@ -14,30 +14,27 @@
   padding: calc(var(--block-4) - 10px) 50px var(--block-6);
 }
 
-/* Tag wheel, description and grid. Also the box the sticky wheel stays
-   stuck inside, so it travels with the grid and leaves with it. Clipped, so
-   the wheel's backdrop never spills past the section as it leaves
-   (onto the CTA badges below); `clip`, unlike `hidden`, keeps it sticky. */
+/* Description above, then the filters beside the cards. */
 .catalogue {
-  /* Where the sticky tag wheel pins (just below the floating navbar) and the
-     room around it; read by TagWheel and by .anchor below. */
-  --wheel-top: 90px;
-  --wheel-pad: var(--block-2);
+  /* Where the chips stick, just below the floating navbar. */
+  --catalogue-top: 110px;
+  /* Where a filter's scroll lands the description: the navbar, plus some room. */
+  --catalogue-landing: 130px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  overflow: clip;
 }
 
-/* Scroll target, directly above the strip; lands it where it sticks. */
+/* Scroll target, directly above the description. */
 .anchor {
-  scroll-margin-top: calc(var(--wheel-top) + var(--wheel-pad));
+  scroll-margin-top: var(--catalogue-landing);
 }
 
 .descriptions {
   display: grid;
-  max-width: 720px;
-  margin-top: var(--space-8);
+  /* Wide enough to hold every objective's description on two lines. */
+  max-width: 780px;
+  margin-bottom: var(--space-8);
 }
 
 /* The old one fades out quickly, then the new one fades in just after. */
@@ -54,6 +51,8 @@
   line-height: var(--leading-relaxed);
   color: var(--color-text);
   text-align: center;
+  /* Even lines, so the short descriptions don't leave a word or two alone on the second. */
+  text-wrap: balance;
 }
 
 .descriptionActive {
@@ -62,20 +61,54 @@
   transition: opacity 0.25s ease 0.1s;
 }
 
-.grid {
+/* Wide enough for the chips to wrap in pairs. */
+.layout {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-7);
+  width: 100%;
+}
+
+/* Stays beside the cards as they scroll, and stops at the end of the grid. */
+.chips {
+  position: sticky;
+  top: var(--catalogue-top);
+}
+
+.grid {
+  /* These cards are narrower than the card's default suits. */
+  --product-card-title: var(--font-size-lg);
+  /* Their hover description sits high over the video, so it needs the stronger shade. */
+  --product-card-hover-shade: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   /* Rows keep their own height even while the grid is held open during a scroll
      (useCatalogueScroll); any held space stays empty below the last row. */
   align-content: start;
   gap: var(--space-5);
-  width: 100%;
-  margin-top: var(--space-8);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Too tight to sit side by side: the chips become a centred block above the cards. */
+@media (max-width: 1024px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--block-2);
+  }
+
+  .chips {
+    position: static;
+    justify-content: center;
+  }
+
+  .grid {
+    --product-card-title: var(--font-size-xl);
   }
 }
 
@@ -86,18 +119,12 @@
   }
 
   .catalogue {
-    --wheel-top: 70px;
-    --wheel-pad: var(--space-4);
-  }
-
-  .descriptions {
-    margin-top: var(--block-3);
+    --catalogue-landing: 106px;
   }
 
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
-    margin-top: var(--block-3);
   }
 }
 

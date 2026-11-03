@@ -28,6 +28,23 @@
   pointer-events: none;
 }
 
+/* A stronger shade for hover, off unless the page turns it on. See --product-card-hover-shade. */
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15) 0%,
+    rgba(0, 0, 0, 0.6) 25%,
+    rgba(0, 0, 0, 0.75) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-base);
+  pointer-events: none;
+}
+
 .media {
   position: absolute;
   inset: 0;
@@ -55,7 +72,7 @@
 .title {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--font-size-xl);
+  font-size: var(--product-card-title, var(--font-size-xl));
   font-weight: 400;
   line-height: var(--leading-snug);
 }
@@ -115,6 +132,10 @@
     opacity: 1;
   }
 
+  .card:hover::after {
+    opacity: var(--product-card-hover-shade, 0);
+  }
+
   .card:hover .descWrapper {
     grid-template-rows: 1fr;
   }
@@ -124,10 +145,13 @@
   }
 
   /* Learn More fills while anywhere on the card is hovered, through the
-     Button's own custom properties. */
+     Button's own custom properties. Its hover values match, so moving onto
+     the button itself changes nothing. */
   .card:hover .learnMore {
     --btn-bg: var(--color-surface-inverse);
     --btn-fg: var(--color-text-inverse);
+    --btn-bg-hover: var(--color-surface-inverse);
+    --btn-fg-hover: var(--color-text-inverse);
   }
 
   .heart:not(.liked):hover {

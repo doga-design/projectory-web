@@ -2889,3 +2889,6 @@ export const products = [
     ],
   },
 ];
+
+/** Every product, A–Z by name. */
+export const productsByName = [...products].sort((a, b) => a.name.localeCompare(b.name));

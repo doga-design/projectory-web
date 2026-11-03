@@ -4,6 +4,14 @@
   width: 100%;
 }
 
+.yellow {
+  --accent: var(--brand-yellow);
+}
+
+.coral {
+  --accent: var(--brand-coral);
+}
+
 /* ── Glass quote card ───
  * In flow with a negative top margin, so it overlaps the video's bottom edge
  * while the section keeps its natural height. */
@@ -52,7 +60,7 @@
 
 .name {
   font-family: var(--font-medium);
-  color: var(--brand-yellow);
+  color: var(--accent);
 }
 
 .role {
@@ -69,7 +77,50 @@
   width: 65px;
   height: auto;
   pointer-events: none;
-  rotate: -30deg;
+  rotate: var(--floater-rotate, -30deg);
+}
+
+/* ── Inset layout ───
+ * The default: the card sits inside a full-width video. */
+
+.inset {
+  --floater-rotate: -30deg;
+}
+
+/* ── Offset layout ───
+ * A narrower video, with the card hanging past its right edge. The floater sits on the
+ * card's top edge, over the corner where the video and card meet. */
+
+.offset {
+  --floater-rotate: 16deg;
+}
+
+.offset .floater {
+  top: 0;
+  right: auto;
+  left: 64%;
+  translate: -50% -50%;
+  width: 92px;
+}
+
+@media (min-width: 769px) {
+  .offset .video {
+    width: 83%;
+  }
+
+  .offset .cardWrap {
+    --overlap: 75px;
+    margin-right: 0;
+  }
+}
+
+/* Short screens: the card rides up the video just far enough for the whole section to fit
+   under the navbar. Video height (0.467 of the column) + the 318px card + 112px of navbar
+   clearance, less the screen. */
+@media (min-width: 769px) and (max-height: 760px) {
+  .offset .cardWrap {
+    --overlap: clamp(130px, calc(min(100vw - 100px, 1100px) * 0.467 + 430px - 100vh), 300px);
+  }
 }
 
 @media (max-width: 768px) {
@@ -91,5 +142,11 @@
   .floater {
     right: -24px;
     width: 48px;
+  }
+
+  .offset .floater {
+    right: auto;
+    left: 76%;
+    width: 64px;
   }
 }
