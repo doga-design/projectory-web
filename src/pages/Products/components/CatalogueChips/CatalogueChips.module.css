@@ -1,0 +1,41 @@
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--space-3) var(--space-2);
+}
+
+.white {
+  --chip: var(--color-text);
+}
+
+.teal {
+  --chip: var(--brand-teal);
+}
+
+.yellow {
+  --chip: var(--brand-yellow);
+}
+
+.pink {
+  --chip: var(--brand-pink);
+}
+
+.coral {
+  --chip: var(--brand-coral);
+}
+
+/* Coloured through the Button's own custom properties. */
+.chips .chip {
+  --btn-fg: var(--chip);
+  --btn-border: var(--chip);
+  --btn-bg-hover: color-mix(in srgb, var(--chip) 15%, transparent);
+}
+
+/* Filled in its own colour. Its hover values match, so moving onto it changes nothing. */
+.chips .active {
+  --btn-bg: var(--chip);
+  --btn-fg: var(--color-text-inverse);
+  --btn-bg-hover: var(--chip);
+  --btn-fg-hover: var(--color-text-inverse);
+}
