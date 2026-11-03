@@ -42,9 +42,9 @@
 .headline {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-statement);
   font-weight: 400;
-  line-height: var(--leading-snug);
+  line-height: var(--leading-normal);
   color: var(--color-text);
 }
 
@@ -96,6 +96,13 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .headline {
+    font-size: var(--font-size-2xl);
+    line-height: var(--leading-snug);
+  }
 }
 
 @media (max-width: 768px) {

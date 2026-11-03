@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   align-items: start;
-  gap: var(--block-3);
+  gap: var(--block-2);
   width: 100%;
 }
 
@@ -27,7 +27,7 @@
 .title {
   margin: 0;
   font-family: var(--font-medium);
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-heading);
   font-weight: 500;
   line-height: var(--leading-tight);
   color: var(--color-text);
@@ -139,8 +139,8 @@
 }
 
 @media (max-width: 1024px) {
-  .section {
-    gap: var(--block-2);
+  .title {
+    font-size: var(--font-size-2xl);
   }
 }
 
