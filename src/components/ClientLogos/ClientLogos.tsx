@@ -40,13 +40,10 @@ const ClientLogos: React.FC<ClientLogosProps> = ({ background = 'transparent' })
   };
 
   useEffect(() => {
-    // Delay measurement to allow images to load
-    const timeout = setTimeout(calculateOneSetWidth, 200);
+    // Each logo also re-measures as it loads, since it has no width until then.
+    calculateOneSetWidth();
     window.addEventListener('resize', calculateOneSetWidth);
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener('resize', calculateOneSetWidth);
-    };
+    return () => window.removeEventListener('resize', calculateOneSetWidth);
   }, []);
 
   const speed = 100;
@@ -70,7 +67,13 @@ const ClientLogos: React.FC<ClientLogosProps> = ({ background = 'transparent' })
           }}
         >
           {[...logos, ...logos].map((logo, index) => (
-            <img key={index} src={logo} alt={`Client Logo ${index + 1}`} className={styles.logo} />
+            <img
+              key={index}
+              src={logo}
+              alt={`Client Logo ${index + 1}`}
+              className={styles.logo}
+              onLoad={calculateOneSetWidth}
+            />
           ))}
         </motion.div>
       </div>

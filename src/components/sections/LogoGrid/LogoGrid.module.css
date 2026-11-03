@@ -11,7 +11,7 @@
 .title {
   margin: 0;
   font-family: var(--font-body);
-  font-size: 44px;
+  font-size: var(--font-size-heading);
   font-weight: 400;
   line-height: var(--leading-tight);
   color: var(--color-text);
@@ -43,6 +43,9 @@
   display: block;
   width: auto;
   height: var(--logo-height);
+  /* Long wordmarks fit inside this rather than running wider than every other logo. */
+  max-width: calc(var(--logo-height) * 4.5);
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
@@ -50,8 +53,10 @@
     --logo-height: 28px;
   }
 
+  /* A line break in the copy only takes effect here; on desktop it's just a space. */
   .title {
     font-size: var(--font-size-2xl);
+    white-space: pre-line;
   }
 
   .tiles {

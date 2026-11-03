@@ -32,20 +32,6 @@
     <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 
-    <!-- Home reel poster: on screen the moment the loader lifts. Keep the URL in
-         sync with src/pages/Home/homeData.ts. Pathname-gated like the script below. -->
-    <script>
-      if (location.pathname === '/') {
-        var homePoster = document.createElement('link');
-        homePoster.rel = 'preload';
-        homePoster.as = 'image';
-        homePoster.href =
-          'https://res.cloudinary.com/dazzkestf/video/upload/so_0,f_jpg,q_auto,w_1920/v1769443947/Projectory_LandingVideo_t4wkon.jpg';
-        homePoster.fetchPriority = 'high';
-        document.head.appendChild(homePoster);
-      }
-    </script>
-
     <!-- /get-started LCP cards: start the exact w_ candidates React will request,
          before the lazy chunk mounts. Pathname-gated so other routes stay clean. -->
     <script>

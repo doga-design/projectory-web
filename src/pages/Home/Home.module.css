@@ -28,191 +28,351 @@ h5 {
   margin-bottom: 10px;
 }
 
-.secondarySizzleTitle h4 {
-  font-size: 28px;
-  font-weight: lighter;
-  margin-bottom: 50px;
-}
-
 iframe {
   border-radius: 30px;
   width: 100%;
   height: 100%;
 }
 
-/*
- * The hero and the pinned copy, fitted to the screen as one piece. The reel takes all
- * the height the words and gaps leave, so everything is always in view; gaps scale with
- * the screen to keep the design's proportions. --reel-aspect sets how wide it runs from
- * there (the 16:9 video crops to fit). The copy reads --reel-w to share the reel's left
- * edge. Update --sub-lines if the subtitle's wrapping changes.
- */
-.fitted {
-  --nav-clear: 90px; /* Navbar: 18px offset + 72px island. */
-  --side-pad: 50px;
-  --title-size: min(var(--font-size-hero), 7.8svh);
-  --sub-size: var(--font-size-lg);
-  --sub-lines: 2;
-  --button-h: 48px;
-  --gap-top: 6.5svh;
-  --gap-text: var(--space-7); /* Headline to subtitle, subtitle to buttons. */
-  --gap-reel: 5svh;
-  --gap-bottom: 2.6svh;
-  --reel-w-max: 76.6vw; /* The reference's reel: 1103 of 1440. */
-  --reel-aspect: 2.2;
-  --reel-h-max: calc(var(--reel-w-max) / var(--reel-aspect));
-  --reel-h: max(
-    160px,
-    min(
-      100svh - var(--nav-clear) - 2 * var(--title-size) - var(--sub-lines) *
-        var(--leading-relaxed) * var(--sub-size) - var(--button-h) - var(--gap-top) - 2 *
-        var(--gap-text) - var(--gap-reel) - var(--gap-bottom),
-      var(--reel-h-max)
-    )
-  );
-  --reel-w: calc(var(--reel-h) * var(--reel-aspect));
+.wrapper {
+  position: relative;
+  height: 350vh;
+  scroll-behavior: smooth;
+  scroll-snap-type: none;
 }
 
-/* Upright screens have height to spare: the words move up, and the reel takes the
-   column's full width and all the height they leave, cropping the video to fit. */
-@media (max-aspect-ratio: 1/1) {
-  .fitted {
-    --gap-top: var(--space-5);
-    --gap-reel: var(--block-1);
-    --gap-bottom: var(--space-7);
-    --reel-w-max: calc(100vw - 2 * var(--side-pad));
-    --reel-h-max: 100svh;
-    --reel-w: var(--reel-w-max);
-  }
+/* Exactly the screen on every device. `svh` is the screen with phone toolbars showing,
+   so nothing is hidden behind them and the video doesn't jump as they collapse.
+
+   Layers, bottom to top: videos 0, icons 1, shade 2, text and buttons 10. Isolated, so
+   these numbers can't interact with anything else on the page. */
+.homeSection {
+  z-index: 1;
+  isolation: isolate;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--black);
 }
 
-/* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
-@media (max-width: 808px) {
-  .fitted {
-    --nav-clear: 66px;
-  }
+/* Its own compositor layer, so the playing video underneath can't interfere with it. */
+.content {
+  position: absolute;
+  bottom: var(--space-8);
+  z-index: 10;
+  transform: translateZ(0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-7);
+  text-align: center;
+  cursor: default;
 }
 
+/* Darkens the video behind the text, the same fade as Get Started's hero. Fixed to the
+   screen rather than the scaling videos, and clicks pass through to the video. */
+.heroShade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(180deg, rgba(19, 19, 19, 0) 40%, var(--color-bg) 100%);
+  pointer-events: none;
+}
+
+/* Explicit margin and weight: the global h1 rule at the top of this file still applies. */
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-medium);
+  font-size: var(--font-size-hero);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.heroButtons {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-5);
+}
+
+/* The longest line is 8.2em wide, and the headline stays on two lines. */
 @media (max-width: 768px) {
-  .fitted {
-    --side-pad: 30px;
-    /* The longest headline line is 8.2em wide, and it must stay on one line. */
-    --title-size: min(var(--font-size-3xl), (100vw - 2 * var(--side-pad)) / 8.2);
+  .heroTitle {
+    font-size: min(var(--font-size-3xl), (100vw - 60px) / 8.2);
   }
 }
 
-/* Phones held upright: more air above the words, around the reel and below it. */
-@media (max-width: 768px) and (max-aspect-ratio: 1/1) {
-  .fitted {
-    --gap-top: var(--block-2);
-    --gap-reel: var(--block-2);
-    --gap-bottom: var(--block-2);
-  }
-}
-
-@media (max-width: 429px) {
-  .fitted {
-    --sub-lines: 3;
-  }
-}
-
-.secondarySizzleWrapper {
+.videoSlides {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: var(--background-dark-gray);
-  width: calc(100% - 100px);
-  border-radius: 25px;
-  margin: auto;
-}
-
-.secondarySizzle {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 100px 0;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
 }
 
-.secondarySizzleTitle {
-  width: 64%;
-  text-align: center;
+.videoSlide {
+  width: 100%;
+  height: 100%;
+  margin: 0 20px;
+  flex-shrink: 0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 25px;
+  overflow: hidden;
 }
 
-/* Same 3 / 2 / 1 columns as the Products page grid. */
-.productsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
-  padding-top: 80px;
-  width: 90%;
-  margin: auto;
+/* Clickable: opens the lightbox. The label follows alongside this cursor. */
+.middleVideoSlide {
+  position: relative;
+  cursor: pointer;
+}
+
+/* Out of sight until a keyboard reaches it. Mouse and touch use the slide itself. */
+.reelButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  padding: var(--space-3) var(--space-5);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.reelButton:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.tapToPlayOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-family: inherit;
+  border-radius: inherit;
+  transition: background 0.2s ease;
+}
+
+.tapToPlayOverlay:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.tapToPlayOverlay:active {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.tapToPlayIcon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--black);
+  font-size: 22px;
+  line-height: 1;
+  padding-inline-start: 4px;
+}
+
+.tapToPlayText {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* The slide handles hover and clicks, not the media element. */
+.videoSlide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 25px;
+  pointer-events: none;
+}
+
+.iconShapes {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.icon {
+  width: 50px;
+  position: absolute;
+}
+
+.icon:nth-child(1) {
+  top: 9%;
+  left: 18%;
+  width: 150px;
+  transform: rotate(20deg);
+}
+
+.icon:nth-child(2) {
+  top: 55%;
+  left: 70%;
+  transform: rotate(-50deg);
+  width: 300px;
+}
+
+.icon:nth-child(3) {
+  top: 82%;
+  right: 38%;
+  width: 108px;
+  transform: rotate(-24deg);
+}
+
+.icon:nth-child(4) {
+  top: 20%;
+  right: 9%;
+  transform: rotate(-20deg);
+  width: 220px;
+}
+
+/* Same content column as Pricing, Partners and Products. */
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-7);
+  width: 100%;
+  max-width: 1200px;
+  margin: var(--block-7) auto 0;
+  padding: 0 50px;
 }
 
 @media (max-width: 1024px) {
-  .productsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.btnOutlinePrimary {
-  border: none;
-  cursor: pointer;
-  background-color: white;
-  padding: 15px 20px;
-  border-radius: 100px;
-  font-size: 20px;
-  transition: all 0.3s ease;
-  color: black;
-  margin-top: 50px;
-}
-
-.btnOutlinePrimary:hover {
-  background-color: var(--brand-lime);
-  color: white;
-}
-
-@media (max-width: 768px) {
-  .secondarySizzle {
-    flex-direction: column;
+  .icon {
+    display: none;
   }
 
-  .secondarySizzleTitle {
+  .wrapper {
+    height: auto;
+  }
+
+  .homeSection {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .videoSlides {
     width: 100%;
   }
 
-  .secondarySizzleWrapper {
-    width: calc(100% - 40px);
-    padding: 0 20px;
+  .videoSlide {
+    border-radius: 0;
   }
 
-  .productsGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .secondarySizzle h2 {
-    font-size: 50px;
-  }
-
-  .secondarySizzle h4 {
-    font-size: 20px;
+  .videoSlide video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
-/* Large-screen enhancements */
-@media (min-width: 2000px) {
-  .secondarySizzleWrapper {
-    width: calc(100% - 200px);
+@media (max-width: 768px) {
+  .content {
+    bottom: 40px;
   }
 
-  .secondarySizzle h2 {
-    font-size: 80px;
+  .column {
+    padding: 0 30px;
+  }
+}
+
+.lightboxBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  cursor: zoom-out;
+}
+
+.lightboxContent {
+  width: 90%;
+  max-width: 1200px;
+  position: relative;
+  cursor: default;
+}
+
+.lightboxVideo {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.lightboxCloseButton {
+  position: fixed;
+  top: 30px;
+  right: 30px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10001;
+}
+
+.lightboxCloseButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+  .lightboxContent {
+    width: 95%;
   }
 
-  .secondarySizzle h4 {
-    font-size: 30px;
+  .lightboxCloseButton {
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
 }

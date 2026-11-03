@@ -12,6 +12,10 @@ interface TestimonialFeatureProps {
   name: string;
   role: string;
   floater?: string;
+  /** `offset`: a narrower video, with the card hanging past its right edge and the floater on top. */
+  layout?: 'inset' | 'offset';
+  /** Colour of the name; pair it with the floater. */
+  accent?: 'yellow' | 'coral';
 }
 
 /** An inline testimonial video with its own controls, and a glass quote card over its bottom edge. */
@@ -22,6 +26,8 @@ const TestimonialFeature = ({
   name,
   role,
   floater = yellowCoral,
+  layout = 'inset',
+  accent = 'yellow',
 }: TestimonialFeatureProps) => {
   const cardWrapRef = useRef<HTMLDivElement>(null);
 
@@ -35,8 +41,10 @@ const TestimonialFeature = ({
   const rotate = useTransform(scrollYProgress, [0, 1], [-6, 0]);
 
   return (
-    <section className={styles.section}>
-      <TestimonialVideo src={videoSrc} poster={poster} />
+    <section className={`${styles.section} ${styles[layout]} ${styles[accent]}`}>
+      <div className={styles.video}>
+        <TestimonialVideo src={videoSrc} poster={poster} />
+      </div>
 
       {/* The floater sits beside the card, not inside it, so the card's tilt doesn't swing it. */}
       <div ref={cardWrapRef} className={styles.cardWrap}>

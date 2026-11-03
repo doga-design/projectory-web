@@ -1,15 +1,15 @@
 .wrapper {
-  /* 38px where the reel is ~890px wide (a 1440×900 laptop), growing with it. The fit
-     below only ever shrinks this. Layout values come from .fitted in Home.module.css. */
+  /* Navbar footprint: 18px offset + 72px island (see Navbar.module.css). */
+  --nav-clear: 90px;
+  --side-pad: 50px;
+  /* The page's content column: 1200px, less the side padding. */
+  --column: min(100vw - 2 * var(--side-pad), 1100px);
+  --copy-left: calc((100vw - var(--column)) / 2);
   --copy-gap: var(--space-3);
   --line-height: 1.15;
-  /* Shares the reel's left edge; never tighter than the page's side padding. */
-  --copy-left: max(var(--side-pad), (100vw - var(--reel-w)) / 2);
-  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
-  --copy-size: min(
-    max(var(--font-size-statement), var(--reel-w) * 0.0427),
-    (100vw - var(--copy-left) - var(--side-pad)) / 21.5
-  );
+  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. The fit below
+     only ever shrinks this. */
+  --copy-size: min(var(--font-size-statement), var(--column) / 21.5);
 
   position: relative;
   height: 250vh;
@@ -17,9 +17,19 @@
   overflow-x: clip;
 }
 
-@media (max-width: 768px) {
+/* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
+@media (max-width: 808px) {
   .wrapper {
+    --nav-clear: 66px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* The copy nearly fills a phone's screen, so this tops up the room below it. */
+  .wrapper {
+    --side-pad: 30px;
     --copy-size: var(--font-size-2xl);
+    margin-bottom: var(--space-8);
   }
 }
 
@@ -88,7 +98,7 @@
   width: 100%;
   height: 100vh;
   padding: var(--nav-clear) var(--side-pad) var(--nav-clear) var(--copy-left);
-  font-size: max(
+  --fit-size: max(
     16px,
     min(
       var(--copy-size),
@@ -102,6 +112,7 @@
       )
     )
   );
+  font-size: var(--fit-size);
 }
 
 /* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
@@ -141,60 +152,55 @@
 }
 
 /*
- * Shapes hold the room above and below the copy, as big as they can be without
- * reaching the navbar or the screen's edge: half of what the copy leaves free.
+ * Sized from the column only, so it never shrinks on a short screen. It sits just below the
+ * copy, and rises beside the last lines when there isn't room for it above the screen's edge.
  */
-.shapeTop,
 .shapeBottom {
   --copy-height: calc(7 * var(--line-height) * 1em + 6 * var(--copy-gap));
-  --room: calc((100svh - 2 * var(--nav-clear) - var(--copy-height)) / 2);
+  --room: calc((100svh - 2 * var(--nav-clear) - var(--copy-height)) / 2 + var(--nav-clear));
+  --shape-width: calc(var(--column) * 0.163);
 
   position: absolute;
   z-index: 0;
+  /* 1.1: a turned shape stands a little taller than its own width. */
+  top: calc(100% + min(var(--space-2), var(--room) - var(--space-5) - var(--shape-width) * 1.1));
   pointer-events: none;
-}
-
-.shapeTop {
-  bottom: calc(100% + var(--space-5));
-  left: calc(var(--reel-w) * 0.31);
-  /* 1.6: a turned shape stands taller than its own width, and it drifts up a little. */
-  width: clamp(0px, calc((var(--room) - var(--space-5)) / 1.6), var(--reel-w) * 0.125);
-}
-
-.shapeBottom {
-  top: calc(100% + var(--space-2));
-  left: calc(var(--reel-w) * 0.88);
-  width: clamp(0px, calc(var(--room) - var(--space-2)), var(--reel-w) * 0.163);
+  left: calc(var(--column) * 0.88);
+  width: var(--shape-width);
 }
 
 /* Upright tablets: the copy runs the column's width, so this one moves in to stay on screen. */
 @media (max-aspect-ratio: 1/1) {
   .shapeBottom {
-    left: calc(var(--reel-w) * 0.78);
+    left: calc(var(--column) * 0.78);
   }
 }
 
-/* Lines wrap to fill the phone screen, so both shapes sit in the corners below them, fully
+/* Lines wrap to fill the phone screen, so the shape sits in the corner below them, fully
    on screen. Anchored to the pin rather than the copy, whose height changes with the wrap. */
 @media (max-width: 768px) {
   .copy {
     position: static;
   }
 
-  .shapeTop,
   .shapeBottom {
     top: auto;
-    bottom: var(--space-2);
-    width: min(84px, 8svh);
-  }
-
-  .shapeTop {
+    right: calc(var(--side-pad) + var(--block-3));
+    bottom: 0;
     left: auto;
-    right: var(--side-pad);
+    width: 100px;
+    rotate: 24deg;
+  }
+}
+
+/* Very short screens: smaller copy for more room around it, and no shape. */
+@media (max-height: 670px) {
+  .pin {
+    font-size: calc(var(--fit-size) * 0.85);
   }
 
   .shapeBottom {
-    left: var(--side-pad);
+    display: none;
   }
 }
 

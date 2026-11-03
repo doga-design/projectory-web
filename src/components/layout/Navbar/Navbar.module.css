@@ -77,23 +77,12 @@
   margin: 18px auto 0;
   container-type: inline-size;
   container-name: nav;
-  transition:
-    gap var(--nav-close-motion),
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    translate 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: gap var(--nav-close-motion);
 }
 
 .navCluster.expanded {
   gap: 0;
   transition: gap var(--nav-open-motion);
-}
-
-/* Home's first-landing entrance: the reel has the screen to itself, then the bar
-   eases down as the frame shrinks. See src/lib/homeEntrance.ts. */
-:global(html[data-home-stage]) .navCluster {
-  opacity: 0;
-  translate: 0 -16px;
-  pointer-events: none;
 }
 
 .navShell {

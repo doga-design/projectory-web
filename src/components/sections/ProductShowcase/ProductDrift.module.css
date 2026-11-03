@@ -1,0 +1,84 @@
+/* The row spans the whole window, so sizes come from its own width (cqw) rather than the
+   window's: 100vw would include a classic scrollbar and miss the page column. */
+.drift {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.viewport {
+  /* The cards in the page column fill it exactly; anything outside it fades out. */
+  --cards: 3;
+  --gap: var(--space-5);
+  --column: min(100cqw - 2 * 50px, 1100px);
+  --inset: calc((100cqw - var(--column)) / 2);
+
+  position: relative;
+  /* `clip`: unlike `hidden`, focus can't scroll it and put the row out of step. */
+  overflow: clip;
+  /* Vertical swipes still scroll the page; sideways ones drag the row. */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--inset),
+    #000 calc(100% - var(--inset)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--inset),
+    #000 calc(100% - var(--inset)),
+    transparent
+  );
+}
+
+.viewport[data-dragging],
+.viewport[data-dragging] * {
+  cursor: grabbing;
+}
+
+/* Marks where the page column starts, for the row to read. */
+.anchor {
+  position: absolute;
+  left: var(--inset);
+  width: 0;
+  height: 0;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Each card carries its own gap, so a set's width is exactly the distance the row wraps by. */
+.set {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.slide {
+  flex: none;
+  width: calc((var(--column) - (var(--cards) - 1) * var(--gap)) / var(--cards));
+  margin-right: var(--gap);
+}
+
+/* Tablets: half a card peeks past the column, so cards stay near their desktop size. */
+@container (max-width: 1024px) {
+  .viewport {
+    --cards: 2.5;
+  }
+}
+
+/* One card in the middle, with its neighbours peeking in on both sides. */
+@container (max-width: 768px) {
+  .viewport {
+    --cards: 1;
+    --gap: var(--space-3);
+    --column: min(78cqw, 420px);
+  }
+}

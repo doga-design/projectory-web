@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type MotionValue } from 'framer-motion';
-import { limeOlive, yellowCoral } from '@/assets/images/shapes/floaters';
+import { limeOlive } from '@/assets/images/shapes/floaters';
 import HomeShape from '../HomeShape/HomeShape';
 import { statementLines } from '../../homeData';
 import styles from './Statement.module.css';
@@ -49,17 +49,6 @@ const Statement = () => {
     <section ref={wrapperRef} className={styles.wrapper}>
       <div className={styles.pin}>
         <div className={styles.copy}>
-          <div className={styles.shapeTop}>
-            <HomeShape
-              src={yellowCoral}
-              progress={scrollYProgress}
-              x={[0, -24]}
-              y={[0, -6]}
-              rotate={[-8, -20]}
-              flipX
-              floatDelay={0.3}
-            />
-          </div>
           {statementLines.map((line, i) => (
             <Line
               key={line}

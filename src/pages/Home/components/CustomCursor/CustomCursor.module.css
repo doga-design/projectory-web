@@ -14,7 +14,6 @@
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   will-change: transform, opacity;
-  transform-origin: center center;
   margin: 0;
   display: block;
   visibility: visible;
