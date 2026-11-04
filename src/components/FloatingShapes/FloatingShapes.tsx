@@ -32,13 +32,13 @@ const leaveDrift = (midRightRotate: Range): Record<keyof typeof defaultShapes, D
   lower: { x: [0, 90], y: [0, 40], rotate: [-15, -50] },
 });
 
-/** Shapes start further out and close in on the text as the section comes up the screen. */
+/** Shapes start a little further out and ease in on the text as the section comes up the screen. */
 const arriveDrift = (midRightRotate: Range): Record<keyof typeof defaultShapes, Drift> => ({
   // This shape is mirrored when arriving, which reverses its turn: positive is counter-clockwise.
-  upper: { x: [-140, 0], y: [-70, 0], rotate: [47, 22] },
-  midLeft: { x: [-180, 0], y: [50, 0], rotate: [55, 15.524] },
-  midRight: { x: [180, 0], y: [-60, 0], rotate: [midRightRotate[1], midRightRotate[0]] },
-  lower: { x: [140, 0], y: [100, 0], rotate: [-50, -15] },
+  upper: { x: [-30, 0], y: [-14, 0], rotate: [37, 22] },
+  midLeft: { x: [-30, 0], y: [14, 0], rotate: [30.5, 15.524] },
+  midRight: { x: [30, 0], y: [-14, 0], rotate: [midRightRotate[0] - 15, midRightRotate[0]] },
+  lower: { x: [30, 0], y: [14, 0], rotate: [-30, -15] },
 });
 
 /** One shape's scroll motion. A hook so each value keeps a stable place in the render. */
