@@ -1,219 +1,66 @@
-.wrapper {
-  /* Navbar footprint: 18px offset + 72px island (see Navbar.module.css). */
-  --nav-clear: 90px;
-  --side-pad: 50px;
-  /* The page's content column: 1200px, less the side padding. */
-  --column: min(100vw - 2 * var(--side-pad), 1100px);
-  --copy-left: calc((100vw - var(--column)) / 2);
-  --copy-gap: var(--space-3);
-  --line-height: 1.15;
-  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. The fit below
-     only ever shrinks this. */
-  --copy-size: min(var(--font-size-statement), var(--column) / 21.5);
-
-  position: relative;
-  height: 250vh;
-  /* `clip`, unlike `hidden`, keeps the pin sticky. Bleeding shapes add no scroll width. */
-  overflow-x: clip;
-}
-
-/* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
-@media (max-width: 808px) {
-  .wrapper {
-    --nav-clear: 66px;
-  }
-}
-
-@media (max-width: 768px) {
-  /* The copy nearly fills a phone's screen, so this tops up the room below it. */
-  .wrapper {
-    --side-pad: 30px;
-    --copy-size: var(--font-size-2xl);
-    margin-bottom: var(--space-8);
-  }
-}
-
-/*
- * The seven lines keep their size wherever it fits between the navbar and the bottom
- * of the screen, and shrink just enough where it doesn't.
- *
- * How the copy wraps depends only on how many em fit on a row. Measured for this copy
- * in Founders Grotesk: ≥21em → 7 rows, ≥19em → 8, ≥11em → 14, ≥10.5em → 15, ≥10em → 16,
- * ≥8.5em → 19. Each candidate is the largest size that keeps that row count AND fits
- * the height (rows + 6 gaps, the gap being the set one or 0.3em once the type shrinks);
- * the largest wins. Update the numbers if the copy changes.
- */
-.pin {
-  --fit-w: calc(100vw - var(--copy-left) - var(--side-pad));
-  --fit-h: calc(100vh - 2 * var(--nav-clear));
-  --rows-7: min(
-    var(--fit-w) / 21.5,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (7 * var(--line-height)),
-      var(--fit-h) / (7 * var(--line-height) + 1.8)
-    )
-  );
-  --rows-8: min(
-    var(--fit-w) / 19,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (8 * var(--line-height)),
-      var(--fit-h) / (8 * var(--line-height) + 1.8)
-    )
-  );
-  --rows-14: min(
-    var(--fit-w) / 11,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (14 * var(--line-height)),
-      var(--fit-h) / (14 * var(--line-height) + 1.8)
-    )
-  );
-  --rows-15: min(
-    var(--fit-w) / 10.5,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (15 * var(--line-height)),
-      var(--fit-h) / (15 * var(--line-height) + 1.8)
-    )
-  );
-  --rows-16: min(
-    var(--fit-w) / 10,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (16 * var(--line-height)),
-      var(--fit-h) / (16 * var(--line-height) + 1.8)
-    )
-  );
-  --rows-19: min(
-    var(--fit-w) / 8.5,
-    max(
-      (var(--fit-h) - 6 * var(--copy-gap)) / (19 * var(--line-height)),
-      var(--fit-h) / (19 * var(--line-height) + 1.8)
-    )
-  );
-
-  position: sticky;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  justify-content: safe center;
+/* Same content column as Pricing, Partners and Products. */
+.section {
   width: 100%;
-  height: 100vh;
-  padding: var(--nav-clear) var(--side-pad) var(--nav-clear) var(--copy-left);
-  --fit-size: max(
-    16px,
-    min(
-      var(--copy-size),
-      max(
-        var(--rows-7),
-        var(--rows-8),
-        var(--rows-14),
-        var(--rows-15),
-        var(--rows-16),
-        var(--rows-19)
-      )
-    )
-  );
-  font-size: var(--fit-size);
-}
-
-/* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
-@supports (height: 100svh) {
-  .pin {
-    --fit-h: calc(100svh - 2 * var(--nav-clear));
-
-    height: 100svh;
-  }
+  max-width: 1200px;
+  margin: var(--block-7) auto calc(var(--block-7) + var(--block-3));
+  padding: 0 50px;
 }
 
 .copy {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: min(var(--copy-gap), 0.3em);
+  gap: var(--space-3);
+  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
+  font-size: min(var(--font-size-statement), (100vw - 100px) / 21.5);
 }
 
 .line {
-  position: relative;
-  z-index: 1;
   margin: 0;
   font-family: var(--font-body);
   font-size: inherit;
-  line-height: var(--line-height);
-  color: var(--neutral-700);
-}
-
-.lit {
-  position: absolute;
-  inset: 0;
+  line-height: var(--leading-tight);
   color: var(--color-text);
 }
 
-.litAccent {
+.accent {
   color: var(--brand-teal);
 }
 
-/*
- * Sized from the column only, so it never shrinks on a short screen. It sits just below the
- * copy, and rises beside the last lines when there isn't room for it above the screen's edge.
- */
-.shapeBottom {
-  --copy-height: calc(7 * var(--line-height) * 1em + 6 * var(--copy-gap));
-  --room: calc((100svh - 2 * var(--nav-clear) - var(--copy-height)) / 2 + var(--nav-clear));
-  --shape-width: calc(var(--column) * 0.163);
-
+/* Beside the last lines, which are short enough to leave it room. */
+.shape {
   position: absolute;
-  z-index: 0;
-  /* 1.1: a turned shape stands a little taller than its own width. */
-  top: calc(100% + min(var(--space-2), var(--room) - var(--space-5) - var(--shape-width) * 1.1));
+  bottom: 0;
+  left: 88%;
+  width: 16.3%;
+  height: auto;
+  rotate: 4deg;
   pointer-events: none;
-  left: calc(var(--column) * 0.88);
-  width: var(--shape-width);
 }
 
-/* Upright tablets: the copy runs the column's width, so this one moves in to stay on screen. */
-@media (max-aspect-ratio: 1/1) {
-  .shapeBottom {
-    left: calc(var(--column) * 0.78);
-  }
-}
-
-/* Lines wrap to fill the phone screen, so the shape sits in the corner below them, fully
-   on screen. Anchored to the pin rather than the copy, whose height changes with the wrap. */
+/* Lines wrap to fill the column on phones, so the shape sits in the space below them. */
 @media (max-width: 768px) {
-  .copy {
-    position: static;
+  .section {
+    padding: 0 30px;
   }
 
-  .shapeBottom {
-    top: auto;
-    right: calc(var(--side-pad) + var(--block-3));
-    bottom: 0;
+  .copy {
+    font-size: var(--font-size-2xl);
+  }
+
+  .shape {
+    top: calc(100% + var(--space-2));
+    right: var(--block-3);
+    bottom: auto;
     left: auto;
     width: 100px;
     rotate: 24deg;
   }
 }
 
-/* Very short screens: smaller copy for more room around it, and no shape. */
+/* Very short screens: no shape. */
 @media (max-height: 670px) {
-  .pin {
-    font-size: calc(var(--fit-size) * 0.85);
-  }
-
-  .shapeBottom {
+  .shape {
     display: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wrapper {
-    height: auto;
-  }
-
-  .pin {
-    position: static;
-  }
-
-  .lit {
-    opacity: 1 !important;
   }
 }

@@ -14,71 +14,37 @@
   padding: calc(var(--block-4) - 10px) 50px var(--block-6);
 }
 
-/* Description above, then the filters beside the cards. */
 .catalogue {
-  /* Where the chips stick, just below the floating navbar. */
+  /* Where the filters stick and where a filter's scroll lands: just below the floating navbar. */
   --catalogue-top: 110px;
-  /* Where a filter's scroll lands the description: the navbar, plus some room. */
-  --catalogue-landing: 130px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  /* Breaks out of the page column so the cards can be larger. */
+  --catalogue-width: min(94vw, 1360px);
+  width: var(--catalogue-width);
+  margin-left: calc(50% - var(--catalogue-width) / 2);
 }
 
-/* Scroll target, directly above the description. */
+/* Scroll target, directly above the two columns. */
 .anchor {
-  scroll-margin-top: var(--catalogue-landing);
+  scroll-margin-top: var(--catalogue-top);
 }
 
-.descriptions {
-  display: grid;
-  /* Wide enough to hold every objective's description on two lines. */
-  max-width: 780px;
-  margin-bottom: var(--space-8);
-}
-
-/* The old one fades out quickly, then the new one fades in just after. */
-.description {
-  grid-area: 1 / 1;
-  margin: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 0.15s ease,
-    visibility 0s linear 0.15s;
-  font-family: var(--font-body);
-  font-size: var(--font-size-lead);
-  line-height: var(--leading-relaxed);
-  color: var(--color-text);
-  text-align: center;
-  /* Even lines, so the short descriptions don't leave a word or two alone on the second. */
-  text-wrap: balance;
-}
-
-.descriptionActive {
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.25s ease 0.1s;
-}
-
-/* Wide enough for the chips to wrap in pairs. */
 .layout {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: minmax(300px, 26%) minmax(0, 1fr);
   align-items: start;
   gap: var(--space-7);
-  width: 100%;
 }
 
-/* Stays beside the cards as they scroll, and stops at the end of the grid. */
-.chips {
-  position: sticky;
-  top: var(--catalogue-top);
+/* Stays beside the cards as they scroll and stops at the end of the grid, on screens tall
+   enough to show every filter at once. On shorter ones it scrolls normally, so none are lost. */
+@media (min-width: 1025px) and (min-height: 800px) {
+  .filters {
+    position: sticky;
+    top: var(--catalogue-top);
+  }
 }
 
 .grid {
-  /* These cards are narrower than the card's default suits. */
-  --product-card-title: var(--font-size-lg);
   /* Their hover description sits high over the video, so it needs the stronger shade. */
   --product-card-hover-shade: 1;
   display: grid;
@@ -89,26 +55,32 @@
   gap: var(--space-5);
 }
 
-@media (max-width: 1200px) {
+/* Three cards would be too small for the longest title. */
+@media (max-width: 1240px) {
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-/* Too tight to sit side by side: the chips become a centred block above the cards. */
+/* Too tight to sit side by side: back in the page column, with the filters sliding above the
+   cards. Block, not grid: a sticky grid item can't leave its own row, and this one has to stay
+   stuck all the way down the cards. */
 @media (max-width: 1024px) {
+  .catalogue {
+    --catalogue-top: 98px;
+    width: auto;
+    margin-left: 0;
+  }
+
   .layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--block-2);
+    display: block;
   }
+}
 
-  .chips {
-    position: static;
-    justify-content: center;
-  }
-
-  .grid {
-    --product-card-title: var(--font-size-xl);
+/* Navbar's compact island kicks in here. */
+@media (max-width: 808px) {
+  .catalogue {
+    --catalogue-top: 74px;
   }
 }
 
@@ -116,10 +88,6 @@
   .container {
     gap: var(--block-5);
     padding: var(--block-4) 30px var(--block-5);
-  }
-
-  .catalogue {
-    --catalogue-landing: 106px;
   }
 
   .grid {

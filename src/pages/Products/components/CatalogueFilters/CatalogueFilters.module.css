@@ -1,0 +1,223 @@
+/* The recipe of Partners' CyclingCards, at sizes that let nine cards fit on screen. */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* --text-lift shifts the text up without changing the card's height:
+   it comes off the top padding and goes onto the bottom. */
+.card {
+  --text-lift: 3px;
+  display: flex;
+  flex-direction: column;
+  padding: calc(14px - var(--text-lift)) var(--space-5) calc(14px + var(--text-lift));
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  text-decoration: none;
+  text-align: left;
+  /* The copy should be copyable, as on Partners. */
+  -webkit-user-select: text;
+  user-select: text;
+  cursor: pointer;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    padding var(--transition-base);
+}
+
+/* Real pointers only: on touch, :hover sticks after a tap. */
+@media (hover: hover) {
+  .card:not(.cardOpen):hover {
+    background: var(--color-surface-hover);
+  }
+}
+
+.cardOpen {
+  padding: calc(var(--space-6) - var(--text-lift)) var(--space-6)
+    calc(var(--space-6) + var(--text-lift));
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
+  cursor: default;
+}
+
+.title {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-normal);
+  transition: font-size var(--transition-base);
+}
+
+.cardOpen .title {
+  font-family: var(--font-medium);
+  font-size: var(--font-size-xl);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  cursor: text;
+}
+
+/* Slide-open: a grid row animating 0fr → 1fr, so no height is measured in JS. */
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-base);
+}
+
+.cardOpen .reveal {
+  grid-template-rows: 1fr;
+}
+
+.revealInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.body {
+  display: block;
+  padding-top: var(--space-3);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  line-height: var(--leading-relaxed);
+  font-feature-settings:
+    'liga' off,
+    'clig' off;
+}
+
+.cardOpen .body {
+  cursor: text;
+}
+
+/* The sliding row's copy; the open card shows it on desktop. */
+.copies {
+  display: none;
+}
+
+/* ── Phones and tablets: a sliding row, with the copy below it ─── */
+
+@media (max-width: 1024px) {
+  /* The row sticks against the whole catalogue rather than this wrapper. */
+  .root {
+    --page-margin: 50px;
+    display: contents;
+  }
+
+  /* Runs edge to edge. It can't be the scroller too: that would clip the strip below. */
+  .row {
+    position: sticky;
+    top: var(--catalogue-top);
+    z-index: 2;
+    margin-inline: calc(-1 * var(--page-margin));
+    /* The top is `--catalogue-top`'s 8px below the navbar plus 8px here; the bottom matches it. */
+    padding-block: var(--space-2) var(--space-4);
+    background: var(--color-bg);
+  }
+
+  /* Runs up behind the navbar, so cards don't show through the gap as they pass under. */
+  .row::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--catalogue-top)) 0 100%;
+    background: var(--color-bg);
+    pointer-events: none;
+  }
+
+  /* The fade sits inside the page margin, so the first pill is clear at the start and whatever
+     peeks past the margin trails off, with no script watching the scroll. */
+  .list {
+    position: relative;
+    flex-direction: row;
+    padding-inline: var(--page-margin);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--page-margin);
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 var(--page-margin),
+      #000 calc(100% - var(--page-margin)),
+      transparent
+    );
+    mask-image: linear-gradient(
+      90deg,
+      transparent,
+      #000 var(--page-margin),
+      #000 calc(100% - var(--page-margin)),
+      transparent
+    );
+  }
+
+  .list::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Open and closed are the same size, so picking a filter never shifts the row. */
+  .card,
+  .cardOpen {
+    flex: none;
+    padding: calc(var(--space-3) - var(--text-lift)) var(--space-4)
+      calc(var(--space-3) + var(--text-lift));
+    white-space: nowrap;
+    scroll-snap-align: center;
+    /* A swipe shouldn't start selecting the label. */
+    -webkit-user-select: none;
+    user-select: none;
+    transition:
+      background var(--transition-base),
+      color var(--transition-base);
+  }
+
+  .cardOpen {
+    cursor: pointer;
+  }
+
+  .title,
+  .cardOpen .title {
+    font-family: var(--font-body);
+    font-size: var(--font-size-md);
+    font-weight: 400;
+    line-height: var(--leading-normal);
+    cursor: inherit;
+  }
+
+  .reveal {
+    display: none;
+  }
+
+  .copies {
+    display: grid;
+    max-width: 720px;
+    margin-bottom: var(--space-7);
+  }
+
+  /* The old one fades out quickly, then the new one fades in just after. */
+  .copy {
+    grid-area: 1 / 1;
+    margin: 0;
+    opacity: 0;
+    visibility: hidden;
+    font-family: var(--font-body);
+    font-size: var(--font-size-md);
+    line-height: var(--leading-relaxed);
+    color: var(--color-text);
+    transition:
+      opacity 0.15s ease,
+      visibility 0s linear 0.15s;
+  }
+
+  .copyActive {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.25s ease 0.1s;
+  }
+}
+
+@media (max-width: 768px) {
+  .root {
+    --page-margin: 30px;
+  }
+}

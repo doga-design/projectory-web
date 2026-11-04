@@ -2,19 +2,17 @@ import { useEffect, useLayoutEffect, useRef, type RefObject } from 'react';
 import type { Location } from 'react-router-dom';
 import { easeScrollTo } from '@/lib/scrollToId';
 
+/** How long the grid takes to ease to a new height. */
+const SETTLE_MS = 400;
+
 /**
  * Brings the catalogue into view on a heavy ease whenever the URL carries its anchor (every
- * tag pick does), and returns the same scroll for the hero button.
+ * filter pick does), and returns the same scroll for the hero button.
  *
- * When the reader is already past the top of the grid, a new filter removes cards *above*
- * the screen. The browser then jumps the scroll position, either to keep what's on screen in
- * place (scroll anchoring) or because the page is now too short. Either way the jump lands
- * before the ease can start. So in that case the grid is held at its old height until the
- * scroll lands; the held space is empty, below the last row. When the grid hasn't been
- * reached yet, nothing above the screen changes and nothing is held: the cards just re-flow.
- *
- * Whether the reader is past the grid's top is tracked as it changes, because it's needed
- * after the new cards are in the DOM, when reading layout would lay them out (and jump) early.
+ * A new filter usually changes the grid's height, which would jump the scroll position if the
+ * page got too short, and pop whatever's below the grid into view. So the grid is held at its
+ * old height, then eases to the new one: straight away when it's growing, and once the scroll
+ * has landed when it's shrinking, by which point the page can get shorter without jumping.
  */
 export const useCatalogueScroll = (
   anchorRef: RefObject<HTMLElement | null>,
@@ -22,25 +20,17 @@ export const useCatalogueScroll = (
   location: Location
 ) => {
   const gridHeight = useRef(0);
-  const pastGridTop = useRef(false);
-  // Which scroll currently holds the grid, so an earlier one landing late can't release it.
+  // Which pick currently holds the grid, so an earlier one finishing late can't release it.
   const holdId = useRef(0);
 
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
-    const track = () => {
+    const ro = new ResizeObserver(() => {
       gridHeight.current = grid.offsetHeight;
-      pastGridTop.current = grid.getBoundingClientRect().top < 0;
-    };
-    track();
-    const ro = new ResizeObserver(track);
+    });
     ro.observe(grid);
-    window.addEventListener('scroll', track, { passive: true });
-    return () => {
-      ro.disconnect();
-      window.removeEventListener('scroll', track);
-    };
+    return () => ro.disconnect();
   }, [gridRef]);
 
   const scrollToCatalogue = () => anchorRef.current && easeScrollTo(anchorRef.current);
@@ -50,11 +40,47 @@ export const useCatalogueScroll = (
     const anchor = anchorRef.current;
     if (location.hash !== `#${anchor?.id}` || !grid || !anchor) return;
     const id = ++holdId.current;
-    grid.style.minHeight = pastGridTop.current ? `${gridHeight.current}px` : '';
+    const from = gridHeight.current;
+
+    const release = () => {
+      grid.style.height = '';
+      grid.style.overflow = '';
+      grid.style.transition = '';
+    };
+    // Arriving on the page: nothing to hold, the grid just has its height.
+    if (!from) {
+      easeScrollTo(anchor);
+      return;
+    }
+
+    release();
+    grid.style.overflow = 'clip';
+    grid.style.height = `${from}px`;
+    // Held first, so measuring where the new cards end can't lay the page out short and jump.
+    const cards = [...grid.children].filter((card) => !(card as HTMLElement).hidden);
+    const lastCard = cards[cards.length - 1];
+    const to = lastCard
+      ? lastCard.getBoundingClientRect().bottom - grid.getBoundingClientRect().top
+      : 0;
+
+    const settle = () => {
+      if (holdId.current !== id) return;
+      if (to === from || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        release();
+        return;
+      }
+      grid.style.transition = `height ${SETTLE_MS}ms ease`;
+      grid.style.height = `${to}px`;
+      window.setTimeout(() => {
+        if (holdId.current === id) release();
+      }, SETTLE_MS);
+    };
+
+    if (to > from) settle();
     easeScrollTo(anchor).then(() => {
-      if (holdId.current === id) grid.style.minHeight = '';
+      if (to <= from) settle();
     });
-    // Keyed on the navigation itself, so picking the same tag again scrolls too.
+    // Keyed on the navigation itself, so picking the same filter again scrolls too.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.key, location.hash]);
 

@@ -21,7 +21,14 @@ type ProductCardProduct = {
 
 /** A square product tile. On hover (real pointers only) the video plays, the description opens
  *  and Learn More fills; the heart saves the product to the liked list. */
-const ProductCard = ({ product }: { product: ProductCardProduct }) => {
+const ProductCard = ({
+  product,
+  imageLoading = 'lazy',
+}: {
+  product: ProductCardProduct;
+  /** `eager` for cards that may be hidden, which lazy loading would leave blank when shown. */
+  imageLoading?: 'lazy' | 'eager';
+}) => {
   const navigate = useNavigate();
   const { likedProducts, toggleLike } = useLikedProducts();
   const isLiked = likedProducts.includes(product.id);
@@ -39,7 +46,12 @@ const ProductCard = ({ product }: { product: ProductCardProduct }) => {
       onClick={() => navigate(href)}
       onMouseEnter={() => setLoadVideo(true)}
     >
-      <CloudinaryImage className={styles.media} src={thumbnail} alt={product.name} loading="lazy" />
+      <CloudinaryImage
+        className={styles.media}
+        src={thumbnail}
+        alt={product.name}
+        loading={imageLoading}
+      />
       {loadVideo && video && (
         <video
           className={`${styles.media} ${styles.video}`}

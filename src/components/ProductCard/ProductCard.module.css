@@ -72,7 +72,7 @@
 .title {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--product-card-title, var(--font-size-xl));
+  font-size: var(--font-size-xl);
   font-weight: 400;
   line-height: var(--leading-snug);
 }
