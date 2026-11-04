@@ -66,7 +66,7 @@ iframe {
 /* Its own compositor layer, so the playing video underneath can't interfere with it. */
 .content {
   position: absolute;
-  bottom: var(--space-8);
+  bottom: var(--block-4);
   z-index: 10;
   transform: translateZ(0);
   display: flex;
@@ -91,9 +91,9 @@ iframe {
 .heroTitle {
   margin: 0;
   font-family: var(--font-medium);
-  font-size: var(--font-size-hero);
+  font-size: var(--font-size-hero-home);
   font-weight: 500;
-  line-height: var(--leading-tight);
+  line-height: 1.05;
   color: var(--color-text);
   white-space: nowrap;
 }
@@ -102,6 +102,25 @@ iframe {
   display: flex;
   justify-content: center;
   gap: var(--space-5);
+}
+
+/* Pills here only; the shared Button keeps its radius elsewhere. */
+.heroButtons > a {
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-md);
+  white-space: nowrap;
+}
+
+/* The narrowest phones: both pills still fit on one row. */
+@media (max-width: 360px) {
+  .heroButtons {
+    gap: var(--space-3);
+  }
+
+  .heroButtons > a {
+    padding-inline: var(--space-4);
+  }
 }
 
 /* The longest line is 8.2em wide, and the headline stays on two lines. */
@@ -304,7 +323,7 @@ iframe {
 
 @media (max-width: 768px) {
   .content {
-    bottom: 40px;
+    bottom: var(--block-3);
   }
 
   .column {

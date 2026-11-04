@@ -38,7 +38,7 @@
 .cardOpen {
   padding: calc(var(--space-6) - var(--text-lift)) var(--space-6)
     calc(var(--space-6) + var(--text-lift));
-  background: var(--color-surface-inverse);
+  background: var(--tag-open-bg, var(--color-surface-inverse));
   color: var(--color-text-inverse);
   cursor: default;
 }
@@ -48,10 +48,14 @@
   font-family: var(--font-body);
   font-size: var(--font-size-lg);
   line-height: var(--leading-normal);
-  transition: font-size var(--transition-base);
+  color: var(--tag-title, inherit);
+  transition:
+    font-size var(--transition-base),
+    color var(--transition-base);
 }
 
 .cardOpen .title {
+  color: var(--tag-open-title, inherit);
   font-family: var(--font-medium);
   font-size: var(--font-size-xl);
   font-weight: 500;
@@ -88,6 +92,12 @@
 
 .cardOpen .body {
   cursor: text;
+}
+
+/* All Products, always first: its short copy otherwise runs wide and strands a word. */
+.card:first-child .body {
+  max-width: 270px;
+  line-height: var(--leading-snug);
 }
 
 /* The sliding row's copy; the open card shows it on desktop. */
