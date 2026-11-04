@@ -6,7 +6,7 @@
    product, then fades back in; --fade is set from FeaturedCarousel.tsx. */
 .slide {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 3fr;
   align-items: start;
   gap: var(--block-2);
   text-align: left;
@@ -44,7 +44,7 @@
   font-family: var(--font-body);
   font-size: var(--font-size-statement);
   font-weight: 400;
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
   color: var(--color-text);
 }
 
@@ -99,9 +99,12 @@
 }
 
 @media (max-width: 1024px) {
+  .slide {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .headline {
     font-size: var(--font-size-2xl);
-    line-height: var(--leading-snug);
   }
 }
 

@@ -13,11 +13,12 @@
   background-color: var(--color-bg);
 }
 
-/* The upper shape's place in the design: above and left of the centred text. */
+/* The upper shape's place in the design: above and left of the centred text, stopping short of the
+   navbar on short screens. */
 @media (min-width: 769px) {
   .section {
-    --lh-upper-top: calc(50% - 300px);
-    --lh-upper-left: calc(50% - 290px);
+    --lh-upper-top: max(84px, calc(50% - 340px));
+    --lh-upper-left: calc(50% - 320px);
     --lh-upper-w: 125px;
   }
 }

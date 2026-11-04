@@ -2,7 +2,7 @@
 .section {
   width: 100%;
   max-width: 1200px;
-  margin: var(--block-7) auto calc(var(--block-7) + var(--block-3));
+  margin: var(--block-7) auto var(--block-4);
   padding: 0 50px;
 }
 
@@ -10,7 +10,7 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
+  gap: var(--space-2);
   /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
   font-size: min(var(--font-size-statement), (100vw - 100px) / 21.5);
 }
@@ -19,7 +19,7 @@
   margin: 0;
   font-family: var(--font-body);
   font-size: inherit;
-  line-height: var(--leading-tight);
+  line-height: 1.1;
   color: var(--color-text);
 }
 
@@ -27,20 +27,23 @@
   color: var(--brand-teal);
 }
 
-/* Beside the last lines, which are short enough to leave it room. */
+/* Below the last line, on the column's right edge. In the flow, so it can't reach the next section.
+   The image has transparent padding: `translate` and the negative margin line up what's visible
+   with the column's edge and the section's bottom margin. */
 .shape {
-  position: absolute;
-  bottom: 0;
-  left: 88%;
+  align-self: flex-end;
   width: 16.3%;
   height: auto;
-  rotate: 4deg;
+  margin-bottom: -1.3%;
+  translate: 16.3% 0;
+  rotate: -15deg;
   pointer-events: none;
 }
 
 /* Lines wrap to fill the column on phones, so the shape sits in the space below them. */
 @media (max-width: 768px) {
   .section {
+    margin-bottom: calc(var(--block-7) + var(--block-3));
     padding: 0 30px;
   }
 
@@ -49,17 +52,21 @@
   }
 
   .shape {
+    position: absolute;
     top: calc(100% + var(--space-2));
     right: var(--block-3);
-    bottom: auto;
-    left: auto;
     width: 100px;
-    rotate: 24deg;
+    margin-bottom: 0;
+    translate: none;
   }
 }
 
 /* Very short screens: no shape. */
 @media (max-height: 670px) {
+  .section {
+    margin-bottom: calc(var(--block-7) + var(--block-3));
+  }
+
   .shape {
     display: none;
   }

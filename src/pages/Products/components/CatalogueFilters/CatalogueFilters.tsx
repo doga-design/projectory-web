@@ -1,8 +1,16 @@
-import { useLayoutEffect, useRef, type MouseEvent } from 'react';
+import { useLayoutEffect, useRef, type CSSProperties, type MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './CatalogueFilters.module.css';
 
-type CatalogueFilter = { key: string; label: string; description: string; href: string };
+type CatalogueFilter = {
+  key: string;
+  label: string;
+  description: string;
+  href: string;
+  closedTitleColor?: string;
+  openTitleColor?: string;
+  openColor?: string;
+};
 
 interface CatalogueFiltersProps {
   items: readonly CatalogueFilter[];
@@ -56,6 +64,13 @@ const CatalogueFilters = ({ items, activeIndex, className }: CatalogueFiltersPro
                 key={item.key}
                 to={item.href}
                 className={`${styles.card}${isOpen ? ` ${styles.cardOpen}` : ''}`}
+                style={
+                  {
+                    '--tag-title': item.closedTitleColor,
+                    '--tag-open-title': item.openTitleColor,
+                    '--tag-open-bg': item.openColor,
+                  } as CSSProperties
+                }
                 aria-current={isOpen ? 'page' : undefined}
                 draggable={false}
                 onClick={keepSelection}
