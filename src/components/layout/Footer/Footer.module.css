@@ -1,6 +1,14 @@
 /* Footer */
 
 .footer {
+  --footer-link-hover: rgba(128, 128, 128, 0.25);
+  --footer-link-radius: 4px;
+  /* Snappy in, slightly softer out: the hover lands almost instantly, then
+   * fades away a touch slower so moving across a list doesn't flicker. */
+  --footer-link-in: 160ms;
+  --footer-link-out: 90ms;
+  --footer-link-ease: cubic-bezier(0.2, 0, 0, 1);
+
   background-color: var(--color-bg);
   color: var(--color-text);
   padding: 48px var(--block-4) 0;
@@ -29,7 +37,7 @@
 .tagline {
   font-family: var(--font-body);
   font-size: var(--font-size-s);
-  color: var(--color-text-dim);
+  color: var(--color-text);
   margin-top: var(--space-2);
 }
 
@@ -51,31 +59,41 @@
 
 .columnHeading,
 .addressBlock h4 {
-  font-size: var(--font-size-lg);
-  color: var(--color-text);
+  font-size: var(--font-size-s);
+  color: var(--color-text-dim);
   margin: 0 0 var(--space-3);
-  font-family: var(--font-medium);
+  font-family: var(--font-body);
   font-weight: normal;
+  line-height: var(--leading-snug);
 }
 
 .subHeading {
   margin-top: var(--space-6);
 }
 
-/* Links inside columns */
+/* Links inside columns.
+ * Hover background padding is cancelled by negative margins, so text stays put. */
 
 .footerColumn a {
+  align-self: flex-start;
+  padding: var(--space-1) var(--space-2);
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2)) var(--space-1);
+  border-radius: var(--footer-link-radius);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-s);
   text-decoration: none;
-  margin-bottom: var(--space-2);
   line-height: var(--leading-snug);
-  transition: color var(--transition-fast);
+  transition: background-color var(--footer-link-out) var(--footer-link-ease);
 }
 
-.footerColumn a:hover {
-  color: var(--brand-lime);
+/* Real pointers only: on touch, :hover sticks to the last tapped link. */
+@media (hover: hover) {
+  .footerColumn a:hover,
+  .legalLinks a:hover {
+    background-color: var(--footer-link-hover);
+    transition-duration: var(--footer-link-in);
+  }
 }
 
 /* ── Column 1: Addresses ── */
@@ -91,7 +109,7 @@
 .addressBlock p {
   font-family: var(--font-body);
   font-size: var(--font-size-s);
-  color: var(--color-text-muted);
+  color: var(--color-text);
   margin: 0;
   line-height: var(--leading-gap);
 }
@@ -134,7 +152,7 @@
 .inputHelper {
   font-family: var(--font-body);
   font-size: var(--font-size-s);
-  color: var(--color-text-dim);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -147,7 +165,7 @@
 .introDeckStatus {
   font-family: var(--font-body);
   font-size: var(--font-size-s);
-  color: var(--color-text-dim);
+  color: var(--color-text);
   margin: 0;
   line-height: var(--leading-loose);
 }
@@ -157,18 +175,13 @@
 }
 
 .footerColumn .contactLink {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-3);
+  margin-top: calc(var(--space-4) - var(--space-1));
+  margin-bottom: calc(var(--space-3) - var(--space-1));
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-s);
   text-decoration: none;
   line-height: var(--leading-loose);
-  transition: color var(--transition-fast);
-}
-
-.contactLink:hover {
-  color: var(--brand-lime);
 }
 
 /* Social icons */
@@ -179,22 +192,20 @@
   margin-top: 0;
 }
 
-.socialIcon {
+.footerColumn .socialIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* Tighter sides than text links: backgrounds would overlap across the 12px gap. */
+  padding: var(--space-1);
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-1)) var(--space-1);
   color: var(--color-text);
   text-decoration: none;
-  transition: color var(--transition-fast);
 }
 
 .socialIcon svg {
   width: 32px;
   height: 32px;
-}
-
-.socialIcon:hover {
-  color: var(--brand-lime);
 }
 
 /* ── Bottom bar ── */
@@ -219,7 +230,7 @@
 .copyright {
   font-family: var(--font-body);
   font-size: var(--font-size-s);
-  color: var(--color-text-dim);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -236,18 +247,17 @@
 }
 
 .legalLinks a {
+  padding: var(--space-1) var(--space-2);
+  margin: calc(-1 * var(--space-1)) calc(-1 * var(--space-2));
+  border-radius: var(--footer-link-radius);
   color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 3px;
-  transition: color var(--transition-fast);
-}
-
-.legalLinks a:hover {
-  color: var(--brand-lime);
+  transition: background-color var(--footer-link-out) var(--footer-link-ease);
 }
 
 .legalDivider {
-  color: var(--color-text-dim);
+  color: var(--color-text);
   user-select: none;
 }
 
