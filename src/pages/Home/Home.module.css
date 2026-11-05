@@ -66,7 +66,7 @@ iframe {
 /* Its own compositor layer, so the playing video underneath can't interfere with it. */
 .content {
   position: absolute;
-  bottom: var(--block-4);
+  bottom: 65px;
   z-index: 10;
   transform: translateZ(0);
   display: flex;
@@ -104,15 +104,14 @@ iframe {
   gap: var(--space-5);
 }
 
-/* Pills here only; the shared Button keeps its radius elsewhere. */
+/* Larger than the shared small Button, here only. */
 .heroButtons > a {
   padding: var(--space-3) var(--space-6);
-  border-radius: var(--radius-pill);
   font-size: var(--font-size-md);
   white-space: nowrap;
 }
 
-/* The narrowest phones: both pills still fit on one row. */
+/* The narrowest phones: both buttons still fit on one row. */
 @media (max-width: 360px) {
   .heroButtons {
     gap: var(--space-3);
@@ -127,6 +126,17 @@ iframe {
 @media (max-width: 768px) {
   .heroTitle {
     font-size: min(var(--font-size-3xl), (100vw - 60px) / 8.2);
+  }
+}
+
+/* Too short for the full headline under the navbar, such as phones held sideways. */
+@media (min-width: 769px) and (max-height: 430px) {
+  .content {
+    bottom: var(--block-1);
+  }
+
+  .heroTitle {
+    font-size: var(--font-size-3xl);
   }
 }
 
@@ -152,34 +162,18 @@ iframe {
   overflow: hidden;
 }
 
-/* Clickable: opens the lightbox. The label follows alongside this cursor. */
+/* Clickable: opens the lightbox. */
 .middleVideoSlide {
   position: relative;
   cursor: pointer;
 }
 
-/* Out of sight until a keyboard reaches it. Mouse and touch use the slide itself. */
-.reelButton {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 3;
-  padding: var(--space-3) var(--space-5);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.reelButton:focus-visible {
-  opacity: 1;
-  pointer-events: auto;
+/* The CustomCursor label stands in for the cursor, wherever it renders: real pointers, above the
+   width where Home goes mobile. Anywhere else this would leave a mouse with no cursor at all. */
+@media (hover: hover) and (min-width: 1025px) {
+  .middleVideoSlide {
+    cursor: none;
+  }
 }
 
 .tapToPlayOverlay {
@@ -282,18 +276,15 @@ iframe {
 .column {
   display: flex;
   flex-direction: column;
-  gap: var(--block-7);
+  gap: var(--block-8);
   width: 100%;
   max-width: 1200px;
-  margin: var(--block-7) auto 0;
+  margin: var(--block-8) auto 0;
   padding: 0 50px;
 }
 
-@media (max-width: 1024px) {
-  .icon {
-    display: none;
-  }
-
+/* The static hero: isStaticHero in Home.tsx. */
+@media (max-width: 1024px), (prefers-reduced-motion: reduce) {
   .wrapper {
     height: auto;
   }
@@ -318,12 +309,13 @@ iframe {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    border-radius: 0;
   }
 }
 
 @media (max-width: 768px) {
   .content {
-    bottom: var(--block-3);
+    bottom: 48px;
   }
 
   .column {
@@ -342,6 +334,8 @@ iframe {
   justify-content: center;
   z-index: 10000;
   cursor: zoom-out;
+  /* Takes focus on open, by script only. */
+  outline: none;
 }
 
 .lightboxContent {

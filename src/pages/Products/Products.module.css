@@ -45,8 +45,6 @@
 }
 
 .grid {
-  /* Their hover description sits high over the video, so it needs the stronger shade. */
-  --product-card-hover-shade: 1;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   /* Rows keep their own height even while the grid is held open during a scroll

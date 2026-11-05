@@ -13,6 +13,7 @@ import HowItWorks from './components/HowItWorks/HowItWorks';
 import DataFeature from '@/components/sections/DataFeature/DataFeature';
 
 import { useLikedProducts } from '@/context/LikedProductsContext';
+import { playLikeBounce } from '@/lib/likeBounce';
 import HeartIconSVG from '@/assets/images/heartIcon.svg';
 import HeartIconSVG_Outline from '@/assets/images/heartIcon_outline.svg';
 import CloudinaryImage from '@/components/CloudinaryImage/CloudinaryImage';
@@ -222,7 +223,13 @@ const ProductPage = () => {
       <FinalCTA experienceText="Products" experienceLink="/products" />
 
       <div className={styles.floatingLikeButton}>
-        <button onClick={() => toggleLike(product.id)} className={styles.likeButton}>
+        <button
+          onClick={(e) => {
+            if (!isLiked) playLikeBounce(e.currentTarget);
+            toggleLike(product.id);
+          }}
+          className={styles.likeButton}
+        >
           <img src={isLiked ? HeartIconSVG : HeartIconSVG_Outline} alt="Like/Unlike Product" />
         </button>
 

@@ -1,4 +1,3 @@
-import { limeOlive } from '@/assets/images/shapes/floaters';
 import { statementLines } from '../../homeData';
 import styles from './Statement.module.css';
 
@@ -14,7 +13,6 @@ const Statement = () => {
             {line}
           </p>
         ))}
-        <img src={limeOlive} alt="" className={styles.shape} aria-hidden />
       </div>
     </section>
   );

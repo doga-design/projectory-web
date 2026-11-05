@@ -2,12 +2,11 @@
 .section {
   width: 100%;
   max-width: 1200px;
-  margin: var(--block-7) auto var(--block-4);
+  margin: var(--block-8) auto;
   padding: 0 50px;
 }
 
 .copy {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -27,47 +26,12 @@
   color: var(--brand-teal);
 }
 
-/* Below the last line, on the column's right edge. In the flow, so it can't reach the next section.
-   The image has transparent padding: `translate` and the negative margin line up what's visible
-   with the column's edge and the section's bottom margin. */
-.shape {
-  align-self: flex-end;
-  width: 16.3%;
-  height: auto;
-  margin-bottom: -1.3%;
-  translate: 16.3% 0;
-  rotate: -15deg;
-  pointer-events: none;
-}
-
-/* Lines wrap to fill the column on phones, so the shape sits in the space below them. */
 @media (max-width: 768px) {
   .section {
-    margin-bottom: calc(var(--block-7) + var(--block-3));
     padding: 0 30px;
   }
 
   .copy {
     font-size: var(--font-size-2xl);
-  }
-
-  .shape {
-    position: absolute;
-    top: calc(100% + var(--space-2));
-    right: var(--block-3);
-    width: 100px;
-    margin-bottom: 0;
-    translate: none;
-  }
-}
-
-/* Very short screens: no shape. */
-@media (max-height: 670px) {
-  .section {
-    margin-bottom: calc(var(--block-7) + var(--block-3));
-  }
-
-  .shape {
-    display: none;
   }
 }

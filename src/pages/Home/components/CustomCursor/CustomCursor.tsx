@@ -1,5 +1,6 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
+import { useReducedMotion } from 'framer-motion';
 import styles from './CustomCursor.module.css';
 
 interface CustomCursorProps {
@@ -8,111 +9,81 @@ interface CustomCursorProps {
   text?: string;
 }
 
+const MAX_TILT_DEG = 15;
+/** Smaller moves are jitter, and keep the current tilt. */
+const MIN_TILT_MOVE_PX = 2;
+
+/** Leans the label toward the direction of travel, further the faster it moves. */
+const tiltFor = (dx: number, dy: number) => {
+  const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+  const speedFactor = Math.min(Math.hypot(dx, dy) / 10, 1);
+  return Math.max(-MAX_TILT_DEG, Math.min(MAX_TILT_DEG, angle * 0.3 * speedFactor));
+};
+
 /**
- * A label that follows a real mouse while it's over the target, just below and right of
- * the native cursor. The browser's own hover events decide when: anything sitting on top
- * of the target (a button, the navbar) ends the hover by itself.
+ * A label that replaces the mouse cursor over the target; the target's CSS hides the native one.
+ * The browser's own hover events decide when: anything sitting on top of the target (a button,
+ * the navbar) ends the hover by itself.
+ *
+ * Position and tilt are written straight to the element, so moving the mouse never re-renders.
  */
 const CustomCursor = ({ targetRef, isMobile, text = 'see the whole reel' }: CustomCursorProps) => {
-  const [active, setActive] = useState(false);
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [rotation, setRotation] = useState(0);
+  const labelRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-
-  const prevRef = useRef<{ x: number; y: number } | null>(null);
-  const rafRef = useRef<number | null>(null);
-  const hideTimerRef = useRef<number | undefined>(undefined);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const el = targetRef.current;
-    if (isMobile || !el) return;
+    const target = targetRef.current;
+    const label = labelRef.current;
+    if (!target || !label) return;
 
-    // Coming back during the fade-out cancels it, so the label can't get stuck hidden.
-    const show = (x: number, y: number) => {
-      window.clearTimeout(hideTimerRef.current);
-      setPos({ x, y });
+    let previous: { x: number; y: number } | null = null;
+
+    // On every move, not just on enter: after the window loses focus the pointer can still be
+    // over the target with no new enter event, and the native cursor is hidden there.
+    const follow = (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      const { clientX: x, clientY: y } = e;
+      label.style.translate = `calc(${x}px - 50%) calc(${y}px - 50%)`;
+
+      if (previous && !reducedMotion) {
+        const dx = x - previous.x;
+        const dy = y - previous.y;
+        if (Math.abs(dx) > MIN_TILT_MOVE_PX || Math.abs(dy) > MIN_TILT_MOVE_PX) {
+          label.style.rotate = `${tiltFor(dx, dy)}deg`;
+        }
+      }
+      previous = { x, y };
       setIsVisible(true);
-      setActive(true);
-      prevRef.current = { x, y };
     };
 
     const hide = () => {
+      previous = null;
+      label.style.rotate = '0deg';
       setIsVisible(false);
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      window.clearTimeout(hideTimerRef.current);
-      // Stays mounted for the fade-out.
-      hideTimerRef.current = window.setTimeout(() => {
-        setActive(false);
-        setRotation(0);
-        prevRef.current = null;
-      }, 200);
     };
 
-    const onPointerEnter = (e: PointerEvent) => {
-      if (e.pointerType === 'mouse') show(e.clientX, e.clientY);
-    };
-
-    const onPointerMove = (e: PointerEvent) => {
-      if (e.pointerType !== 'mouse') return;
-      const x = e.clientX;
-      const y = e.clientY;
-      setPos({ x, y });
-
-      // smooth rotation via rAF to reduce jitter/state spam
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => {
-        const prev = prevRef.current;
-        if (prev) {
-          const dx = x - prev.x;
-          const dy = y - prev.y;
-
-          if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
-            const rawAngle = Math.atan2(dy, dx) * (180 / Math.PI);
-            const speed = Math.sqrt(dx * dx + dy * dy);
-            const maxRotation = 15;
-            const speedFactor = Math.min(speed / 10, 1);
-            const subtle = rawAngle * 0.3 * speedFactor;
-            const clamped = Math.max(-maxRotation, Math.min(maxRotation, subtle));
-            setRotation(clamped);
-          }
-        }
-        prevRef.current = { x, y };
-      });
-    };
-
-    el.addEventListener('pointerenter', onPointerEnter);
-    el.addEventListener('pointermove', onPointerMove);
-    el.addEventListener('pointerleave', hide);
+    target.addEventListener('pointerenter', follow);
+    target.addEventListener('pointermove', follow);
+    target.addEventListener('pointerleave', hide);
     window.addEventListener('blur', hide);
 
     return () => {
-      if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      window.clearTimeout(hideTimerRef.current);
-      el.removeEventListener('pointerenter', onPointerEnter);
-      el.removeEventListener('pointermove', onPointerMove);
-      el.removeEventListener('pointerleave', hide);
+      target.removeEventListener('pointerenter', follow);
+      target.removeEventListener('pointermove', follow);
+      target.removeEventListener('pointerleave', hide);
       window.removeEventListener('blur', hide);
+      hide();
     };
-  }, [isMobile, targetRef]);
+  }, [isMobile, targetRef, reducedMotion]);
 
-  if (isMobile || !active || typeof document === 'undefined') return null;
-
-  const scale = isVisible ? 1 : 0.8;
-  const opacity = isVisible ? 1 : 0;
+  if (isMobile || typeof document === 'undefined') return null;
 
   return ReactDOM.createPortal(
     <div
-      className={styles.customCursor}
-      style={{
-        left: `${pos.x}px`,
-        top: `${pos.y}px`,
-        transform: `translate(18px, 18px) rotate(${rotation}deg) scale(${scale})`,
-        transformOrigin: 'top left',
-        opacity: opacity,
-        transition: isVisible
-          ? 'opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)'
-          : 'opacity 0.15s ease-out, transform 0.15s ease-out',
-      }}
+      ref={labelRef}
+      className={`${styles.customCursor}${isVisible ? ` ${styles.visible}` : ''}`}
+      aria-hidden
     >
       {text}
     </div>,
