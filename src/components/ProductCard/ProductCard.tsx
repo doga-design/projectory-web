@@ -1,6 +1,7 @@
 import { memo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLikedProducts } from '@/context/LikedProductsContext';
+import { playLikeBounce } from '@/lib/likeBounce';
 import { optimizeCloudinaryUrl } from '@/utils/cloudinaryHelpers';
 import Button from '@/components/Button/Button';
 import CloudinaryImage from '@/components/CloudinaryImage/CloudinaryImage';
@@ -46,24 +47,26 @@ const ProductCard = ({
       onClick={() => navigate(href)}
       onMouseEnter={() => setLoadVideo(true)}
     >
-      <CloudinaryImage
-        className={styles.media}
-        src={thumbnail}
-        alt={product.name}
-        loading={imageLoading}
-      />
-      {loadVideo && video && (
-        <video
-          className={`${styles.media} ${styles.video}`}
-          src={video}
-          poster={thumbnail}
-          preload="none"
-          autoPlay
-          muted
-          loop
-          playsInline
+      <div className={styles.mediaFrame}>
+        <CloudinaryImage
+          className={styles.media}
+          src={thumbnail}
+          alt={product.name}
+          loading={imageLoading}
         />
-      )}
+        {loadVideo && video && (
+          <video
+            className={`${styles.media} ${styles.video}`}
+            src={video}
+            poster={thumbnail}
+            preload="none"
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+        )}
+      </div>
 
       <div className={styles.content}>
         <h3 className={styles.title} style={{ color: product.categoryColor }}>
@@ -92,6 +95,7 @@ const ProductCard = ({
             aria-label={`Save ${product.name}`}
             onClick={(e) => {
               e.stopPropagation();
+              if (!isLiked) playLikeBounce(e.currentTarget);
               toggleLike(product.id);
             }}
           >

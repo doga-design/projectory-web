@@ -21,9 +21,6 @@ const filterItems = productTags.map((tag, i) => ({
   key: tag.value,
   label: tag.label,
   description: tag.description,
-  closedTitleColor: tag.closedTitleColor,
-  openTitleColor: tag.openTitleColor,
-  openColor: tag.openColor,
   href:
     i === 0
       ? `/products#${CATALOGUE_ID}`

@@ -1,20 +1,41 @@
+/* The component writes `translate` and `rotate`. Separate properties, so tilt and scale can ease
+   while position stays untransitioned and locked to the pointer. */
 .customCursor {
   position: fixed;
-  pointer-events: none;
+  top: 0;
+  left: 0;
   z-index: 9999;
+  /* The size of the hero's buttons, in glass. */
+  padding: var(--space-3) var(--space-6);
+  border: 0.5px solid rgba(255, 255, 255, 0.6);
+  border-radius: var(--radius-sm);
   background: rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: white;
-  padding: 10px 18px;
-  border-radius: 20px;
-  font-size: 16px;
-  font-family: 'FounderGrotesk_Regular', sans-serif;
-  white-space: nowrap;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  will-change: transform, opacity;
-  margin: 0;
-  display: block;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-snug);
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: translate, rotate, scale, opacity;
+  opacity: 0;
+  scale: 0.8;
+  visibility: hidden;
+  transition:
+    opacity 0.15s ease-out,
+    scale 0.15s ease-out,
+    rotate 0.15s ease-out,
+    visibility 0s linear 0.15s;
+}
+
+.visible {
+  opacity: 1;
+  scale: 1;
   visibility: visible;
+  transition:
+    opacity 0.2s ease-out,
+    scale 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    rotate 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }

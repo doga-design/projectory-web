@@ -28,17 +28,27 @@
     padding var(--transition-base);
 }
 
+/* All Products, always first, is coral until it's selected; then it opens like every other card. */
+.card:first-child:not(.cardOpen) {
+  background: var(--brand-coral);
+}
+
 /* Real pointers only: on touch, :hover sticks after a tap. */
 @media (hover: hover) {
   .card:not(.cardOpen):hover {
     background: var(--color-surface-hover);
+  }
+
+  /* The coral Button's hover. */
+  .card:first-child:not(.cardOpen):hover {
+    background: #e06545;
   }
 }
 
 .cardOpen {
   padding: calc(var(--space-6) - var(--text-lift)) var(--space-6)
     calc(var(--space-6) + var(--text-lift));
-  background: var(--tag-open-bg, var(--color-surface-inverse));
+  background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
   cursor: default;
 }
@@ -48,14 +58,13 @@
   font-family: var(--font-body);
   font-size: var(--font-size-lg);
   line-height: var(--leading-normal);
-  color: var(--tag-title, inherit);
   transition:
     font-size var(--transition-base),
     color var(--transition-base);
 }
 
 .cardOpen .title {
-  color: var(--tag-open-title, inherit);
+  color: var(--brand-coral);
   font-family: var(--font-medium);
   font-size: var(--font-size-xl);
   font-weight: 500;
