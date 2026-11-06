@@ -196,7 +196,7 @@ const Home = () => {
                   <span className={styles.tapToPlayIcon}>
                     <FiPlay />
                   </span>
-                  <span className={styles.tapToPlayText}>Tap to play</span>
+                  <span className={styles.tapToPlayText}>Tap to Play</span>
                 </button>
               )}
               <CustomCursor targetRef={middleVideoSlideRef} isMobile={isMobile} />

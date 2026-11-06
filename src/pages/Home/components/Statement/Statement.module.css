@@ -1,5 +1,11 @@
-/* Full-bleed white band; the copy block sits centred, lines left-aligned. */
+/* Full-bleed white band; the copy keeps the 1200px content column of
+ * Pricing, Partners and Products, so it lines up with "What We Do" below. */
 .section {
+  /* The copy's text column, for placing the floaters. */
+  --col: min(100% - 100px, 1100px);
+  --col-left: calc((100% - var(--col)) / 2);
+
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7,7 +13,8 @@
   width: 100%;
   min-height: 550px;
   margin: var(--block-8) 0;
-  padding: var(--block-4) 0;
+  /* Extra top room on desktop: the copy sits 20px lower in the 550px band. */
+  padding: calc(var(--block-4) + var(--block-2)) 0 var(--block-4);
   background: var(--color-surface-inverse);
   color: var(--color-text-inverse);
 }
@@ -17,7 +24,8 @@
   flex-direction: column;
   gap: var(--space-2);
   box-sizing: border-box;
-  max-width: 100%;
+  width: 100%;
+  max-width: 1200px;
   padding: 0 50px;
   /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
   font-size: min(var(--font-size-statement), (100vw - 100px) / 21.5);
@@ -32,10 +40,42 @@
 }
 
 .accent {
-  color: var(--brand-teal);
+  color: var(--brand-coral);
+}
+
+/* Floaters straddle the band's top and bottom edges, half on white, half on
+ * the dark page. Placed and sized from the copy's column (--col), measured off
+ * the design reference; phones get a minimum size. */
+.shapeTop,
+.shapeBottom {
+  position: absolute;
+  z-index: 1;
+  height: auto;
+  rotate: -15deg;
+  pointer-events: none;
+}
+
+.shapeTop {
+  top: 0;
+  left: calc(var(--col-left) + var(--col) * 0.2785);
+  width: max(72px, var(--col) * 0.1027);
+  translate: 0 -55.6%;
+  scale: -1 1;
+}
+
+.shapeBottom {
+  right: calc(var(--col-left) + var(--col) * 0.0412);
+  bottom: 0;
+  width: max(96px, var(--col) * 0.1915);
+  translate: 0 51.9%;
 }
 
 @media (max-width: 768px) {
+  .section {
+    --col: calc(100% - 60px);
+    padding-top: var(--block-4);
+  }
+
   .copy {
     padding: 0 30px;
     font-size: var(--font-size-2xl);
