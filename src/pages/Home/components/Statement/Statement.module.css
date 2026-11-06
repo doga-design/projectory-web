@@ -45,13 +45,13 @@
 
 /* Floaters straddle the band's top and bottom edges, half on white, half on
  * the dark page. Placed and sized from the copy's column (--col), measured off
- * the design reference; phones get a minimum size. */
+ * the design reference; phones get a minimum size. Their tilt, flip and scroll
+ * drift are set in Statement.tsx. */
 .shapeTop,
 .shapeBottom {
   position: absolute;
   z-index: 1;
   height: auto;
-  rotate: -15deg;
   pointer-events: none;
 }
 
@@ -60,7 +60,6 @@
   left: calc(var(--col-left) + var(--col) * 0.2785);
   width: max(72px, var(--col) * 0.1027);
   translate: 0 -55.6%;
-  scale: -1 1;
 }
 
 .shapeBottom {
