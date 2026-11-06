@@ -1,0 +1,226 @@
+/* ObjectiveFilter
+ * ═══════════════
+ * The catalogue's filter: a dropdown naming the selected objective, with its
+ * copy below. It opens a glass menu and sticks under the navbar over the cards.
+ * Corners are the buttons' --radius-sm, like every control on the site. The
+ * dropdown, and the selected row in its menu, fill like the site's Buttons in
+ * the selected filter's brand accent: teal for All Products, coral, lime or
+ * pink for an objective.
+ */
+
+.root {
+  display: contents;
+}
+
+/* ── Accents ───
+ * --accent fills, --ink is the text on it, --accent-hover the hover fill: the
+ * pairings of Button's own variants. Teal has no filled Button, so it takes
+ * the Pricing pills' dark ink on teal and the teal Button's hover hue. */
+
+.coral {
+  --accent: var(--brand-coral);
+  --ink: var(--color-text);
+  --accent-hover: #e06545;
+}
+
+.teal {
+  --accent: var(--brand-teal);
+  --ink: var(--color-text-inverse);
+  --accent-hover: #1fb895;
+}
+
+.lime {
+  --accent: var(--brand-lime);
+  --ink: var(--color-text-inverse);
+  --accent-hover: color-mix(in srgb, var(--brand-lime) 90%, black);
+}
+
+.pink {
+  --accent: var(--brand-pink);
+  --ink: var(--color-text);
+  --accent-hover: color-mix(in srgb, var(--brand-pink) 90%, black);
+}
+
+/* ── Dropdown ─── */
+
+/* Sticks against the whole catalogue, as .root is display: contents. Only the dropdown covers the
+   cards when stuck; the bar itself lets clicks through. */
+.bar {
+  position: sticky;
+  top: var(--catalogue-top);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* Anchors the menu under the dropdown. */
+.anchor {
+  position: relative;
+  pointer-events: auto;
+}
+
+/* Filled with the selected filter's accent, at the site's Button size (13px × 18px) with an
+   18px label: the section's one control, a step up from the navbar's Get Started. The shadow
+   lifts it off the cards once it's stuck over them. */
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 13px 18px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--leading-snug);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .trigger:hover {
+    background: var(--accent-hover);
+  }
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--brand-coral);
+  outline-offset: 3px;
+}
+
+.chevron {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  /* Rides the label's line, so it doesn't add to the button's height. */
+  margin-block: -2px;
+  opacity: 0.7;
+  transition: rotate var(--transition-base);
+}
+
+.chevronOpen {
+  rotate: 180deg;
+}
+
+/* The section's intro copy: --font-size-lg, close under the dropdown and a clear step above the
+   cards. */
+.description {
+  /* Narrow enough that even All Products' short copy breaks onto two lines, wide enough that every
+     objective's copy stays on two. */
+  max-width: 650px;
+  margin: var(--space-4) auto var(--block-2);
+  font-family: var(--font-body);
+  font-size: var(--font-size-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  text-align: center;
+  /* Lines fill the full measure, so every objective's copy is the same width, and the browser
+     still avoids stranding one word on the last line. (balance shortened two-line copy, which
+     made it narrower than All Products' single line.) */
+  text-wrap: pretty;
+  animation: fadeIn 0.3s ease;
+}
+
+/* All Products' copy is barely longer than one line, so filling the first line would leave a
+   two-word stub; it splits into two even lines instead. */
+.descriptionAll {
+  text-wrap: balance;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ── Menu ─── */
+
+.menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 50%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+  min-width: 100%;
+  max-width: calc(100vw - 32px);
+  max-height: 60vh;
+  /* With the rows' --radius-sm (8px), this padding makes the menu's 12px corners concentric;
+     the rows sit the same distance apart. */
+  gap: var(--space-1);
+  padding: var(--space-1);
+  overflow-y: auto;
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--glass-shadow);
+  translate: -50% 0;
+  animation: menuIn 0.18s ease-out;
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    translate: -50% -6px;
+  }
+}
+
+.option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  /* Each row is the navbar's Get Started in size, type and corners (CtaButton). */
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: var(--leading-snug);
+  text-decoration: none;
+  transition: background var(--transition-fast);
+}
+
+@media (hover: hover) {
+  .option:hover {
+    background: var(--alpha-white-12);
+  }
+}
+
+/* The selected row, filled like the dropdown. Scoped under .menu so it outranks the neutral
+   hover. */
+.menu .filled {
+  background: var(--accent);
+  color: var(--ink);
+}
+
+@media (hover: hover) {
+  .menu .filled:hover {
+    background: var(--accent-hover);
+  }
+}
+
+.count {
+  color: var(--color-text-dim);
+  font-size: var(--font-size-s);
+}
+
+.menu .filled .count {
+  color: var(--ink);
+  opacity: 0.7;
+}
+
+/* ── Smaller screens ─── */
+
+@media (max-width: 768px) {
+  .description {
+    margin-bottom: var(--space-7);
+    font-size: var(--font-size-md);
+  }
+}

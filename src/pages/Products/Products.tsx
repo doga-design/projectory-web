@@ -4,7 +4,7 @@ import { useLocation, useSearchParams } from 'react-router-dom';
 import { productsByName } from '@/data/products';
 import ProductCard from '@/components/ProductCard/ProductCard';
 import FeaturedCarousel from './components/FeaturedCarousel/FeaturedCarousel';
-import CatalogueFilters from './components/CatalogueFilters/CatalogueFilters';
+import ObjectiveFilter from './components/ObjectiveFilter/ObjectiveFilter';
 import CtaPair from './components/CtaPair/CtaPair';
 import CaseStudyFeature from '@/components/sections/CaseStudyFeature/CaseStudyFeature';
 import LandingHero from '@/components/LandingHero/LandingHero';
@@ -20,11 +20,16 @@ const CATALOGUE_ID = 'tagContent';
 const filterItems = productTags.map((tag, i) => ({
   key: tag.value,
   label: tag.label,
+  accent: tag.accent,
   description: tag.description,
   href:
     i === 0
       ? `/products#${CATALOGUE_ID}`
       : `/products?tag=${encodeURIComponent(tag.value)}#${CATALOGUE_ID}`,
+  count:
+    i === 0
+      ? productsByName.length
+      : productsByName.filter((product) => product.tags.includes(tag.value)).length,
 }));
 
 const Products = () => {
@@ -68,25 +73,19 @@ const Products = () => {
 
         <section className={styles.catalogue}>
           <div id={CATALOGUE_ID} ref={anchorRef} className={styles.anchor} />
-          <div className={styles.layout}>
-            <CatalogueFilters
-              items={filterItems}
-              activeIndex={activeIndex}
-              className={styles.filters}
-            />
-            <div ref={gridRef} className={styles.grid}>
-              {/* Every card stays mounted and filters only hide them, so switching never makes
-                  a card rebuild and redraw its image. */}
-              {productsByName.map((product) => (
-                <div
-                  key={product.id}
-                  hidden={activeIndex !== 0 && !product.tags.includes(activeTag.value)}
-                >
-                  {/* Loaded once the catalogue is near, so a filter never reveals a blank card. */}
-                  <ProductCard product={product} imageLoading={nearCatalogue ? 'eager' : 'lazy'} />
-                </div>
-              ))}
-            </div>
+          <ObjectiveFilter items={filterItems} activeIndex={activeIndex} />
+          <div ref={gridRef} className={styles.grid}>
+            {/* Every card stays mounted and filters only hide them, so switching never makes
+                a card rebuild and redraw its image. */}
+            {productsByName.map((product) => (
+              <div
+                key={product.id}
+                hidden={activeIndex !== 0 && !product.tags.includes(activeTag.value)}
+              >
+                {/* Loaded once the catalogue is near, so a filter never reveals a blank card. */}
+                <ProductCard product={product} imageLoading={nearCatalogue ? 'eager' : 'lazy'} />
+              </div>
+            ))}
           </div>
         </section>
 
