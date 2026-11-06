@@ -1,15 +1,24 @@
-/* Same content column as Pricing, Partners and Products. */
+/* Full-bleed white band; the copy block sits centred, lines left-aligned. */
 .section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   width: 100%;
-  max-width: 1200px;
-  margin: var(--block-8) auto;
-  padding: 0 50px;
+  min-height: 550px;
+  margin: var(--block-8) 0;
+  padding: var(--block-4) 0;
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
 }
 
 .copy {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  box-sizing: border-box;
+  max-width: 100%;
+  padding: 0 50px;
   /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
   font-size: min(var(--font-size-statement), (100vw - 100px) / 21.5);
 }
@@ -19,7 +28,7 @@
   font-family: var(--font-body);
   font-size: inherit;
   line-height: 1.1;
-  color: var(--color-text);
+  color: var(--color-text-inverse);
 }
 
 .accent {
@@ -27,11 +36,8 @@
 }
 
 @media (max-width: 768px) {
-  .section {
-    padding: 0 30px;
-  }
-
   .copy {
+    padding: 0 30px;
     font-size: var(--font-size-2xl);
   }
 }

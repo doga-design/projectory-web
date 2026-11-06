@@ -104,10 +104,13 @@ iframe {
   gap: var(--space-5);
 }
 
-/* Larger than the shared small Button, here only. */
+/* Same box as the navbar CtaButton, slightly roomier in the hero (11px 17px, 16px). These buttons carry a
+ * border the CTA doesn't (Chrome draws it at 1px), so the height is pinned to
+ * the CTA's (text + 2 x 11px) instead of being padded out. */
 .heroButtons > a {
-  padding: var(--space-3) var(--space-6);
-  font-size: var(--font-size-md);
+  height: calc(1rem * var(--leading-snug) + 22px);
+  padding: 0 calc(17px - var(--btn-border-width, 0px));
+  font-size: 1rem;
   white-space: nowrap;
 }
 
@@ -115,10 +118,6 @@ iframe {
 @media (max-width: 360px) {
   .heroButtons {
     gap: var(--space-3);
-  }
-
-  .heroButtons > a {
-    padding-inline: var(--space-4);
   }
 }
 
