@@ -27,7 +27,7 @@ const tiltFor = (dx: number, dy: number) => {
  *
  * Position and tilt are written straight to the element, so moving the mouse never re-renders.
  */
-const CustomCursor = ({ targetRef, isMobile, text = 'see the whole reel' }: CustomCursorProps) => {
+const CustomCursor = ({ targetRef, isMobile, text = 'See the Whole Reel' }: CustomCursorProps) => {
   const labelRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const reducedMotion = useReducedMotion();
