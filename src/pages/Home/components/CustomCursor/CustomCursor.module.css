@@ -5,8 +5,8 @@
   top: 0;
   left: 0;
   z-index: 9999;
-  /* The size of the hero's buttons, in glass. */
-  padding: var(--space-3) var(--space-6);
+  /* The navbar "Get Started" button's size and type (CtaButton), in glass. */
+  padding: 10px 14px;
   border: 0.5px solid rgba(255, 255, 255, 0.6);
   border-radius: var(--radius-sm);
   background: rgba(0, 0, 0, 0.1);
@@ -15,7 +15,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   color: var(--color-text);
   font-family: var(--font-body);
-  font-size: var(--font-size-md);
+  font-size: 1rem;
   line-height: var(--leading-snug);
   white-space: nowrap;
   pointer-events: none;
