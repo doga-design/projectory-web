@@ -237,7 +237,12 @@ const Home = () => {
               <Button variant="coral" size="small" to="/get-started">
                 Get Started
               </Button>
-              <Button variant="outline" size="small" to="/products#tagContent">
+              <Button
+                variant="outline"
+                size="small"
+                to="/products#tagContent"
+                className={styles.glassButton}
+              >
                 Explore Products
               </Button>
             </div>
