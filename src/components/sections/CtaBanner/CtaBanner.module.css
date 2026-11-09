@@ -132,11 +132,18 @@
   .lime .body {
     max-width: 16em;
   }
-
+  /* adding a quick btn-width hack here so on mobile they are equal widht when stacked */
   .actions {
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: fit-content;
+    max-width: 100%;
+    margin-inline: auto;
     gap: var(--space-4);
     margin-top: var(--space-3);
+  }
+
+  .actions > * {
+    width: 100%;
   }
 }
