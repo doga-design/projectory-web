@@ -74,7 +74,7 @@
 @media (max-width: 768px) {
   .section {
     --col: calc(100% - 60px);
-    margin-top: var(--block-4);
+    margin: var(--block-4) 0;
     padding-top: var(--block-4);
   }
 
