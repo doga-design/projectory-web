@@ -78,6 +78,11 @@
     padding-top: var(--block-4);
   }
 
+  .shapeTop,
+  .shapeBottom {
+    display: none;
+  }
+
   .copy {
     padding: 0 30px;
     /* 11em fits half the longest line (21.5em), so every line wraps to exactly two rows. */
