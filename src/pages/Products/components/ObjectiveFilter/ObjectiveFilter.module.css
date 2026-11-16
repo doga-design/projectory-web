@@ -3,42 +3,11 @@
  * The catalogue's filter: a dropdown naming the selected objective, with its
  * copy below. It opens a glass menu and sticks under the navbar over the cards.
  * Corners are the buttons' --radius-sm, like every control on the site. The
- * dropdown, and the selected row in its menu, fill like the site's Buttons in
- * the selected filter's brand accent: teal for All Products, coral, lime or
- * pink for an objective.
+ * dropdown wears the same glass as its menu; the selected row is plain white.
  */
 
 .root {
   display: contents;
-}
-
-/* ── Accents ───
- * --accent fills, --ink is the text on it, --accent-hover the hover fill: the
- * pairings of Button's own variants. Teal has no filled Button, so it takes
- * the Pricing pills' dark ink on teal and the teal Button's hover hue. */
-
-.coral {
-  --accent: var(--brand-coral);
-  --ink: var(--color-text);
-  --accent-hover: #e06545;
-}
-
-.teal {
-  --accent: var(--brand-teal);
-  --ink: var(--color-text-inverse);
-  --accent-hover: #1fb895;
-}
-
-.lime {
-  --accent: var(--brand-lime);
-  --ink: var(--color-text-inverse);
-  --accent-hover: color-mix(in srgb, var(--brand-lime) 90%, black);
-}
-
-.pink {
-  --accent: var(--brand-pink);
-  --ink: var(--color-text);
-  --accent-hover: color-mix(in srgb, var(--brand-pink) 90%, black);
 }
 
 /* ── Dropdown ─── */
@@ -60,29 +29,55 @@
   pointer-events: auto;
 }
 
-/* Filled with the selected filter's accent, at the site's Button size (13px × 18px) with an
-   18px label: the section's one control, a step up from the navbar's Get Started. The shadow
-   lifts it off the cards once it's stuck over them. */
+/* The menu's glass, at the site's Button size (13px × 18px) with an 18px label: the section's one
+   control, a step up from the navbar's Get Started. */
 .trigger {
+  position: relative;
+  /* A stacking context, so the glass can sit under the label. */
+  z-index: 0;
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
   padding: 13px 18px;
   border: 0;
   border-radius: var(--radius-sm);
-  background: var(--accent);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  color: var(--ink);
+  background: none;
+  box-shadow: var(--glass-shadow);
+  color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-md);
   line-height: var(--leading-snug);
   cursor: pointer;
-  transition: background var(--transition-fast);
+}
+
+/* The glass and its hairline are separate layers: Safari (iOS especially) composites a
+   backdrop-filter as its own layer and, in this sticky bar at a half-pixel position, let it cover
+   part of the element's own border, fading the right edge. The hairline now paints above it. */
+.trigger::before,
+.trigger::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.trigger::before {
+  z-index: -1;
+  background-color: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background-image var(--transition-fast);
+}
+
+.trigger::after {
+  border: var(--border-hairline);
 }
 
 @media (hover: hover) {
-  .trigger:hover {
-    background: var(--accent-hover);
+  /* The menu rows' white tint, laid over the glass. */
+  .trigger:hover::before {
+    background-image: linear-gradient(var(--alpha-white-12), var(--alpha-white-12));
   }
 }
 
@@ -193,16 +188,15 @@
   }
 }
 
-/* The selected row, filled like the dropdown. Scoped under .menu so it outranks the neutral
-   hover. */
+/* The selected row: plain white. Scoped under .menu so it outranks the neutral hover. */
 .menu .filled {
-  background: var(--accent);
-  color: var(--ink);
+  background: var(--color-surface-inverse);
+  color: var(--color-text-inverse);
 }
 
 @media (hover: hover) {
   .menu .filled:hover {
-    background: var(--accent-hover);
+    background: var(--color-surface-inverse-hover);
   }
 }
 
@@ -212,7 +206,7 @@
 }
 
 .menu .filled .count {
-  color: var(--ink);
+  color: var(--color-text-inverse);
   opacity: 0.7;
 }
 

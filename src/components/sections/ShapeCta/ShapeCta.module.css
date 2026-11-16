@@ -63,9 +63,19 @@
   margin-top: var(--block-2);
 }
 
+/* Phones: as tall as its content, not the screen. The top padding holds the teal and coral shapes
+   in the top corners, clear above the title; the bottom padding holds the yellow and lime ones. */
 @media (max-width: 768px) {
   .section {
-    padding: var(--block-5) 30px;
+    --lh-midLeft-top: 128px;
+    --lh-midLeft-left: 3%;
+    --lh-midRight-top: 100px;
+    --lh-midRight-right: 3%;
+    --lh-upper-bottom: 24px;
+    --lh-lower-bottom: 64px;
+
+    min-height: 0;
+    padding: 264px 30px 224px;
   }
 
   .title {

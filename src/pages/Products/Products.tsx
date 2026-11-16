@@ -20,7 +20,6 @@ const CATALOGUE_ID = 'tagContent';
 const filterItems = productTags.map((tag, i) => ({
   key: tag.value,
   label: tag.label,
-  accent: tag.accent,
   description: tag.description,
   href:
     i === 0

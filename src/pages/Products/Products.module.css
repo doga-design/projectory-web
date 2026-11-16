@@ -14,12 +14,12 @@
   padding: calc(var(--block-4) - 10px) 50px var(--block-6);
 }
 
-/* In the page column, so the cards line up with every other section. Closer to the carousel than
-   the page's section gap: the filter carries on browsing products rather than starting anew. */
+/* In the page column, so the cards line up with every other section, and the same gap from the
+   carousel as every other section. */
 .catalogue {
-  /* Where the filter sticks and where a filter's scroll lands: just below the floating navbar. */
-  --catalogue-top: 110px;
-  margin-top: calc(var(--block-4) - var(--block-6));
+  /* Where the filter sticks and where a filter's scroll lands: 10px under the floating navbar
+     (its island ends 90px down; 66px once compact). */
+  --catalogue-top: 100px;
 }
 
 /* Scroll target, directly above the filters. */
@@ -39,7 +39,7 @@
 /* Three cards would be too small for the longest title here. */
 @media (max-width: 1024px) {
   .catalogue {
-    --catalogue-top: 98px;
+    --catalogue-top: 94px;
   }
 
   .grid {
@@ -50,18 +50,14 @@
 /* Navbar's compact island kicks in here. */
 @media (max-width: 808px) {
   .catalogue {
-    --catalogue-top: 74px;
+    --catalogue-top: 70px;
   }
 }
 
 @media (max-width: 768px) {
   .container {
-    gap: var(--block-5);
-    padding: var(--block-4) 30px var(--block-5);
-  }
-
-  .catalogue {
-    margin-top: calc(var(--block-3) - var(--block-5));
+    gap: var(--block-4);
+    padding: var(--block-4) 30px;
   }
 
   .grid {
@@ -77,16 +73,16 @@
 @media (max-width: 768px) {
   .hero {
     /* teal floater → right edge (bleed), larger */
-    --lh-midLeft-top: 13%;
+    --lh-midLeft-top: 10%;
     --lh-midLeft-left: auto;
-    --lh-midLeft-right: -12%;
+    --lh-midLeft-right: -24%;
     --lh-midLeft-w: clamp(160px, 36vw, 250px);
     --lh-midLeft-rotate: 25deg;
 
     /* red floater → left side */
-    --lh-midRight-top: 18%;
+    --lh-midRight-top: 9%;
     --lh-midRight-right: auto;
-    --lh-midRight-left: 7%;
+    --lh-midRight-left: -5%;
     --lh-midRight-w: clamp(80px, 22vw, 130px);
     --lh-midRight-rotate: -35deg;
 

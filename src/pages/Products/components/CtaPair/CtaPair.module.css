@@ -34,7 +34,16 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-6);
+  /* Matches the button's extra margin below, so the group's centre (and the copy) stays put
+     while the button drops. */
+  padding-top: var(--space-2);
   text-align: center;
+}
+
+/* The coral card's copy runs a line longer and its badge weighs on the top corner: nudged
+   down so the group reads centred. Visual only, so the card's height is untouched. */
+.coral .content {
+  translate: 0 10px;
 }
 
 /* Trimmed to cap height and baseline, so the one gap above reads as equal
@@ -64,6 +73,11 @@
   font-family: var(--font-body);
   font-size: var(--font-size-lg);
   line-height: var(--leading-normal);
+}
+
+/* A little more room above the button than between title and body. */
+.content .button {
+  margin-top: var(--space-2);
 }
 
 /* Hangs off a corner of its card, bobbing like CtaBanner's badge. As the

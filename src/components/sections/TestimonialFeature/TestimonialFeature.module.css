@@ -89,21 +89,22 @@
 
 /* ── Offset layout ───
  * A narrower video, with the card hanging past its right edge. The floater sits on the
- * card's top edge, over the corner where the video and card meet. */
-
-.offset {
-  --floater-rotate: 16deg;
-}
-
-.offset .floater {
-  top: 0;
-  right: auto;
-  left: 64%;
-  translate: -50% -50%;
-  width: 92px;
-}
+ * card's top edge, over the corner where the video and card meet. On phones the layout is
+ * the inset one, so the floater is too. */
 
 @media (min-width: 769px) {
+  .offset {
+    --floater-rotate: 16deg;
+  }
+
+  .offset .floater {
+    top: 0;
+    right: auto;
+    left: 64%;
+    translate: -50% -50%;
+    width: 92px;
+  }
+
   .offset .video {
     width: 83%;
   }
@@ -123,9 +124,23 @@
   }
 }
 
+/* --card-overlap is set on the section so the video's controls (TestimonialVideo) can clear it. */
 @media (max-width: 768px) {
+  .section {
+    --card-overlap: 90px;
+  }
+
+  /* Home's card rides further up the video, with no floater on phones. */
+  .offset {
+    --card-overlap: 120px;
+  }
+
+  .offset .floater {
+    display: none;
+  }
+
   .cardWrap {
-    --overlap: 90px;
+    --overlap: var(--card-overlap);
     width: auto;
     margin: calc(-1 * var(--overlap)) var(--space-4) 0;
   }
@@ -142,11 +157,5 @@
   .floater {
     right: -24px;
     width: 48px;
-  }
-
-  .offset .floater {
-    right: auto;
-    left: 76%;
-    width: 64px;
   }
 }

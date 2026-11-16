@@ -159,10 +159,11 @@
     aspect-ratio: 4 / 5;
   }
 
-  /* The quote card covers the bottom 90px on phones, so sit above it. */
+  /* The quote card covers the video's bottom (--card-overlap, from TestimonialFeature) on phones,
+     so sit above it. */
   .controls {
     left: var(--space-4);
-    bottom: calc(90px + var(--space-3));
+    bottom: calc(var(--card-overlap, 90px) + var(--space-3));
   }
 
   .media:fullscreen .controls {

@@ -4,13 +4,9 @@ import { FiChevronDown } from 'react-icons/fi';
 import { useEscapeKey } from '@/hooks/useEscapeKey';
 import styles from './ObjectiveFilter.module.css';
 
-/** The brand colour a filter fills with when it's selected (classes in the CSS module). */
-export type ObjectiveAccent = 'teal' | 'coral' | 'lime' | 'pink';
-
 type Objective = {
   key: string;
   label: string;
-  accent: ObjectiveAccent;
   description: string;
   href: string;
   /** How many products the filter shows. */
@@ -27,8 +23,7 @@ interface ObjectiveFilterProps {
 const MENU_AREA = '[data-objective-menu]';
 
 /**
- * The catalogue's filter: a dropdown naming the selected objective, filled with its brand colour,
- * which opens a menu of every filter (each a link, so filters can be shared) and sticks under the
+ * The catalogue's filter: a glass dropdown naming the selected objective, which opens a menu of every filter (each a link, so filters can be shared) and sticks under the
  * navbar while the cards scroll. The selected objective's copy sits below it.
  */
 const ObjectiveFilter = ({ items, activeIndex }: ObjectiveFilterProps) => {
@@ -56,7 +51,7 @@ const ObjectiveFilter = ({ items, activeIndex }: ObjectiveFilterProps) => {
         <div className={styles.anchor} data-objective-menu>
           <button
             type="button"
-            className={`${styles.trigger} ${styles[active.accent]}`}
+            className={styles.trigger}
             aria-expanded={open}
             aria-controls={menuId}
             onClick={() => setOpen((o) => !o)}
@@ -74,13 +69,7 @@ const ObjectiveFilter = ({ items, activeIndex }: ObjectiveFilterProps) => {
                 <Link
                   key={item.key}
                   to={item.href}
-                  className={[
-                    styles.option,
-                    styles[item.accent],
-                    i === activeIndex && styles.filled,
-                  ]
-                    .filter(Boolean)
-                    .join(' ')}
+                  className={`${styles.option}${i === activeIndex ? ` ${styles.filled}` : ''}`}
                   aria-current={i === activeIndex ? 'page' : undefined}
                   onClick={close}
                 >

@@ -17,7 +17,7 @@ const CtaPair = () => (
         <div className={styles.content}>
           <h2 className={styles.title}>{title}</h2>
           <p className={styles.body}>{body}</p>
-          <Button variant={ACCENTS[accent].button} to={button.to}>
+          <Button variant={ACCENTS[accent].button} to={button.to} className={styles.button}>
             {button.label}
           </Button>
         </div>

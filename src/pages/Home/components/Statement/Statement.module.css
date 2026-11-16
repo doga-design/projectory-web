@@ -1,82 +1,231 @@
-/* Full-bleed white band; the copy keeps the 1200px content column of
- * Pricing, Partners and Products, so it lines up with "What We Do" below. */
-.section {
-  /* The copy's text column, for placing the floaters. */
-  --col: min(100% - 100px, 1100px);
+/* The statement: a white band that grows to the full screen and pins while the lines light up. */
+
+.wrapper {
+  /* Navbar footprint: 18px offset + 72px island (see Navbar.module.css). Kept clear on both sides,
+     so the copy centres on the screen. */
+  --nav-clear: 90px;
+  --side-pad: 50px;
+  /* The page's content column. */
+  --col: min(100% - 2 * var(--side-pad), 1100px);
   --col-left: calc((100% - var(--col)) / 2);
+  --copy-gap: var(--space-3);
+  --line-height: 1.15;
+  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. The fit below only ever
+     shrinks this. */
+  --copy-size: min(var(--font-size-statement), (100vw - 2 * var(--side-pad)) / 21.5);
+
+  /* Set from the script: how far the resting band sits in from the screen's edges. The band
+     arrives at that size, so the top margin counts from its resting edge; it leaves full-screen,
+     so the bottom margin is the plain gap. */
+  --rest-inset: 0px;
+  --gap: var(--block-8);
 
   position: relative;
+  z-index: 1;
+  height: 280vh;
+  margin: calc(var(--gap) - var(--rest-inset)) 0 var(--gap);
+  /* `clip`, unlike `hidden`, keeps the pin sticky. */
+  overflow-x: clip;
+}
+
+/* Navbar's compact island (48px) kicks in at 808px — its `nav` container query. */
+@media (max-width: 808px) {
+  .wrapper {
+    --nav-clear: 66px;
+  }
+}
+
+/* Phones: every line wraps to exactly two rows (11em fits half the longest line), balanced below. */
+@media (max-width: 768px) {
+  .wrapper {
+    --side-pad: 30px;
+    --copy-size: min(var(--font-size-2xl), (100vw - 2 * var(--side-pad)) / 11);
+    --gap: var(--block-4);
+  }
+}
+
+/*
+ * The seven lines keep their size wherever it fits between the navbar and the bottom of the
+ * screen, and shrink just enough where it doesn't.
+ *
+ * How the copy wraps depends only on how many em fit on a row. Measured for this copy in Founders
+ * Grotesk: ≥21em → 7 rows, ≥19em → 8, ≥11em → 14, ≥10.5em → 15, ≥10em → 16, ≥8.5em → 19. Each
+ * candidate is the largest size that keeps that row count AND fits the height (rows + 6 gaps, the
+ * gap being the set one or 0.3em once the type shrinks); the largest wins. Update the numbers if
+ * the copy changes.
+ */
+.pin {
+  --fit-w: calc(100vw - 2 * var(--side-pad));
+  --fit-h: calc(100vh - 2 * var(--nav-clear));
+  --rows-7: min(
+    var(--fit-w) / 21.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (7 * var(--line-height)),
+      var(--fit-h) / (7 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-8: min(
+    var(--fit-w) / 19,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (8 * var(--line-height)),
+      var(--fit-h) / (8 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-14: min(
+    var(--fit-w) / 11,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (14 * var(--line-height)),
+      var(--fit-h) / (14 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-15: min(
+    var(--fit-w) / 10.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (15 * var(--line-height)),
+      var(--fit-h) / (15 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-16: min(
+    var(--fit-w) / 10,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (16 * var(--line-height)),
+      var(--fit-h) / (16 * var(--line-height) + 1.8)
+    )
+  );
+  --rows-19: min(
+    var(--fit-w) / 8.5,
+    max(
+      (var(--fit-h) - 6 * var(--copy-gap)) / (19 * var(--line-height)),
+      var(--fit-h) / (19 * var(--line-height) + 1.8)
+    )
+  );
+
+  position: sticky;
+  top: 0;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  justify-content: safe center;
   box-sizing: border-box;
   width: 100%;
-  min-height: 550px;
-  margin: var(--block-8) 0;
-  /* Extra top room on desktop: the copy sits 20px lower in the 550px band. */
-  padding: calc(var(--block-4) + var(--block-2)) 0 var(--block-4);
+  height: 100vh;
+  padding: var(--nav-clear) var(--side-pad);
+  font-size: max(
+    16px,
+    min(
+      var(--copy-size),
+      max(
+        var(--rows-7),
+        var(--rows-8),
+        var(--rows-14),
+        var(--rows-15),
+        var(--rows-16),
+        var(--rows-19)
+      )
+    )
+  );
+}
+
+/* Small viewport units keep the box (and the fit) clear of mobile browser toolbars. */
+@supports (height: 100svh) {
+  .pin {
+    --fit-h: calc(100svh - 2 * var(--nav-clear));
+
+    height: 100svh;
+  }
+}
+
+.band {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
   background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
 }
 
 .copy {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
-  box-sizing: border-box;
+  gap: min(var(--copy-gap), 0.3em);
   width: 100%;
-  max-width: 1200px;
-  padding: 0 50px;
-  /* Its longest line is 21.5em: on desktop the copy stays on seven rows. */
-  font-size: min(var(--font-size-statement), (100vw - 100px) / 21.5);
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .line {
+  position: relative;
   margin: 0;
   font-family: var(--font-body);
   font-size: inherit;
-  line-height: 1.1;
+  line-height: var(--line-height);
+  color: var(--neutral-300);
+  /* On phones, where each line wraps, its two rows split evenly. */
+  text-wrap: balance;
+}
+
+.lit {
+  position: absolute;
+  inset: 0;
   color: var(--color-text-inverse);
 }
 
-.accent {
+.litAccent {
   color: var(--brand-coral);
 }
 
-/* Floaters straddle the band's top and bottom edges, half on white, half on
- * the dark page. Placed and sized from the copy's column (--col), measured off
- * the design reference; phones get a minimum size. Their tilt, flip and scroll
- * drift are set in Statement.tsx. */
-.shapeTop,
+/* Straddles the band's bottom edge near the column's right. --lift (from the script, 0–1) raises it
+   into the band while the band fills the screen, its bottom 56px above the edge. */
 .shapeBottom {
   position: absolute;
-  z-index: 1;
-  height: auto;
-  pointer-events: none;
-}
-
-.shapeTop {
-  top: 0;
-  left: calc(var(--col-left) + var(--col) * 0.2785);
-  width: max(72px, var(--col) * 0.1027);
-  translate: 0 -55.6%;
-}
-
-.shapeBottom {
+  z-index: 2;
   right: calc(var(--col-left) + var(--col) * 0.0412);
   bottom: 0;
   width: max(96px, var(--col) * 0.1915);
-  translate: 0 51.9%;
+  height: auto;
+  translate: 0 calc((1 - var(--lift, 0)) * 51.9% - var(--lift, 0) * 56px);
+  pointer-events: none;
 }
 
-@media (max-width: 768px) {
-  .section {
-    --col: calc(100% - 60px);
-    padding-top: var(--block-4);
+@media (prefers-reduced-motion: reduce) {
+  .wrapper {
+    height: auto;
   }
 
-  .copy {
-    padding: 0 30px;
-    font-size: var(--font-size-2xl);
+  .pin {
+    position: relative;
+  }
+
+  .lit {
+    opacity: 1 !important;
+  }
+}
+
+/* Phones: a plain white band, fully lit. No pin, no grow, no lighting; the !importants outrank the
+   script's inline styles. */
+@media (max-width: 768px) {
+  .wrapper {
+    height: auto;
+    margin: var(--gap) 0;
+  }
+
+  .pin {
+    position: relative;
+    height: auto;
+    padding: var(--block-4) var(--side-pad);
+    font-size: var(--copy-size);
+  }
+
+  .band {
+    top: 0 !important;
+    bottom: 0 !important;
+  }
+
+  .shapeBottom {
+    translate: 0 51.9%;
+  }
+
+  .lit {
+    opacity: 1 !important;
   }
 }

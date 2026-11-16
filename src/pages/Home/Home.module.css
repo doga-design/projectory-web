@@ -328,6 +328,8 @@ iframe {
   }
 
   .column {
+    gap: var(--block-4);
+    margin-top: var(--block-4);
     padding: 0 30px;
   }
 }
