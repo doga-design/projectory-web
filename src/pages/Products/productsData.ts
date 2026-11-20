@@ -73,13 +73,33 @@ export const ctaPair = [
   },
 ] as const;
 
-/* The section after the CTA cards. The study's own copy comes from caseStudiesData. */
+/* The section after the CTA cards. The card cycles through `studies` in order;
+   each study's own copy comes from caseStudiesData. */
 export const featuredStudy = {
   eyebrow: 'Featured Case Study',
   title: 'Explore How Our\nProducts Re-shape\nExperiences',
   titleWide: 'Explore How Our Products\nRe-shape Experiences',
   cta: { label: 'Explore All Case Studies', to: '/case-studies' },
-  studyId: 'cibc-global-leadership-summit',
-  image:
-    'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749518972/FM8A5043-Enhanced-NR_qywkjc_vydjdi.webp',
+  studies: [
+    {
+      id: 'cibc-global-leadership-summit',
+      image:
+        'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749518972/FM8A5043-Enhanced-NR_qywkjc_vydjdi.webp',
+    },
+    {
+      id: 'pcma-2024-cema-summit',
+      image:
+        'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749519212/Screenshot_2025-05-20_at_19.18.46_gfnyht_ssydvf.webp',
+    },
+    {
+      id: 'surescripts-sales-kickoff',
+      image:
+        'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749519968/Flagfinder_udmunk_fil12l.webp',
+    },
+    {
+      id: 'deloitte-connect-2024',
+      image:
+        'https://res.cloudinary.com/dazzkestf/image/upload/f_auto,q_auto/v1749520803/Deloitte-June19th2024-0125_websize_hgkwds_cbli1w.webp',
+    },
+  ],
 };

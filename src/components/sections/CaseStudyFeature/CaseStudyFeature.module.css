@@ -54,7 +54,13 @@
    against the card's own width (cqw), not `aspect-ratio`: that only grows
    through its automatic minimum size, which WebKit (every iOS browser)
    doesn't apply here, so phones kept 16:9 and cut the headline off. */
+/* --swap is the image cross-fade and the old copy's fade-out. The new copy
+   then rises into place over --text-in on a long ease-out curve. */
 .card {
+  --swap: 0.3s;
+  --text-in: 1.2s;
+  --text-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --rise: 24px;
   position: relative;
   z-index: 0;
   display: flex;
@@ -68,6 +74,15 @@
   cursor: pointer;
 }
 
+/* Every study's image sits stacked here, under the shade and the hover tint. */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* The outgoing image holds until the incoming one has faded in on top, so
+   the cross-fade never dips to the surface behind. */
 .image {
   position: absolute;
   inset: 0;
@@ -75,6 +90,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--swap) ease var(--swap);
+}
+
+.imageActive {
+  z-index: 1;
+  opacity: 1;
+  transition-delay: 0s;
 }
 
 /* Bottom shade so the text reads on any photo. */
@@ -111,10 +134,66 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
-  gap: var(--space-2);
   min-height: calc(100cqw * 9 / 16);
   padding: var(--space-6);
+}
+
+/* Every study's copy sits in the same cell, so the stack is always as tall
+   as the tallest one. The old copy fades out quickly, then hides; the new one
+   starts once the image has mostly changed, so the two never read on top of
+   each other. */
+.slides {
+  display: grid;
+  min-width: 0;
+}
+
+.slides > .copy {
+  grid-area: 1 / 1;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  visibility: hidden;
+  transition: visibility 0s linear calc(var(--swap) * 0.6);
+}
+
+.slides > .copyActive {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/* Out: a quick fade in place, then drop back down, ready for its next turn. */
+.copy > * {
+  opacity: 0;
+  transform: translateY(var(--rise));
+  transition:
+    opacity calc(var(--swap) * 0.6) ease,
+    transform 0s linear calc(var(--swap) * 0.6);
+}
+
+/* In: headline, name, then Learn More each slide up and fade in, staggered. */
+.copyActive > * {
+  --delay: var(--swap);
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--text-in) var(--text-ease) var(--delay),
+    transform var(--text-in) var(--text-ease) var(--delay);
+}
+
+.copyActive > :nth-child(2) {
+  --delay: calc(var(--swap) + 0.1s);
+}
+
+.copyActive > :nth-child(3) {
+  --delay: calc(var(--swap) + 0.2s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    --rise: 0px;
+  }
 }
 
 .headline,
@@ -128,6 +207,9 @@
   font-size: var(--font-size-xl);
   line-height: var(--leading-snug);
   color: var(--color-text);
+  /* Caps the line length so a tagline short enough for one line still wraps
+     like the others (theirs settle at 15–17.6em). */
+  max-width: 18em;
   /* Even lines, no single word left on the last one. */
   text-wrap: balance;
 }
